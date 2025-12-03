@@ -1,0 +1,275 @@
+{
+    "signal_mappings": [
+        {
+            "dbc_signal": "OBC_Bootloader_Version",
+            "ui_element": "BL Version",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "OBC_Firmware_Version",
+            "ui_element": "FW Version",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "OBC_Hardware_Version",
+            "ui_element": "HW Version",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "GridVol",
+            "ui_element": "Grid Voltage",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "GridCur",
+            "ui_element": "Grid Current",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "BusVol",
+            "ui_element": "Bus Voltage",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "BmsVol",
+            "ui_element": "BMS Voltage",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "HvVol",
+            "ui_element": "HV Voltage",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "HvCur",
+            "ui_element": "HV Current",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "LvVol",
+            "ui_element": "LV Voltage",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "LvCur",
+            "ui_element": "LV Current",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "OBC_temp",
+            "ui_element": "OBC Temperature",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "OBC_FET_Temp",
+            "ui_element": "OBC FET Temp",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "HP_DCDC_Temp",
+            "ui_element": "HP DCDC Temp",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "Transformer_temp",
+            "ui_element": "Transformer Temp",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "Chrg_Curr_limit",
+            "ui_element": "Charge Current Limit",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "DisChrg_Curr_limit",
+            "ui_element": "Discharge Current Limit",
+            "type": "value"
+        },
+        {
+            "dbc_signal": "OBC_Input_AC_Over_Vlt",
+            "ui_element": "OBC Input AC Over Voltage",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Input_AC_under_Vlt",
+            "ui_element": "OBC Input AC Under Voltage",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Input_Over_Curr",
+            "ui_element": "OBC Input Over Current",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Output_Over_Curr",
+            "ui_element": "OBC Output Over Current",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_High_Temp",
+            "ui_element": "OBC High Temperature",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Low_temp",
+            "ui_element": "OBC Low Temperature",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Temp_Snsr_Fail",
+            "ui_element": "OBC Temp Sensor Fail",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Curr_Sensing_Fail",
+            "ui_element": "OBC Current Sensing Fail",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Contactor_or_Relay_Fail",
+            "ui_element": "OBC Contactor/Relay Fail",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Output_Open_Ckt",
+            "ui_element": "OBC Output Open Circuit",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Output_Shrt_Ckt_Fail",
+            "ui_element": "OBC Output Short Circuit",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Output_Over_Vlt_Flt",
+            "ui_element": "OBC Output Over Voltage",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Output_Under_Vlt_Flt",
+            "ui_element": "OBC Output Under Voltage",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Output_Over_Vlt_Flt",
+            "ui_element": "DCDC Output Over Voltage",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Input_Over_Vlt",
+            "ui_element": "DCDC Input Over Voltage",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Input_Under_Vlt",
+            "ui_element": "DCDC Input Under Voltage",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Input_Over_Curr",
+            "ui_element": "DCDC Input Over Current",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Output_Over_Curr",
+            "ui_element": "DCDC Output Over Current",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_High_Temp",
+            "ui_element": "DCDC High Temperature",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Low_Temp",
+            "ui_element": "DCDC Low Temperature",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Temp_Snsr_Fail",
+            "ui_element": "DCDC Temp Sensor Fail",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DC_DC_Curr_Sensing_Fail",
+            "ui_element": "DCDC Current Sensing Fail",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Contactor_or_Relay_Fail",
+            "ui_element": "DCDC Contactor/Relay Fail",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Output_Open_Ckt",
+            "ui_element": "DCDC Output Open Circuit",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Output_Shrt_Ckt",
+            "ui_element": "DCDC Output Short Circuit",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Output_Under_Vlt_Flt",
+            "ui_element": "DCDC Output Under Voltage",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "DCDC_Input_Over_Vlt_Lvl2",
+            "ui_element": "DCDC Input Over Voltage L2",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Input_AC_Distorted_Vlt",
+            "ui_element": "OBC Input AC Distorted",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Input_Shrt_Ckt_Fail",
+            "ui_element": "OBC Input Short Circuit",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Bus_Over_Vlt_Flt",
+            "ui_element": "OBC Bus Over Voltage",
+            "type": "status",
+            "error_value": 1
+        },
+        {
+            "dbc_signal": "OBC_Bus_Short_Out_Flt",
+            "ui_element": "OBC Bus Short Out",
+            "type": "status",
+            "error_value": 1
+        }
+    ]
+}

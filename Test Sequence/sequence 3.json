@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "author": "",
+    "description": "",
+    "last_modified": "2025-12-01T15:11:29.289192",
+    "name": "sequence 3",
+    "tags": [],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "CAN / Stop Trace",
+      "params": ""
+    },
+    {
+      "action": "CAN / Stop Trace",
+      "params": ""
+    },
+    {
+      "action": "CAN / Stop Trace",
+      "params": ""
+    },
+    {
+      "action": "CAN / Stop Trace",
+      "params": ""
+    }
+  ]
+}

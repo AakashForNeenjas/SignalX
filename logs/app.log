@@ -1,0 +1,912 @@
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-11-27 18:34:04,236"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-11-27 18:34:58,867"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-11-27 18:37:28,597"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-11-27 18:40:01,062"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-11-27 18:40:01,108"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-11-27 18:40:32,300"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-11-27 18:41:21,751"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-11-27 18:41:21,823"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-11-27 18:48:39,670"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2025-11-27 18:48:39,671"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-11-27 18:48:53,961"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-11-27 18:48:53,962"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-11-27 18:48:53,969"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-11-27 18:48:58,089"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-11-27 18:48:58,104"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Test 2", "time": "2025-11-27 18:49:29,993"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-11-27 18:49:29,995"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-11-27 18:49:29,995"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Test 2", "time": "2025-11-27 18:49:29,996"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-11-27 18:49:29,997"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-11-27 18:49:29,997"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Connect: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-11-27 18:49:30,000"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-11-27 18:49:30,007"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-11-27 18:49:30,008"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-11-27 18:49:30,502"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Started: trace_20251127_184930", "time": "2025-11-27 18:49:30,506"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Started: trace_20251127_184930", "time": "2025-11-27 18:49:30,507"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-11-27 18:49:30,507"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-11-27 18:49:31,008"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-11-27 18:49:31,009"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-11-27 18:49:31,012"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-11-27 18:49:31,013"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-11-27 18:49:31,511"}
+{"level": "INFO", "name": "root", "message": "Step 4: Wait: 20.0s (completed)", "time": "2025-11-27 18:49:51,593"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: Wait: 20.0s (completed)", "time": "2025-11-27 18:49:51,594"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-11-27 18:49:51,596"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2025-11-27 18:49:52,097"}
+{"level": "INFO", "name": "root", "message": "Step 5: CAN Stop Cyclic: Success", "time": "2025-11-27 18:49:52,098"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: CAN Stop Cyclic: Success", "time": "2025-11-27 18:49:52,099"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2025-11-27 18:49:52,099"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2025-11-27 18:49:52,601"}
+{"level": "INFO", "name": "root", "message": "Step 6: CAN Trace Stopped", "time": "2025-11-27 18:49:52,603"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: CAN Trace Stopped", "time": "2025-11-27 18:49:52,603"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2025-11-27 18:49:52,605"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2025-11-27 18:49:53,107"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-11-27 18:49:53,162"}
+{"level": "INFO", "name": "root", "message": "Step 7: CAN Disconnected", "time": "2025-11-27 18:49:53,162"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: CAN Disconnected", "time": "2025-11-27 18:49:53,171"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2025-11-27 18:49:53,172"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-11-27 18:49:53,665"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-11-27 18:49:53,665"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-11-27 18:50:14,347"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-11-27 18:50:14,348"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-11-27 19:10:37,337"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2025-11-27 19:10:37,341"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-11-27 19:10:39,453"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-11-27 19:10:39,454"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-11-27 19:10:39,483"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-11-27 19:10:44,780"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-11-27 19:10:44,787"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Test 2", "time": "2025-11-27 19:11:01,837"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-11-27 19:11:01,841"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-11-27 19:11:01,841"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Test 2", "time": "2025-11-27 19:11:01,842"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-11-27 19:11:01,843"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-11-27 19:11:01,844"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Connect: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-11-27 19:11:01,846"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-11-27 19:11:01,853"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-11-27 19:11:01,857"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-11-27 19:11:02,348"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Started: trace_20251127_191102", "time": "2025-11-27 19:11:02,359"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Started: trace_20251127_191102", "time": "2025-11-27 19:11:02,359"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-11-27 19:11:02,361"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-11-27 19:11:02,865"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-11-27 19:11:02,866"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-11-27 19:11:02,867"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-11-27 19:11:02,867"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-11-27 19:11:03,370"}
+{"level": "INFO", "name": "root", "message": "Step 4: Wait: 20.0s (completed)", "time": "2025-11-27 19:11:23,466"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: Wait: 20.0s (completed)", "time": "2025-11-27 19:11:23,467"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-11-27 19:11:23,468"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2025-11-27 19:11:23,970"}
+{"level": "INFO", "name": "root", "message": "Step 5: CAN Stop Cyclic: Success", "time": "2025-11-27 19:11:23,972"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: CAN Stop Cyclic: Success", "time": "2025-11-27 19:11:23,973"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2025-11-27 19:11:23,974"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2025-11-27 19:11:24,477"}
+{"level": "INFO", "name": "root", "message": "Step 6: CAN Trace Stopped", "time": "2025-11-27 19:11:24,480"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: CAN Trace Stopped", "time": "2025-11-27 19:11:24,480"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2025-11-27 19:11:24,484"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2025-11-27 19:11:24,983"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-11-27 19:11:25,002"}
+{"level": "INFO", "name": "root", "message": "Step 7: CAN Disconnected", "time": "2025-11-27 19:11:25,003"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: CAN Disconnected", "time": "2025-11-27 19:11:25,003"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2025-11-27 19:11:25,004"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-11-27 19:11:25,505"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-11-27 19:11:25,505"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-11-27 19:12:19,864"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-11-27 19:12:19,865"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-01 12:31:01,334"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2025-12-01 12:31:01,336"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-01 12:31:04,619"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-12-01 12:31:04,620"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-12-01 12:31:04,643"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-01 12:31:06,746"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-01 12:31:06,763"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 12:31:56,888"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 12:31:56,947"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 12:33:56,648"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 12:33:56,650"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 12:38:18,560"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 12:38:18,561"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-01 12:39:01,360"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-12-01 12:39:01,361"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-12-01 12:39:01,371"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-01 12:39:09,883"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-12-01 12:39:09,883"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-12-01 12:39:09,886"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 12:40:16,268"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 12:40:16,347"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-01 12:52:27,279"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-12-01 12:52:27,280"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-12-01 12:52:27,292"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 12:54:50,587"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 12:54:50,589"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-01 13:14:32,169"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-12-01 13:14:32,169"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-12-01 13:14:32,173"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-01 13:14:33,384"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-01 13:14:33,387"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 13:14:51,080"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 13:14:51,107"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-01 13:18:17,710"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-12-01 13:18:17,711"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-12-01 13:18:17,716"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-01 13:18:19,162"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-01 13:18:19,172"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 13:19:01,856"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 13:19:01,931"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-01 13:21:00,240"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-12-01 13:21:00,241"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-12-01 13:21:00,253"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-01 13:21:01,159"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-01 13:21:01,165"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 13:21:20,747"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 13:21:20,844"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 14:58:03,986"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 14:58:03,987"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 15:10:23,255"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 15:10:23,256"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 15:12:57,645"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 15:12:57,646"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 15:15:29,957"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 15:15:29,958"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 15:16:34,804"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 15:16:34,805"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-01 15:54:03,182"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2025-12-01 15:54:03,185"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 15:57:05,623"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 15:57:05,624"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-01 16:00:25,462"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2025-12-01 16:00:25,463"}
+{"level": "INFO", "name": "root", "message": "power_supply: PS OK (V=0.0, I=0.0)", "time": "2025-12-01 16:00:37,724"}
+{"level": "INFO", "name": "root", "message": "grid_emulator: Grid OK (V=0.0, I=0.0)", "time": "2025-12-01 16:00:37,724"}
+{"level": "INFO", "name": "root", "message": "oscilloscope: Scope OK: 0.0", "time": "2025-12-01 16:00:37,725"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 16:01:09,468"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 16:01:09,469"}
+{"level": "INFO", "name": "root", "message": "Profile changed to hw", "time": "2025-12-01 16:01:09,553"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-01 16:01:11,938"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply Error: Error connecting to TCPIP::192.168.4.53::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator Error: Error connecting to TCPIP::192.168.4.52::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.", "time": "2025-12-01 16:01:19,021"}
+{"level": "ERROR", "name": "root", "message": "power_supply: PS health failed: could not convert string to float: ''", "time": "2025-12-01 16:01:24,706"}
+{"level": "ERROR", "name": "root", "message": "grid_emulator: Grid health failed: could not convert string to float: ''", "time": "2025-12-01 16:01:24,707"}
+{"level": "INFO", "name": "root", "message": "oscilloscope: Scope OK: ", "time": "2025-12-01 16:01:24,709"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 16:02:06,261"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 16:02:06,262"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-01 18:20:51,251"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2025-12-01 18:20:51,281"}
+{"level": "INFO", "name": "root", "message": "power_supply: PS OK (V=0.0, I=0.0)", "time": "2025-12-01 18:20:57,770"}
+{"level": "INFO", "name": "root", "message": "grid_emulator: Grid OK (V=0.0, I=0.0)", "time": "2025-12-01 18:20:57,787"}
+{"level": "INFO", "name": "root", "message": "oscilloscope: Scope OK: 0.0", "time": "2025-12-01 18:20:57,796"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 18:37:30,625"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 18:37:30,626"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 18:56:25,651"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 18:56:25,652"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-01 18:56:58,518"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-01 18:56:58,519"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 13:22:05,813"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 13:22:05,813"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 14:22:20,730"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 14:22:20,730"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 14:23:45,622"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 14:23:45,623"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 14:23:56,487"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 14:23:56,488"}
+{"level": "ERROR", "name": "root", "message": "Preflight check failed:\nCAN not connected", "time": "2025-12-02 14:40:22,310"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-02 14:40:30,438"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-12-02 14:40:30,439"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-12-02 14:40:30,451"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 3", "time": "2025-12-02 14:40:35,953"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-02 14:40:35,959"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-02 14:40:35,959"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 3", "time": "2025-12-02 14:40:35,960"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Trace Stopped", "time": "2025-12-02 14:40:35,962"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-02 14:40:35,964"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Trace Stopped", "time": "2025-12-02 14:40:35,965"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-12-02 14:40:35,969"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-12-02 14:40:36,467"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Stopped", "time": "2025-12-02 14:40:36,467"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Stopped", "time": "2025-12-02 14:40:36,468"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-12-02 14:40:36,469"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-12-02 14:40:36,970"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Trace Stopped", "time": "2025-12-02 14:40:36,970"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Trace Stopped", "time": "2025-12-02 14:40:36,971"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-12-02 14:40:36,974"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-12-02 14:40:37,474"}
+{"level": "INFO", "name": "root", "message": "Step 4: CAN Trace Stopped", "time": "2025-12-02 14:40:37,475"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: CAN Trace Stopped", "time": "2025-12-02 14:40:37,477"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-12-02 14:40:37,478"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-02 14:40:37,979"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-02 14:40:37,979"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2025-12-02 14:40:52,456"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-02 14:40:52,458"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-02 14:40:52,459"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2025-12-02 14:40:52,459"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Trace Stopped", "time": "2025-12-02 14:40:52,461"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-02 14:40:52,461"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Trace Stopped", "time": "2025-12-02 14:40:52,468"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-12-02 14:40:52,469"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Stopped", "time": "2025-12-02 14:40:52,963"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-12-02 14:40:52,964"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Stopped", "time": "2025-12-02 14:40:52,966"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-12-02 14:40:52,968"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-12-02 14:40:53,468"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Trace Stopped", "time": "2025-12-02 14:40:53,469"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Trace Stopped", "time": "2025-12-02 14:40:53,470"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-12-02 14:40:53,473"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-12-02 14:40:53,972"}
+{"level": "INFO", "name": "root", "message": "Step 4: CAN Trace Stopped", "time": "2025-12-02 14:40:53,972"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: CAN Trace Stopped", "time": "2025-12-02 14:40:53,974"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-12-02 14:40:53,977"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2025-12-02 14:40:54,477"}
+{"level": "ERROR", "name": "root", "message": "Step 5 exception: cannot unpack non-iterable bool object", "time": "2025-12-02 14:40:54,477"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-02 14:40:54,479"}
+{"level": "ERROR", "name": "root", "message": "Step 5 status: Fail", "time": "2025-12-02 14:40:54,481"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-02 14:40:54,483"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 14:41:20,391"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 14:41:20,467"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 18:14:23,822"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 18:14:23,832"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 18:14:54,868"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 18:14:54,869"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 18:15:08,999"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 18:15:09,002"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 18:16:55,511"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 18:16:55,512"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 18:18:56,687"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 18:18:56,688"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 18:19:24,277"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 18:19:24,278"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 18:35:37,501"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 18:35:37,505"}
+{"level": "INFO", "name": "root", "message": "Theme changed to Light", "time": "2025-12-02 18:35:50,233"}
+{"level": "INFO", "name": "root", "message": "Theme changed to Light", "time": "2025-12-02 18:36:15,575"}
+{"level": "INFO", "name": "root", "message": "Theme changed to Light", "time": "2025-12-02 18:38:46,801"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-02 18:39:19,890"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2025-12-02 18:39:19,892"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-02 18:39:23,061"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2025-12-02 18:39:23,062"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2025-12-02 18:39:23,086"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-02 18:39:31,446"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-02 18:39:31,455"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 18:39:51,407"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 18:39:51,411"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-02 18:39:59,753"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-02 18:39:59,784"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 10:41:42,365"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 10:41:42,366"}
+{"level": "INFO", "name": "root", "message": "Profile changed to hw", "time": "2025-12-03 10:41:42,464"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 10:41:45,383"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply: Connected\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator: Connected", "time": "2025-12-03 10:41:48,732"}
+{"level": "INFO", "name": "root", "message": "power_supply: PS OK (V=-0.00317383, I=-0.00148773)", "time": "2025-12-03 10:42:47,127"}
+{"level": "INFO", "name": "root", "message": "grid_emulator: Grid OK (V=0.0, I=0.0)", "time": "2025-12-03 10:42:47,127"}
+{"level": "INFO", "name": "root", "message": "oscilloscope: Scope OK: ", "time": "2025-12-03 10:42:47,128"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 10:45:45,973"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 10:45:45,974"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 10:46:35,312"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2025-12-03 10:46:35,315"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 10:46:39,727"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 10:46:39,728"}
+{"level": "INFO", "name": "root", "message": "Profile changed to hw", "time": "2025-12-03 10:46:39,825"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 10:46:41,004"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply: Connected\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator: Connected", "time": "2025-12-03 10:46:43,138"}
+{"level": "INFO", "name": "root", "message": "power_supply: PS OK (V=67.9917, I=0.111881)", "time": "2025-12-03 10:46:52,388"}
+{"level": "INFO", "name": "root", "message": "grid_emulator: Grid OK (V=0.0, I=0.0)", "time": "2025-12-03 10:46:52,388"}
+{"level": "ERROR", "name": "root", "message": "oscilloscope: Scope not connected", "time": "2025-12-03 10:46:52,389"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 10:48:16,987"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 10:48:16,987"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 10:48:27,315"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 10:48:27,316"}
+{"level": "INFO", "name": "root", "message": "Profile changed to hw", "time": "2025-12-03 10:48:27,428"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 10:48:30,893"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply: Connected\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator: Connected", "time": "2025-12-03 10:48:33,056"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 10:49:35,575"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 10:49:35,576"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:05:43,701"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:05:43,702"}
+{"level": "INFO", "name": "root", "message": "Profile changed to hw", "time": "2025-12-03 11:05:43,801"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:05:45,987"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply: Connected\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator: Connected", "time": "2025-12-03 11:05:48,128"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:08:17,862"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:08:17,862"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:08:25,871"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:08:25,872"}
+{"level": "INFO", "name": "root", "message": "Profile changed to hw", "time": "2025-12-03 11:08:25,979"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:08:26,782"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected\nOscilloscope: Connected\nGrid Emulator: Connected", "time": "2025-12-03 11:08:26,925"}
+{"level": "INFO", "name": "root", "message": "power_supply: PS OK (V=-0.00268555, I=-0.00123596)", "time": "2025-12-03 11:08:39,022"}
+{"level": "INFO", "name": "root", "message": "grid_emulator: Grid OK (V=0.0, I=0.0)", "time": "2025-12-03 11:08:39,023"}
+{"level": "INFO", "name": "root", "message": "oscilloscope: Scope OK: RIGOL TECHNOLOGIES,MSO5204,MS5A231902077,00.01.03.00.01\n", "time": "2025-12-03 11:08:39,023"}
+{"level": "ERROR", "name": "root", "message": "Preflight check failed:\nCAN not connected", "time": "2025-12-03 11:11:51,791"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:11:57,623"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:11:57,624"}
+{"level": "WARNING", "name": "can.pcan", "message": "uptime library not available, timestamps are relative to boot time and not to Epoch UTC", "time": "2025-12-03 11:11:57,647"}
+{"level": "INFO", "name": "root", "message": "CAN connected pcan:PCAN_USBBUS1", "time": "2025-12-03 11:11:57,857"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 11:11:57,862"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 11:12:16,942"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 11:12:16,958"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 11:12:16,958"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 11:12:16,961"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:12:16,962"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 11:12:16,965"}
+{"level": "ERROR", "name": "root", "message": "[CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:12:17,002"}
+{"level": "WARNING", "name": "root", "message": "Step 1: CAN Connect: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:12:17,004"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:12:17,004"}
+{"level": "ERROR", "name": "root", "message": "Step 1 status: Fail", "time": "2025-12-03 11:12:17,006"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:12:17,006"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:12:17,014"}
+{"level": "INFO", "name": "root", "message": "Disconnect CAN requested", "time": "2025-12-03 11:12:25,413"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:12:26,026"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:12:26,027"}
+{"level": "ERROR", "name": "root", "message": "Preflight check failed:\nCAN not connected", "time": "2025-12-03 11:12:29,324"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:12:40,124"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:12:40,125"}
+{"level": "INFO", "name": "root", "message": "CAN connected pcan:PCAN_USBBUS1", "time": "2025-12-03 11:12:40,257"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 11:12:40,264"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:12:53,119"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:12:53,120"}
+{"level": "ERROR", "name": "root", "message": "[CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:12:53,156"}
+{"level": "ERROR", "name": "root", "message": "CAN connect failed: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:12:53,157"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:13:09,874"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:13:09,874"}
+{"level": "ERROR", "name": "root", "message": "[CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:13:09,915"}
+{"level": "ERROR", "name": "root", "message": "CAN connect failed: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:13:09,917"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:13:14,186"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:13:14,401"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:13:27,177"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:13:27,179"}
+{"level": "INFO", "name": "root", "message": "Profile changed to hw", "time": "2025-12-03 11:13:27,299"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:13:31,061"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply Error: Error connecting to TCPIP::192.168.4.53::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator Error: Error connecting to TCPIP::192.168.4.52::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.", "time": "2025-12-03 11:13:37,184"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:14:08,587"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply Error: Error connecting to TCPIP::192.168.4.53::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator Error: Error connecting to TCPIP::192.168.4.52::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.", "time": "2025-12-03 11:14:14,626"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:15:09,434"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply Error: Error connecting to TCPIP::192.168.4.53::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator Error: Error connecting to TCPIP::192.168.4.52::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.", "time": "2025-12-03 11:15:15,482"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:15:23,689"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:15:23,690"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:15:32,783"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:15:32,784"}
+{"level": "INFO", "name": "root", "message": "Profile changed to hw", "time": "2025-12-03 11:15:32,874"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:15:33,752"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply Error: Error connecting to TCPIP::192.168.4.53::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator Error: Error connecting to TCPIP::192.168.4.52::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.", "time": "2025-12-03 11:15:39,859"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:16:02,997"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:16:02,998"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:16:10,709"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:16:10,710"}
+{"level": "INFO", "name": "root", "message": "Profile changed to hw", "time": "2025-12-03 11:16:10,814"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:16:13,789"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply Error: Error connecting to TCPIP::192.168.4.53::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator Error: Error connecting to TCPIP::192.168.4.52::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.", "time": "2025-12-03 11:16:19,906"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:16:42,677"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:16:42,678"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:17:53,971"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply Error: Error connecting to TCPIP::192.168.4.53::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator Error: Error connecting to TCPIP::192.168.4.52::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.", "time": "2025-12-03 11:18:00,169"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:23:52,987"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply Error: Error connecting to TCPIP::192.168.4.53::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.\nGrid Emulator Error: Error connecting to TCPIP::192.168.4.52::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.", "time": "2025-12-03 11:23:59,030"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:25:08,102"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:25:08,104"}
+{"level": "WARNING", "name": "can.pcan", "message": "uptime library not available, timestamps are relative to boot time and not to Epoch UTC", "time": "2025-12-03 11:25:08,128"}
+{"level": "ERROR", "name": "root", "message": "[CAN ERROR] Connection failed: The value of a handle (PCAN-Channel, PCAN-Hardware, PCAN-Net, PCAN-Client) is invalid", "time": "2025-12-03 11:25:08,191"}
+{"level": "ERROR", "name": "root", "message": "CAN connect failed: [CAN ERROR] Connection failed: The value of a handle (PCAN-Channel, PCAN-Hardware, PCAN-Net, PCAN-Client) is invalid", "time": "2025-12-03 11:25:08,192"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:25:24,291"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:25:24,291"}
+{"level": "ERROR", "name": "root", "message": "[CAN ERROR] Connection failed: The value of a handle (PCAN-Channel, PCAN-Hardware, PCAN-Net, PCAN-Client) is invalid", "time": "2025-12-03 11:25:24,366"}
+{"level": "ERROR", "name": "root", "message": "CAN connect failed: [CAN ERROR] Connection failed: The value of a handle (PCAN-Channel, PCAN-Hardware, PCAN-Net, PCAN-Client) is invalid", "time": "2025-12-03 11:25:24,367"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-03 11:25:31,187"}
+{"level": "WARNING", "name": "root", "message": "Cyclic CAN failed: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-03 11:25:31,193"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:25:45,437"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:25:45,438"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:33:12,998"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:33:12,999"}
+{"level": "WARNING", "name": "can.pcan", "message": "uptime library not available, timestamps are relative to boot time and not to Epoch UTC", "time": "2025-12-03 11:33:13,146"}
+{"level": "INFO", "name": "root", "message": "CAN connected pcan:PCAN_USBBUS1", "time": "2025-12-03 11:33:13,323"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 11:33:14,424"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:33:19,993"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected\nOscilloscope: Connected\nGrid Emulator: Connected", "time": "2025-12-03 11:33:20,730"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-03 11:33:25,209"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:25,221"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-03 11:33:25,225"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:25,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:26,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:27,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:28,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:29,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:30,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:31,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:32,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:33,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:34,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:35,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:36,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:37,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:38,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:39,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:40,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:41,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:42,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:43,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:44,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:45,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:46,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:47,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:48,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:49,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:50,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:51,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:52,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:53,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:54,290"}
+{"level": "INFO", "name": "root", "message": "Stop Cyclic CAN requested", "time": "2025-12-03 11:33:54,605"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN stopped", "time": "2025-12-03 11:33:54,606"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:55,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:56,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:57,290"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-03 11:33:57,786"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-03 11:33:57,796"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:58,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:33:59,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:00,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:01,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:02,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:03,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:04,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:05,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:06,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:07,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:08,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:09,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:10,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:11,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:12,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:13,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:14,292"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:15,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:16,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:17,289"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:18,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:19,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:20,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:21,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:22,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:23,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:24,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:25,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:26,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:27,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:28,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:29,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:30,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:31,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:32,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:33,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:34,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:35,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:36,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:37,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:38,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:39,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:40,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:41,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:42,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:43,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:44,298"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:45,293"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:46,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:47,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:48,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:49,292"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:50,293"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:51,316"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:52,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:53,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:54,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:55,292"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:56,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:57,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:58,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:34:59,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:00,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:01,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:02,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:03,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:04,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:05,291"}
+{"level": "INFO", "name": "root", "message": "Stop Cyclic CAN requested", "time": "2025-12-03 11:35:05,636"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN stopped", "time": "2025-12-03 11:35:05,637"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:06,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:07,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:08,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:09,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:10,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:11,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:12,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:13,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:14,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:15,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:16,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:17,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:18,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:19,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:20,294"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:21,292"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:22,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:23,292"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:24,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:25,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:26,295"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:27,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:28,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:29,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:30,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:31,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:32,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:33,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:34,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:35,297"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:36,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:37,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:38,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:39,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:40,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:41,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:42,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:43,292"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:44,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:45,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:46,291"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:47,290"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:48,292"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 11:35:49,291"}
+{"level": "INFO", "name": "root", "message": "Stop Cyclic CAN requested", "time": "2025-12-03 11:36:14,319"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN stopped", "time": "2025-12-03 11:36:14,321"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:36:18,669"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:36:19,181"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:36:31,615"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected\nOscilloscope: Connected\nGrid Emulator: Connected", "time": "2025-12-03 11:36:31,767"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:36:36,102"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:36:36,103"}
+{"level": "WARNING", "name": "can.pcan", "message": "uptime library not available, timestamps are relative to boot time and not to Epoch UTC", "time": "2025-12-03 11:36:36,124"}
+{"level": "INFO", "name": "root", "message": "CAN connected pcan:PCAN_USBBUS1", "time": "2025-12-03 11:36:36,274"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 11:36:36,547"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-03 11:36:38,845"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-03 11:36:38,860"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 11:38:10,924"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 11:38:10,927"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 11:38:10,927"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 11:38:10,928"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:38:10,929"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 11:38:10,931"}
+{"level": "ERROR", "name": "root", "message": "[CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:38:10,985"}
+{"level": "WARNING", "name": "root", "message": "Step 1: CAN Connect: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:38:10,987"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:38:10,989"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:38:10,993"}
+{"level": "ERROR", "name": "root", "message": "Step 1 status: Fail", "time": "2025-12-03 11:38:10,994"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:38:10,997"}
+{"level": "INFO", "name": "root", "message": "Stop Cyclic CAN requested", "time": "2025-12-03 11:38:19,807"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN stopped", "time": "2025-12-03 11:38:19,809"}
+{"level": "INFO", "name": "root", "message": "Disconnect CAN requested", "time": "2025-12-03 11:38:25,774"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:38:25,924"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:38:25,925"}
+{"level": "ERROR", "name": "root", "message": "Preflight check failed:\nCAN not connected", "time": "2025-12-03 11:38:35,587"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:41:47,673"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:41:47,677"}
+{"level": "INFO", "name": "root", "message": "CAN connected pcan:PCAN_USBBUS1", "time": "2025-12-03 11:41:47,839"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 11:41:47,904"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 11:41:51,667"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 11:41:51,670"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 11:41:51,670"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 11:41:51,671"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:41:51,679"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 11:41:51,684"}
+{"level": "ERROR", "name": "root", "message": "[CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:41:51,738"}
+{"level": "WARNING", "name": "root", "message": "Step 1: CAN Connect: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:41:51,750"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:41:51,751"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:41:51,755"}
+{"level": "ERROR", "name": "root", "message": "Step 1 status: Fail", "time": "2025-12-03 11:41:51,766"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:41:51,782"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:42:04,580"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:42:05,016"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:43:05,333"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected\nOscilloscope: Connected\nGrid Emulator: Connected", "time": "2025-12-03 11:43:06,549"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:43:09,523"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:43:09,547"}
+{"level": "WARNING", "name": "can.pcan", "message": "uptime library not available, timestamps are relative to boot time and not to Epoch UTC", "time": "2025-12-03 11:43:09,567"}
+{"level": "INFO", "name": "root", "message": "CAN connected pcan:PCAN_USBBUS1", "time": "2025-12-03 11:43:09,744"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 11:43:11,035"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-03 11:43:22,754"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-03 11:43:22,783"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 11:43:37,823"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 11:43:37,825"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 11:43:37,825"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 11:43:37,826"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:43:37,827"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 11:43:37,829"}
+{"level": "ERROR", "name": "root", "message": "[CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:43:37,865"}
+{"level": "WARNING", "name": "root", "message": "Step 1: CAN Connect: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:43:37,866"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:43:37,866"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:43:37,867"}
+{"level": "ERROR", "name": "root", "message": "Step 1 status: Fail", "time": "2025-12-03 11:43:37,867"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:43:37,871"}
+{"level": "INFO", "name": "root", "message": "Disconnect CAN requested", "time": "2025-12-03 11:43:50,894"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:43:51,056"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:43:51,057"}
+{"level": "INFO", "name": "root", "message": "Stop Cyclic CAN requested", "time": "2025-12-03 11:43:53,458"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN stopped", "time": "2025-12-03 11:43:53,459"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2025-12-03 11:43:59,135"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2025-12-03 11:44:04,520"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 11:44:04,521"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 11:44:04,523"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 11:44:04,523"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 11:44:04,523"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:44:04,524"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 11:44:04,525"}
+{"level": "INFO", "name": "root", "message": "CAN connected pcan:PCAN_USBBUS1", "time": "2025-12-03 11:44:04,621"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Connect: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 11:44:04,621"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 11:44:04,622"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-12-03 11:44:04,622"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Started: trace_20251203_114405", "time": "2025-12-03 11:44:05,126"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-12-03 11:44:05,127"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Started: trace_20251203_114405", "time": "2025-12-03 11:44:05,128"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-12-03 11:44:05,129"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-12-03 11:44:05,629"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 11:44:05,636"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 11:44:05,637"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-12-03 11:44:05,639"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-12-03 11:44:06,140"}
+{"level": "INFO", "name": "root", "message": "Step 4: Wait: 2.0s (completed)", "time": "2025-12-03 11:44:08,151"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: Wait: 2.0s (completed)", "time": "2025-12-03 11:44:08,151"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-12-03 11:44:08,152"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2025-12-03 11:44:08,654"}
+{"level": "INFO", "name": "root", "message": "Step 5: CAN Stop Cyclic: Success", "time": "2025-12-03 11:44:08,654"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: CAN Stop Cyclic: Success", "time": "2025-12-03 11:44:08,656"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2025-12-03 11:44:08,661"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2025-12-03 11:44:09,160"}
+{"level": "INFO", "name": "root", "message": "Step 6: CAN Trace Stopped", "time": "2025-12-03 11:44:09,161"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: CAN Trace Stopped", "time": "2025-12-03 11:44:09,165"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2025-12-03 11:44:09,167"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:44:09,664"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:44:09,664"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 11:44:14,765"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 11:44:14,767"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 11:44:14,767"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 11:44:14,768"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:44:14,768"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 11:44:14,770"}
+{"level": "ERROR", "name": "root", "message": "[CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:44:14,817"}
+{"level": "WARNING", "name": "root", "message": "Step 1: CAN Connect: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:44:14,817"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: [CAN ERROR] Connection failed: A PCAN Channel has not been initialized yet or the initialization process has failed", "time": "2025-12-03 11:44:14,818"}
+{"level": "ERROR", "name": "root", "message": "Step 1 status: Fail", "time": "2025-12-03 11:44:14,819"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:44:14,819"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:44:14,820"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:48:35,634"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 11:48:36,250"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2025-12-03 11:48:47,446"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected\nOscilloscope: Connected\nGrid Emulator: Connected", "time": "2025-12-03 11:48:48,375"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2025-12-03 11:48:49,941"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 11:48:49,943"}
+{"level": "WARNING", "name": "can.pcan", "message": "uptime library not available, timestamps are relative to boot time and not to Epoch UTC", "time": "2025-12-03 11:48:49,956"}
+{"level": "INFO", "name": "root", "message": "CAN connected pcan:PCAN_USBBUS1", "time": "2025-12-03 11:48:50,105"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 11:48:50,656"}
+{"level": "INFO", "name": "root", "message": "Start Cyclic CAN requested", "time": "2025-12-03 11:48:56,113"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO", "time": "2025-12-03 11:48:56,129"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 11:49:12,940"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 11:49:12,943"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 11:49:12,943"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 11:49:12,944"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Connect: already connected, reusing existing session", "time": "2025-12-03 11:49:12,945"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 11:49:12,946"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: already connected, reusing existing session", "time": "2025-12-03 11:49:12,948"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-12-03 11:49:12,959"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-12-03 11:49:13,448"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Started: trace_20251203_114913", "time": "2025-12-03 11:49:13,451"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Started: trace_20251203_114913", "time": "2025-12-03 11:49:13,453"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-12-03 11:49:13,454"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-12-03 11:49:13,954"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 11:49:13,960"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 11:49:13,961"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-12-03 11:49:13,963"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-12-03 11:49:14,463"}
+{"level": "INFO", "name": "root", "message": "Step 4: Wait: 2.0s (completed)", "time": "2025-12-03 11:49:16,472"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: Wait: 2.0s (completed)", "time": "2025-12-03 11:49:16,473"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-12-03 11:49:16,475"}
+{"level": "INFO", "name": "root", "message": "Step 5: CAN Stop Cyclic: Success", "time": "2025-12-03 11:49:16,976"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2025-12-03 11:49:16,977"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: CAN Stop Cyclic: Success", "time": "2025-12-03 11:49:16,978"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2025-12-03 11:49:16,979"}
+{"level": "INFO", "name": "root", "message": "Step 6: CAN Trace Stopped", "time": "2025-12-03 11:49:17,481"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2025-12-03 11:49:17,481"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: CAN Trace Stopped", "time": "2025-12-03 11:49:17,485"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2025-12-03 11:49:17,486"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:49:17,984"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:49:17,984"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 11:49:28,369"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 11:49:28,371"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 11:49:28,371"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 11:49:28,372"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Connect: already connected, reusing existing session", "time": "2025-12-03 11:49:28,373"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 11:49:28,375"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: already connected, reusing existing session", "time": "2025-12-03 11:49:28,377"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-12-03 11:49:28,378"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-12-03 11:49:28,876"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Started: trace_20251203_114928", "time": "2025-12-03 11:49:28,880"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Started: trace_20251203_114928", "time": "2025-12-03 11:49:28,881"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-12-03 11:49:28,882"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-12-03 11:49:29,383"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 11:49:29,412"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 11:49:29,412"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-12-03 11:49:29,416"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-12-03 11:49:29,916"}
+{"level": "INFO", "name": "root", "message": "Step 4: Wait: 2.0s (completed)", "time": "2025-12-03 11:49:31,928"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: Wait: 2.0s (completed)", "time": "2025-12-03 11:49:31,929"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-12-03 11:49:31,930"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2025-12-03 11:49:32,432"}
+{"level": "INFO", "name": "root", "message": "Step 5: CAN Stop Cyclic: Success", "time": "2025-12-03 11:49:32,433"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: CAN Stop Cyclic: Success", "time": "2025-12-03 11:49:32,434"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2025-12-03 11:49:32,438"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2025-12-03 11:49:32,936"}
+{"level": "INFO", "name": "root", "message": "Step 6: CAN Trace Stopped", "time": "2025-12-03 11:49:32,938"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: CAN Trace Stopped", "time": "2025-12-03 11:49:32,941"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2025-12-03 11:49:32,943"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:49:33,440"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:49:33,440"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2025-12-03 11:49:55,147"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 11:49:55,148"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 11:49:55,149"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2025-12-03 11:49:55,150"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Connect: already connected, reusing existing session", "time": "2025-12-03 11:49:55,151"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 11:49:55,152"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: already connected, reusing existing session", "time": "2025-12-03 11:49:55,153"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-12-03 11:49:55,164"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-12-03 11:49:55,658"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Started: trace_20251203_114955", "time": "2025-12-03 11:49:55,660"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Started: trace_20251203_114955", "time": "2025-12-03 11:49:55,664"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-12-03 11:49:55,666"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-12-03 11:49:56,162"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 11:49:56,169"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 11:49:56,171"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-12-03 11:49:56,173"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-12-03 11:49:56,674"}
+{"level": "INFO", "name": "root", "message": "Step 4: Wait: 2.0s (completed)", "time": "2025-12-03 11:49:58,682"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: Wait: 2.0s (completed)", "time": "2025-12-03 11:49:58,683"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-12-03 11:49:58,686"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2025-12-03 11:49:59,187"}
+{"level": "INFO", "name": "root", "message": "Step 5: CAN Trace Stopped", "time": "2025-12-03 11:49:59,189"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: CAN Trace Stopped", "time": "2025-12-03 11:49:59,192"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2025-12-03 11:49:59,193"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:49:59,692"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 11:49:59,692"}
+{"level": "INFO", "name": "root", "message": "Stop Cyclic CAN requested", "time": "2025-12-03 11:50:13,150"}
+{"level": "INFO", "name": "root", "message": "Cyclic CAN stopped", "time": "2025-12-03 11:50:13,150"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:50:18,782"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 11:50:18,784"}
+{"level": "INFO", "name": "root", "message": "power_supply: PS OK (V=0.521729, I=-0.00109863)", "time": "2025-12-03 11:51:04,786"}
+{"level": "INFO", "name": "root", "message": "grid_emulator: Grid OK (V=0.0, I=0.0)", "time": "2025-12-03 11:51:04,788"}
+{"level": "INFO", "name": "root", "message": "oscilloscope: Scope OK: RIGOL TECHNOLOGIES,MSO5204,MS5A231902077,00.01.03.00.01\n", "time": "2025-12-03 11:51:04,790"}
+{"level": "INFO", "name": "root", "message": "power_supply: PS OK (V=0.325439, I=-0.00114059)", "time": "2025-12-03 11:51:31,171"}
+{"level": "INFO", "name": "root", "message": "grid_emulator: Grid OK (V=229.999, I=0.0746972)", "time": "2025-12-03 11:51:31,172"}
+{"level": "INFO", "name": "root", "message": "oscilloscope: Scope OK: RIGOL TECHNOLOGIES,MSO5204,MS5A231902077,00.01.03.00.01\n", "time": "2025-12-03 11:51:31,174"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 12:17:27,672"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 12:17:28,281"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 12:24:22,840"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 12:24:22,840"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 12:29:07,263"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 12:29:07,266"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 12:45:24,306"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 12:45:24,307"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2025-12-03 12:46:04,853"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2025-12-03 12:46:07,303"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 12:46:07,304"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 12:46:07,306"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 12:46:07,306"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 12:46:07,307"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 12:46:07,308"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 12:46:07,311"}
+{"level": "WARNING", "name": "can.pcan", "message": "uptime library not available, timestamps are relative to boot time and not to Epoch UTC", "time": "2025-12-03 12:46:07,361"}
+{"level": "INFO", "name": "root", "message": "CAN connected pcan:PCAN_USBBUS1", "time": "2025-12-03 12:46:07,488"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Connect: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 12:46:07,489"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 12:46:07,490"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-12-03 12:46:07,491"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-12-03 12:46:07,993"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Started: trace_20251203_124607", "time": "2025-12-03 12:46:07,996"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Started: trace_20251203_124607", "time": "2025-12-03 12:46:07,999"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-12-03 12:46:08,001"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-12-03 12:46:08,498"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 12:46:08,512"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 12:46:08,513"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-12-03 12:46:08,515"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:08,516"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-12-03 12:46:09,015"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:09,278"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:10,278"}
+{"level": "INFO", "name": "root", "message": "Step 4: Wait: 2.0s (completed)", "time": "2025-12-03 12:46:11,025"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: Wait: 2.0s (completed)", "time": "2025-12-03 12:46:11,026"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-12-03 12:46:11,028"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:11,278"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2025-12-03 12:46:11,529"}
+{"level": "INFO", "name": "root", "message": "Step 5: CAN Stop Cyclic: Success", "time": "2025-12-03 12:46:11,530"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: CAN Stop Cyclic: Success", "time": "2025-12-03 12:46:11,531"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2025-12-03 12:46:11,537"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2025-12-03 12:46:12,033"}
+{"level": "INFO", "name": "root", "message": "Step 6: CAN Trace Stopped", "time": "2025-12-03 12:46:12,034"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: CAN Trace Stopped", "time": "2025-12-03 12:46:12,037"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2025-12-03 12:46:12,038"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:12,278"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 12:46:12,537"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 12:46:12,537"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:13,278"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:14,278"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:15,278"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:16,278"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:17,278"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:18,278"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:19,279"}
+{"level": "WARNING", "name": "can.pcan", "message": "Bus error: an error counter reached the 'heavy'/'warning' limit", "time": "2025-12-03 12:46:20,279"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 12:46:27,849"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 12:46:27,851"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 12:46:27,852"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 12:46:27,852"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Connect: already connected, reusing existing session", "time": "2025-12-03 12:46:27,855"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 12:46:27,860"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: already connected, reusing existing session", "time": "2025-12-03 12:46:27,862"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-12-03 12:46:27,863"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-12-03 12:46:28,360"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Started: trace_20251203_124628", "time": "2025-12-03 12:46:28,363"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Started: trace_20251203_124628", "time": "2025-12-03 12:46:28,367"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-12-03 12:46:28,368"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-12-03 12:46:28,866"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 12:46:28,876"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 12:46:28,877"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-12-03 12:46:28,879"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-12-03 12:46:29,382"}
+{"level": "INFO", "name": "root", "message": "Step 4: Wait: 2.0s (completed)", "time": "2025-12-03 12:46:31,393"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: Wait: 2.0s (completed)", "time": "2025-12-03 12:46:31,394"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-12-03 12:46:31,396"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2025-12-03 12:46:31,897"}
+{"level": "INFO", "name": "root", "message": "Step 5: CAN Stop Cyclic: Success", "time": "2025-12-03 12:46:31,898"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: CAN Stop Cyclic: Success", "time": "2025-12-03 12:46:31,900"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2025-12-03 12:46:31,906"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2025-12-03 12:46:32,403"}
+{"level": "INFO", "name": "root", "message": "Step 6: CAN Trace Stopped", "time": "2025-12-03 12:46:32,405"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: CAN Trace Stopped", "time": "2025-12-03 12:46:32,406"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2025-12-03 12:46:32,415"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 12:46:32,912"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 12:46:32,913"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 12:52:06,869"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 12:52:08,040"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2025-12-03 12:52:44,789"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2025-12-03 12:52:47,087"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: sequence 2", "time": "2025-12-03 12:52:47,088"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2025-12-03 12:52:47,090"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2025-12-03 12:52:47,090"}
+{"level": "INFO", "name": "root", "message": "Sequence started: sequence 2", "time": "2025-12-03 12:52:47,091"}
+{"level": "INFO", "name": "root", "message": "CAN connect attempt pcan:PCAN_USBBUS1 bitrate=500000", "time": "2025-12-03 12:52:47,092"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2025-12-03 12:52:47,104"}
+{"level": "WARNING", "name": "can.pcan", "message": "uptime library not available, timestamps are relative to boot time and not to Epoch UTC", "time": "2025-12-03 12:52:47,152"}
+{"level": "INFO", "name": "root", "message": "CAN connected pcan:PCAN_USBBUS1", "time": "2025-12-03 12:52:47,282"}
+{"level": "INFO", "name": "root", "message": "Step 1: CAN Connect: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 12:52:47,283"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: CAN Connect: [CAN] \u2713 Connected to pcan:PCAN_USBBUS1", "time": "2025-12-03 12:52:47,284"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2025-12-03 12:52:47,285"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2025-12-03 12:52:47,786"}
+{"level": "INFO", "name": "root", "message": "Step 2: CAN Trace Started: trace_20251203_125247", "time": "2025-12-03 12:52:47,789"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: CAN Trace Started: trace_20251203_125247", "time": "2025-12-03 12:52:47,791"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2025-12-03 12:52:47,792"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2025-12-03 12:52:48,291"}
+{"level": "INFO", "name": "root", "message": "Step 3: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 12:52:48,304"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: ", "time": "2025-12-03 12:52:48,305"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2025-12-03 12:52:48,306"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2025-12-03 12:52:48,807"}
+{"level": "INFO", "name": "root", "message": "Step 4: Wait: 2.0s (completed)", "time": "2025-12-03 12:52:50,818"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: Wait: 2.0s (completed)", "time": "2025-12-03 12:52:50,819"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2025-12-03 12:52:50,821"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2025-12-03 12:52:51,322"}
+{"level": "INFO", "name": "root", "message": "Step 5: CAN Stop Cyclic: Success", "time": "2025-12-03 12:52:51,322"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: CAN Stop Cyclic: Success", "time": "2025-12-03 12:52:51,324"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2025-12-03 12:52:51,331"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2025-12-03 12:52:51,826"}
+{"level": "INFO", "name": "root", "message": "Step 6: CAN Trace Stopped", "time": "2025-12-03 12:52:51,827"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: CAN Trace Stopped", "time": "2025-12-03 12:52:51,828"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2025-12-03 12:52:51,831"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 12:52:52,330"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2025-12-03 12:52:52,331"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 14:45:45,190"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 14:45:46,119"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2025-12-03 14:45:50,253"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2025-12-03 14:45:50,254"}

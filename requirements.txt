@@ -1,0 +1,6 @@
+PyQt6
+pyvisa
+python-can
+pyqtdarktheme
+cantools
+PyQt6-WebEngine
