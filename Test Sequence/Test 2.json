@@ -1,0 +1,30 @@
+[
+  {
+    "action": "CAN / Connect",
+    "params": ""
+  },
+  {
+    "action": "CAN / Start Trace",
+    "params": ""
+  },
+  {
+    "action": "CAN / Start Cyclic CAN",
+    "params": ""
+  },
+  {
+    "action": "Wait",
+    "params": "20"
+  },
+  {
+    "action": "CAN / Stop Cyclic CAN",
+    "params": ""
+  },
+  {
+    "action": "CAN / Stop Trace",
+    "params": ""
+  },
+  {
+    "action": "CAN / Disconnect",
+    "params": ""
+  }
+]
