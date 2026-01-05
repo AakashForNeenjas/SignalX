@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+
+# Builds / dist
+build/
+dist/
+*.spec
+
+# Logs
+logs/
+*.log
+
+# Test artifacts
+Test Results/
+
+# IDE
+.vscode/
+.idea/
