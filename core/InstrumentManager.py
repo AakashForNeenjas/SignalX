@@ -1,8 +1,16 @@
-import pyvisa
+try:
+    import pyvisa
+except Exception as _visa_exc:
+    pyvisa = None
+    _visa_import_error = _visa_exc
+else:
+    _visa_import_error = None
 import time
 import random
 import sys
 import os
+import importlib.util
+from types import ModuleType
 from core.driver_base import PowerSupplyDriver, GridEmulatorDriver, OscilloscopeDriver, HealthStatus
 
 # Add parent directory to path to import config
@@ -31,12 +39,15 @@ class InstrumentDriver:
             return True, "Connected (Simulation)"
         
         try:
+            if pyvisa is None:
+                raise ImportError(f"PyVISA not available: {_visa_import_error}")
             rm = pyvisa.ResourceManager()
             self.inst = rm.open_resource(self.resource_name)
             self.connected = True
             return True, "Connected"
         except Exception as e:
-            msg = f"Error connecting to {self.resource_name}: {e}"
+            hint = "Install NI-VISA Runtime or pyvisa-py and set PYVISA_LIBRARY if needed."
+            msg = f"Error connecting to {self.resource_name}: {e}. {hint}"
             print(msg)
             return False, msg
 
@@ -183,6 +194,11 @@ class ITECH6006(ITECH6000, PowerSupplyDriver):
         except Exception:
             c = 0.0
         return v, c
+
+    def measure_power_vi(self):
+        """Measure voltage, current, and compute power (V*I)."""
+        v, c = self.measure_vi()
+        return v, c, v * c
 
     def read_errors(self):
         try:
@@ -337,6 +353,20 @@ class ITECH7900(InstrumentDriver, GridEmulatorDriver):
         except Exception:
             return 0.0
 
+    def measure_power_factor(self):
+        """Measure PF directly, fallback compute PF = real/apparent."""
+        try:
+            return float(self.query("MEAS:POW:PF?"))
+        except Exception:
+            try:
+                real = self.measure_power_real()
+                apparent = self.measure_power_apparent()
+                if apparent == 0:
+                    return 0.0
+                return real / apparent
+            except Exception:
+                return 0.0
+
     def measure_thd_current(self):
         try:
             return float(self.query("MEAS:CURR:HARMonic:THD?"))
@@ -386,6 +416,8 @@ class InstrumentManager:
         self.itech6000 = None
         self.siglent = None
         self.itech7900 = None
+        self.dc_load = None
+        self._dc_module = None
         # Allow callers to inject addresses per profile
         self.addresses = config if config else INSTRUMENT_ADDRESSES
 
@@ -425,10 +457,180 @@ class InstrumentManager:
         
         return success, "\n".join(messages)
 
+    # --------- Independent init/disconnect helpers for sequencer INSTR actions ----------
+    def init_ps(self):
+        addr_ps = self.addresses.get('Bi-Directional Power Supply', "TCPIP::192.168.4.53::INSTR")
+        if self.itech6000 is None:
+            self.itech6000 = ITECH6006(addr_ps, self.simulation_mode)
+        if getattr(self.itech6000, "connected", False):
+            return True, "PS already connected"
+        return self.itech6000.connect()
+
+    def end_ps(self):
+        if self.itech6000:
+            try:
+                self.itech6000.disconnect()
+                return True, "PS disconnected"
+            except Exception as e:
+                return False, f"PS disconnect failed: {e}"
+        return True, "PS not initialized"
+
+    def init_gs(self):
+        addr_grid = self.addresses.get('Grid Emulator', "TCPIP::192.168.4.52::INSTR")
+        if self.itech7900 is None:
+            self.itech7900 = ITECH7900(addr_grid, self.simulation_mode)
+        if getattr(self.itech7900, "connected", False):
+            return True, "GS already connected"
+        return self.itech7900.connect()
+
+    def end_gs(self):
+        if self.itech7900:
+            try:
+                self.itech7900.disconnect()
+                return True, "GS disconnected"
+            except Exception as e:
+                return False, f"GS disconnect failed: {e}"
+        return True, "GS not initialized"
+
+    def init_os(self):
+        addr_scope = self.addresses.get('Oscilloscope', "TCPIP::192.168.4.51::INSTR")
+        if self.siglent is None:
+            self.siglent = SiglentSDX(addr_scope, self.simulation_mode)
+        if getattr(self.siglent, "connected", False):
+            return True, "Oscilloscope already connected"
+        return self.siglent.connect()
+
+    def end_os(self):
+        if self.siglent:
+            try:
+                self.siglent.disconnect()
+                return True, "Oscilloscope disconnected"
+            except Exception as e:
+                return False, f"Oscilloscope disconnect failed: {e}"
+        return True, "Oscilloscope not initialized"
+
+    # ---------- DC Load (Maynuo M97 via RS232/USB) ----------
+    def _load_dc_driver(self) -> ModuleType:
+        """Lazy-load the DC load driver from core/DC_load(.py) to avoid hard dependency failures."""
+        if self._dc_module:
+            return self._dc_module
+        module_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "DC_load")
+        if not os.path.exists(module_path) and os.path.exists(module_path + ".py"):
+            module_path = module_path + ".py"
+        spec = importlib.util.spec_from_file_location("core.dc_load_dynamic", module_path)
+        if spec is None:
+            raise ImportError("Cannot load DC_load driver file")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)  # type: ignore
+        self._dc_module = module
+        return module
+
+    def init_load(self, port=None, slave_addr=1, baudrate=9600, timeout=0.3, parity="N"):
+        """Connect DC load; default port from config INSTRUMENT_ADDRESSES['DC Load'].""" 
+        if self.dc_load and getattr(self.dc_load, "ser", None) and self.dc_load.ser.is_open:
+            return True, "DC Load already connected"
+        try:
+            module = self._load_dc_driver()
+            addr = port or self.addresses.get("DC Load", "COM3")
+            self.dc_load = module.MaynuoM97(port=addr, slave_addr=slave_addr, baudrate=baudrate, timeout=timeout, parity=parity)
+            self.dc_load.open()
+            try:
+                self.dc_load.set_remote_control(True)
+            except Exception:
+                pass
+            return True, f"DC Load connected on {addr}"
+        except Exception as e:
+            return False, f"DC Load connect failed: {e}"
+
+    def end_load(self):
+        if self.dc_load:
+            try:
+                self.dc_load.close()
+                return True, "DC Load disconnected"
+            except Exception as e:
+                return False, f"DC Load disconnect failed: {e}"
+        return True, "DC Load not initialized"
+
+    def dc_load_enable_input(self, enable=True):
+        if not self.dc_load:
+            return False, "DC Load not initialized"
+        try:
+            if enable:
+                self.dc_load.enable_input()
+                return True, "DC Load input ON"
+            else:
+                self.dc_load.disable_input()
+                return True, "DC Load input OFF"
+        except Exception as e:
+            return False, f"DC Load input toggle failed: {e}"
+
+    def dc_load_set_cc(self, current_a):
+        if not self.dc_load:
+            return False, "DC Load not initialized"
+        try:
+            self.dc_load.set_cc_current(float(current_a))
+            return True, f"DC Load CC set to {current_a} A"
+        except Exception as e:
+            return False, f"DC Load CC failed: {e}"
+
+    def dc_load_set_cv(self, voltage_v):
+        if not self.dc_load:
+            return False, "DC Load not initialized"
+        try:
+            self.dc_load.set_cv_voltage(float(voltage_v))
+            return True, f"DC Load CV set to {voltage_v} V"
+        except Exception as e:
+            return False, f"DC Load CV failed: {e}"
+
+    def dc_load_set_cp(self, power_w):
+        if not self.dc_load:
+            return False, "DC Load not initialized"
+        try:
+            self.dc_load.set_cw_power(float(power_w))
+            return True, f"DC Load CP set to {power_w} W"
+        except Exception as e:
+            return False, f"DC Load CP failed: {e}"
+
+    def dc_load_set_cr(self, resistance_ohm):
+        if not self.dc_load:
+            return False, "DC Load not initialized"
+        try:
+            self.dc_load.set_cr_resistance(float(resistance_ohm))
+            return True, f"DC Load CR set to {resistance_ohm} Ω"
+        except Exception as e:
+            return False, f"DC Load CR failed: {e}"
+
+    def dc_load_measure_vi(self):
+        if not self.dc_load:
+            return False, "DC Load not initialized"
+        try:
+            v, i = self.dc_load.read_voltage_current()
+            return True, f"DC Load Meas V={v:.3f} V, I={i:.3f} A"
+        except Exception as e:
+            return False, f"DC Load measure failed: {e}"
+
+    def dc_load_measure_power(self):
+        ok, msg = self.dc_load_measure_vi()
+        if not ok:
+            return False, msg
+        try:
+            parts = msg.split(",")
+            v_part = float(parts[0].split("=")[1].split()[0])
+            i_part = float(parts[1].split("=")[1].split()[0])
+            p = v_part * i_part
+            return True, f"DC Load Power: {p:.3f} W (V={v_part:.3f} V, I={i_part:.3f} A)"
+        except Exception:
+            return True, msg
+
     def close_instruments(self):
         if self.itech6000: self.itech6000.disconnect()
         if self.siglent: self.siglent.disconnect()
         if self.itech7900: self.itech7900.disconnect()
+        if self.dc_load:
+            try:
+                self.dc_load.close()
+            except Exception:
+                pass
 
     def safe_power_down(self):
         """Attempt to power down PS and Grid gracefully."""

@@ -2,7 +2,7 @@
   "meta": {
     "author": "Aakash",
     "description": "test sequence for automated testing",
-    "last_modified": "2025-12-01T15:05:54.518376",
+    "last_modified": "2025-12-05T12:28:19.379326",
     "name": "sequence 2",
     "tags": [
       "CAN",
@@ -25,7 +25,7 @@
     },
     {
       "action": "Wait",
-      "params": "2"
+      "params": "10"
     },
     {
       "action": "CAN / Stop Cyclic CAN",

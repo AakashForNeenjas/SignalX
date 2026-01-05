@@ -1,3 +1,5 @@
+import os
+from pathlib import Path
 from PyQt6.QtGui import QIcon, QPixmap, QPainter, QColor, QFont
 
 
@@ -22,13 +24,24 @@ def _build_pixmap(size: int = 128) -> QPixmap:
     return pixmap
 
 
+def _load_logo_pixmap(size: int = 256) -> QPixmap:
+    """
+    Try to load the saved app logo from the ui folder; fall back to generated art.
+    """
+    logo_path = Path(__file__).with_name("app logo.png")
+    if logo_path.exists():
+        pix = QPixmap(str(logo_path))
+        if not pix.isNull():
+            return pix.scaled(size, size)
+    return _build_pixmap(size)
+
+
 def create_app_icon() -> QIcon:
-    """Create a lightweight generated icon (no external assets)."""
-    pix = _build_pixmap(128)
-    icon = QIcon(pix)
-    return icon
+    """Create an icon using the saved app logo when available."""
+    pix = _load_logo_pixmap(256)
+    return QIcon(pix)
 
 
 def create_splash_pixmap() -> QPixmap:
-    """Splash artwork derived from the same generated icon."""
-    return _build_pixmap(256)
+    """Splash artwork derived from the same saved logo (or fallback artwork)."""
+    return _load_logo_pixmap(512)

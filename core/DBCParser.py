@@ -1,6 +1,15 @@
 import cantools
 import os
+import sys
 from typing import Dict, Optional, Any
+
+
+def resource_path(rel_path: str) -> str:
+    """
+    Resolve a path that works both in development and in a PyInstaller bundle.
+    """
+    base = getattr(sys, "_MEIPASS", os.path.abspath("."))
+    return os.path.join(base, rel_path)
 
 class DBCParser:
     """Parse and manage DBC files for CAN message decoding"""
@@ -16,21 +25,22 @@ class DBCParser:
         If filename is None, loads the first .dbc file found.
         """
         try:
+            dbc_root = resource_path(self.dbc_folder)
             # Create DBC folder if it doesn't exist
-            if not os.path.exists(self.dbc_folder):
-                os.makedirs(self.dbc_folder)
-                print(f"Created DBC folder: {self.dbc_folder}")
+            if not os.path.exists(dbc_root):
+                os.makedirs(dbc_root, exist_ok=True)
+                print(f"Created DBC folder: {dbc_root}")
                 return False, "DBC folder created, please add DBC file"
             
             # Find DBC file
             if filename:
-                dbc_path = os.path.join(self.dbc_folder, filename if filename.endswith('.dbc') else f"{filename}.dbc")
+                dbc_path = os.path.join(dbc_root, filename if filename.endswith('.dbc') else f"{filename}.dbc")
             else:
                 # Find first .dbc file in folder
-                dbc_files = [f for f in os.listdir(self.dbc_folder) if f.endswith('.dbc')]
+                dbc_files = [f for f in os.listdir(dbc_root) if f.endswith('.dbc')]
                 if not dbc_files:
-                    return False, f"No DBC files found in {self.dbc_folder}"
-                dbc_path = os.path.join(self.dbc_folder, dbc_files[0])
+                    return False, f"No DBC files found in {dbc_root}"
+                dbc_path = os.path.join(dbc_root, dbc_files[0])
             
             if not os.path.exists(dbc_path):
                 return False, f"DBC file not found: {dbc_path}"

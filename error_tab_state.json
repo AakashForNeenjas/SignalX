@@ -1,0 +1,79 @@
+{
+  "period_ms": 100,
+  "messages": [
+    "VCU_Data",
+    "Vehicle_Mode",
+    "BMS_PARAMETER_1",
+    "BATTERY_LIMITS",
+    "BATTERY_STS_INFO"
+  ],
+  "signals": {
+    "VCU_Data": {
+      "Chrgr_Plugin": 0,
+      "MCU_Power_Supply": 0,
+      "HU_Power_Supply": 0,
+      "Left_Indicator_Power_Supply": 0,
+      "Right_Indicator_Power_Supply": 0,
+      "High_Beam_Power_Supply": 0,
+      "Low_Beam_Power_Supply": 0,
+      "Position_Lamp_Power_Supply": 0,
+      "LSC_Power_Supply": 0,
+      "RSC_Power_Supply": 0,
+      "Horn_Power_Supply": 0,
+      "Speaker_Power_Supply": 0,
+      "SOM_Power_Supply": 0,
+      "EHBL_Commands": 0,
+      "EHBL_Power_Supply": 0,
+      "Stop_Lamp_Power_Supply": 0,
+      "Tail_Lamp_Power_Supply": 0,
+      "Veh_Authentication_Flag": 0,
+      "Ignition_Sts": 1,
+      "Tail_Lamp_Sts": 0,
+      "Stop_Lamp_Sts": 0,
+      "Drv_Enable": 0,
+      "Cruise_Availibilty_Status": 0,
+      "Throttle_Response_CutOFF_Flag": 0,
+      "Auto_Lock_Flg": 0,
+      "BMS_Hearbeat_Fail_flg": 0,
+      "MCU_Hearbeat_Fail_flg": 0,
+      "OBC_Hearbeat_Fail_flg": 0,
+      "SPI_Comm_Fail_flg": 0,
+      "LIN_Comm_Fail_flg": 0,
+      "BCM_RTC_WakeUp_flg": 0
+    },
+    "Vehicle_Mode": {
+      "Vehicle_Mode_Lvl_1": 5,
+      "Vehicle_Mode_Lvl_2": 15,
+      "Vehicle_Mode_Lvl_3": 1
+    },
+    "BMS_PARAMETER_1": {
+      "DisChrg_Contactor_state": 3,
+      "Chrg_Contactor_state": 1,
+      "PreChrg_Contactor_state": 0,
+      "Batt_Pack_Bus_Vlt": "0",
+      "BMS_Board_Temp": "0",
+      "BMS_Mode": 2,
+      "HVIL_OBC_Req": 0,
+      "HVIL_MCU_Req": 0,
+      "HVIL_OBC_Sts": 0,
+      "HVIL_MCU_Sts": 1,
+      "BMS_Chrgr_CAN_Heartbeat": 1,
+      "BMS_Regen_Inhibit": 1
+    },
+    "BATTERY_LIMITS": {
+      "Chrg_Curr_limit": "21",
+      "DisChrg_Curr_limit": "-30",
+      "Regen_Curr_Limit": "0",
+      "Time_to_Chrg_Hrs": "0",
+      "Time_to_Chrg_Mins": "0"
+    },
+    "BATTERY_STS_INFO": {
+      "Battery_Curr": "0",
+      "Battery_Pack_SoC": "0",
+      "Chrg_Vlt_limit": "120",
+      "Chrgr_Mode_Request": 1,
+      "Time_to_Chrg_Hrs": "0",
+      "Time_to_Chrg_Mins": "0"
+    }
+  }
+}

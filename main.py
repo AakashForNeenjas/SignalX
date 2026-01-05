@@ -32,7 +32,8 @@ def main():
     window = MainWindow(logger=logger, log_path=log_path)
     window.setWindowIcon(app_icon)
     window.setWindowOpacity(0.0)
-    window.move(window.pos() + QPoint(0, 30))  # start slightly lower
+    # Maximized display (keeps window controls visible)
+    window.showMaximized()
     window.show()
     splash.finish(window)
 

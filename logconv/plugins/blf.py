@@ -1,6 +1,13 @@
 
 import os
-from logconv.model import LogFormatPlugin, FormatCapabilities, LogDocument, WriteResult, BusType, TimeBase
+from logconv.model import (
+    LogFormatPlugin,
+    FormatCapabilities,
+    LogDocument,
+    WriteResult,
+    BusType,
+    TimeBase,
+)
 
 
 class BlfPlugin(LogFormatPlugin):
@@ -10,6 +17,13 @@ class BlfPlugin(LogFormatPlugin):
     def capabilities(self) -> FormatCapabilities:
         return FormatCapabilities(supports_streaming=True, supports_signals=False, bus_types=[BusType.CAN])
 
+    def detect(self, path: str, sample: bytes = None) -> bool:
+        if path and any(path.lower().endswith(ext) for ext in self.extensions):
+            return True
+        if sample:
+            return sample[:4] == b"L\x04\x00\x00"  # BLF magic
+        return False
+
     def parse(self, path, options=None) -> LogDocument:
         # Avoid loading whole BLF into memory; just record source path and basic meta
         meta = {"path": path, "format": "blf"}
@@ -17,33 +31,37 @@ class BlfPlugin(LogFormatPlugin):
 
     def write(self, path, log_doc: LogDocument, options=None) -> WriteResult:
         src = (log_doc.source_info or {}).get("path")
-        # If python-can is available, do a best-effort BLF->TRC text conversion; else copy bytes.
+        # If python-can is available, emit a BLF with frames; otherwise copy source if exists.
         try:
             import can
-            reader = can.io.BLFReader(src)
-            first_ts = None
-            with open(path, "w", encoding="utf-8") as f:
-                f.write(";$FILEVERSION=1.3\n")
-                for msg in reader:
-                    if first_ts is None:
-                        first_ts = msg.timestamp
-                    t_rel = msg.timestamp - first_ts if first_ts is not None else 0.0
-                    ch = getattr(msg, "channel", 1) or 1
-                    direction = "Rx" if getattr(msg, "is_rx", True) else "Tx"
-                    arb_id = msg.arbitration_id
-                    dlc = msg.dlc
-                    data_bytes = getattr(msg, "data", b"")
-                    data_str = " ".join(f"{b:02X}" for b in data_bytes[:dlc])
-                    f.write(f"{t_rel:0.6f} {ch} {direction} {arb_id:08X} d {dlc} {data_str}\n")
-            return WriteResult(success=True, output_paths=[path])
+
+            if log_doc.frames:
+                writer = can.BLFWriter(path)
+                for fr in log_doc.frames:
+                    msg = can.Message(
+                        arbitration_id=fr.arbitration_id,
+                        dlc=fr.dlc,
+                        data=fr.payload,
+                        is_extended_id=fr.arbitration_id > 0x7FF,
+                        timestamp=fr.timestamp_ns / 1_000_000_000.0,
+                        channel=int(fr.channel) if fr.channel and str(fr.channel).isdigit() else None,
+                    )
+                    writer.on_message_received(msg)
+                writer.stop()
+                return WriteResult(success=True, output_paths=[path], warnings=[])
+
+            if src and os.path.exists(src):
+                import shutil
+                shutil.copyfile(src, path)
+                return WriteResult(success=True, output_paths=[path], warnings=["Copied BLF as-is (no frames parsed)."])
         except Exception:
-            try:
-                if src and os.path.exists(src):
+            if src and os.path.exists(src):
+                try:
                     import shutil
                     shutil.copyfile(src, path)
-                    return WriteResult(success=True, output_paths=[path], warnings=["Copied BLF as-is (conversion library unavailable)."])
-            except Exception as e2:
-                return WriteResult(success=False, messages=[str(e2)])
+                    return WriteResult(success=True, output_paths=[path], warnings=["BLF backend unavailable; copied source bytes."])
+                except Exception as e2:
+                    return WriteResult(success=False, messages=[str(e2)])
         return WriteResult(success=False, messages=["BLF write failed"])
 
 

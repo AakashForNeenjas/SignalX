@@ -80,6 +80,19 @@ class WriteResult:
     output_paths: List[str] = field(default_factory=list)
 
 
+@dataclass
+class ConversionEntry:
+    """Result for a single input file."""
+    input: str
+    detected_format: Optional[str]
+    status: str  # success|warning|error
+    outputs: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+    errors: List[str] = field(default_factory=list)
+    duration_ms: Optional[float] = None
+    notes: List[str] = field(default_factory=list)
+
+
 class FormatCapabilities:
     def __init__(self, *, supports_streaming: bool, supports_signals: bool, bus_types: List[str]):
         self.supports_streaming = supports_streaming
