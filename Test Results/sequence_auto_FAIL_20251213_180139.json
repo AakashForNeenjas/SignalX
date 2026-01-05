@@ -1,0 +1,25 @@
+{
+  "name": "sequence auto",
+  "meta": {
+    "name": "sequence auto",
+    "author": "Aakash",
+    "description": "demo",
+    "tags": [
+      "demo"
+    ],
+    "version": 1,
+    "last_modified": "2025-12-13T18:01:38.488328"
+  },
+  "start_time": "2025-12-13 18:01:38.766949",
+  "steps": [
+    {
+      "index": 1,
+      "action": "GS / Ramp Set & Measure",
+      "params": "{\"target\": {\"type\": \"GS_VOLT\", \"message\": \"\", \"signal\": \"\"}, \"start\": 100.0, \"step\": 1.0, \"end\": 150.0, \"dwell\": 1.0, \"tolerance\": 0.5, \"retries\": 3, \"verify\": true, \"measure\": {\"gs\": true, \"ps\": true}}",
+      "status": "Fail",
+      "messages": [
+        "Verify failed at 100.0"
+      ]
+    }
+  ]
+}

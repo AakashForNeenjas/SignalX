@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Line_and_Load_Regulation PASS</title>
+<style>
+body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; background: #0b111a; color: #e7f1ff; margin: 0; padding: 0; }
+.container { max-width: 1080px; margin: 0 auto; padding: 32px 24px 48px 24px; }
+.header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #233044; padding-bottom: 12px; margin-bottom: 16px; }
+.title { font-size: 28px; font-weight: 700; letter-spacing: 0.5px; color: #5ce1e6; }
+.badge { padding: 8px 14px; border-radius: 16px; font-weight: 700; text-transform: uppercase; }
+.status-pass { background: #0f3c2a; color: #5df0a1; border: 1px solid #1f6c46; }
+.status-fail { background: #3c1f1f; color: #ff9b9b; border: 1px solid #7a2f2f; }
+.meta { list-style: none; padding: 0; margin: 0 0 12px 0; display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 13px; color: #9db4d4; }
+.meta li b { color: #e7f1ff; }
+.dates { font-size: 13px; color: #9db4d4; margin-bottom: 8px; }
+table { width: 100%; border-collapse: collapse; margin-top: 16px; border: 1px solid #1f2b3d; }
+th, td { border: 1px solid #1f2b3d; padding: 10px; vertical-align: top; font-size: 13px; }
+th { background: #162133; color: #c8ddf5; text-align: left; }
+tr:nth-child(even) { background: #0f1726; }
+tr:nth-child(odd) { background: #0c141f; }
+.step-pass { color: #6dffb3; font-weight: 600; }
+.step-fail { color: #ff8f8f; font-weight: 600; }
+.step-running { color: #f6c343; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="title">Line and Load Regulation</div>
+    <div class="badge status-pass">PASS</div>
+  </div>
+  <div class="dates"><b>Started:</b> 2025-12-10 22:04:45.968958 &nbsp; <b>Ended:</b> 2025-12-10 22:05:34.338835 &nbsp; <b>Total:</b> 00:00:48</div>
+  <ul class="meta"><li><b>Author:</b> Aakash</li><li><b>Description:</b> Line and Load Regulation</li><li><b>Last_Modified:</b> 2025-12-10T17:43:46.550016</li><li><b>Name:</b> Line and Load Regulation</li><li><b>Tags:</b> ['Line', 'Load', 'OBC', 'HPDC']</li><li><b>Version:</b> 1</li></ul>
+  <table>
+    <thead><tr><th>#</th><th>Action</th><th>Parameters</th><th>Status</th><th>Messages</th></tr></thead>
+    <tbody>
+    <tr><td>1</td><td>CAN / Connect</td><td></td><td>Pass</td><td>CAN Connect: [CAN SIMULATION] Connected (Simulation Mode)</td></tr><tr><td>2</td><td>CAN / Start Trace</td><td></td><td>Pass</td><td>CAN Trace Started: trace_20251210_220446</td></tr><tr><td>3</td><td>CAN / Start Cyclic CAN</td><td></td><td>Pass</td><td>CAN Start Cyclic: Started: Vehicle_Mode, VCU_Data, BMS_PARAMETER_1, GET_DEBUG_MSG, BATTERY_LIMITS, BATTERY_STS_INFO; Failed: </td></tr><tr><td>4</td><td>PS / HV: Battery Set Discharge (V,I)</td><td>{"voltage": 84.0, "current": 30.0}</td><td>Pass</td><td>PS Battery Set Discharge: V=84.0V I=30.0A</td></tr><tr><td>5</td><td>PS / HV: Output ON</td><td></td><td>Pass</td><td>PS Output ON</td></tr><tr><td>6</td><td>Wait</td><td>10</td><td>Pass</td><td>Wait: 10.0s (completed)</td></tr><tr><td>7</td><td>PS / HV: Measure Voltage, Current, Power</td><td>0</td><td>Pass</td><td>PS Measure VIP: V=0.0V I=0.0A P=0.0W</td></tr><tr><td>8</td><td>GS / Set Voltage AC</td><td>103</td><td>Pass</td><td>GS Set Voltage: 103.0V</td></tr><tr><td>9</td><td>GS / Check Error</td><td></td><td>Pass</td><td>GS Error Status: 0.0</td></tr><tr><td>10</td><td>GS / Power: ON</td><td></td><td>Pass</td><td>GS Power ON</td></tr><tr><td>11</td><td>CAN / Set Signal Value</td><td>{"message_id": "0x12C", "signal_name": "Chrg_Curr_limit", "target_value": 30.0, "tolerance": 0.0, "verify_timeout": 2.0}</td><td>Pass</td><td>Chrg_Curr_limit verified at 30.0<br>Chrg_Curr_limit verified at 30.0</td></tr><tr><td>12</td><td>Wait</td><td>5</td><td>Pass</td><td>Wait: 5.0s (completed)</td></tr><tr><td>13</td><td>GS / Measure Current AC</td><td></td><td>Pass</td><td>GS Measure Current: 0.0A</td></tr><tr><td>14</td><td>GS / Measure Voltage AC</td><td></td><td>Pass</td><td>GS Measure Voltage: 0.0V</td></tr><tr><td>15</td><td>GS / Measure Power Real</td><td></td><td>Pass</td><td>GS Measure Power Real: 0.0W</td></tr><tr><td>16</td><td>GS / Measure THD Current</td><td></td><td>Pass</td><td>GS Measure THD Current: 0.0%</td></tr><tr><td>17</td><td>GS / Measure THD Voltage</td><td></td><td>Pass</td><td>GS Measure THD Voltage: 0.0%</td></tr><tr><td>18</td><td>GS / Measure Power Factor</td><td></td><td>Pass</td><td>GS Measure Power Factor: 0.0</td></tr><tr><td>19</td><td>PS / HV: Measure Voltage, Current, Power</td><td>0</td><td>Pass</td><td>PS Measure VIP: V=0.0V I=0.0A P=0.0W</td></tr><tr><td>20</td><td>CAN / Set Signal Value</td><td>{"message_id": "0x12C", "signal_name": "Chrg_Curr_limit", "target_value": 8.0, "tolerance": 0.0, "verify_timeout": 2.0}</td><td>Pass</td><td>Chrg_Curr_limit verified at 8.0<br>Chrg_Curr_limit verified at 8.0</td></tr><tr><td>21</td><td>Wait</td><td>5</td><td>Pass</td><td>Wait: 5.0s (completed)</td></tr><tr><td>22</td><td>PS / HV: Measure Voltage, Current, Power</td><td>0</td><td>Pass</td><td>PS Measure VIP: V=0.0V I=0.0A P=0.0W</td></tr><tr><td>23</td><td>CAN / Set Signal Value</td><td>{"message_id": "0x12C", "signal_name": "Chrg_Curr_limit", "target_value": 7.0, "tolerance": 0.0, "verify_timeout": 2.0}</td><td>Pass</td><td>Chrg_Curr_limit verified at 7.0<br>Chrg_Curr_limit verified at 7.0</td></tr><tr><td>24</td><td>Wait</td><td>5</td><td>Pass</td><td>Wait: 5.0s (completed)</td></tr><tr><td>25</td><td>PS / HV: Measure Voltage, Current, Power</td><td>0</td><td>Pass</td><td>PS Measure VIP: V=0.0V I=0.0A P=0.0W</td></tr><tr><td>26</td><td>CAN / Set Signal Value</td><td>{"message_id": "0x12C", "signal_name": "Chrg_Curr_limit", "target_value": 6.0, "tolerance": 0.0, "verify_timeout": 2.0}</td><td>Pass</td><td>Chrg_Curr_limit verified at 6.0<br>Chrg_Curr_limit verified at 6.0</td></tr><tr><td>27</td><td>Wait</td><td>5</td><td>Pass</td><td>Wait: 5.0s (completed)</td></tr><tr><td>28</td><td>PS / HV: Measure Voltage, Current, Power</td><td>0</td><td>Pass</td><td>PS Measure VIP: V=0.0V I=0.0A P=0.0W</td></tr><tr><td>29</td><td>GS / Power: OFF</td><td></td><td>Pass</td><td>GS Power OFF</td></tr><tr><td>30</td><td>PS / HV: Output OFF</td><td></td><td>Pass</td><td>PS Output OFF</td></tr><tr><td>31</td><td>CAN / Stop Trace</td><td></td><td>Pass</td><td>CAN Trace Stopped</td></tr><tr><td>32</td><td>CAN / Stop Cyclic CAN</td><td></td><td>Pass</td><td>CAN Stop Cyclic: Success</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

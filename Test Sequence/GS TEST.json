@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "author": "Aakash",
+    "description": "Grid simulator test",
+    "last_modified": "2025-12-13T18:37:10.250304",
+    "name": "GS TEST",
+    "tags": [
+      "Grid simulator test"
+    ],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "GS / Power: ON",
+      "params": ""
+    },
+    {
+      "action": "GS / Ramp Set & Measure",
+      "params": "{\"target\": {\"type\": \"GS_VOLT\", \"message\": \"\", \"signal\": \"\"}, \"start\": 220.0, \"step\": 1.0, \"end\": 230.0, \"dwell\": 0.5, \"tolerance\": 0.5, \"retries\": 3, \"verify\": false, \"measure\": {\"gs\": true, \"ps\": true}}"
+    }
+  ]
+}

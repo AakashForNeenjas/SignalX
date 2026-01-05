@@ -1,6 +1,7 @@
 
 import importlib
-from typing import Dict, List, Optional
+import os
+from typing import Dict, List, Optional, Tuple
 from .model import LogFormatPlugin
 
 
@@ -20,14 +21,38 @@ class FormatRegistry:
     def all(self) -> List[LogFormatPlugin]:
         return list(self._plugins.values())
 
-    def detect_for_path(self, path: str) -> Optional[LogFormatPlugin]:
+    def detect_for_path(self, path: str) -> Tuple[Optional[LogFormatPlugin], Optional[str]]:
+        """
+        Try to detect a plugin for the given path.
+        Returns (plugin, reason) where plugin may be None.
+        """
+        if not path or not os.path.exists(path):
+            return None, "File not found"
+
+        # Try extension match first
         for plugin in self._plugins.values():
             try:
                 if plugin.detect(path):
-                    return plugin
+                    return plugin, None
             except Exception:
                 continue
-        return None
+
+        # Optional content sniff: read small sample and retry detect() with sample
+        sample = None
+        try:
+            with open(path, "rb") as f:
+                sample = f.read(2048)
+        except Exception:
+            sample = None
+
+        for plugin in self._plugins.values():
+            try:
+                if plugin.detect(path, sample=sample):
+                    return plugin, None
+            except Exception:
+                continue
+
+        return None, "No plugin matched by extension or sniff"
 
 
 def load_builtin_plugins() -> FormatRegistry:

@@ -1,0 +1,18 @@
+{
+  "started": "2025-12-25T15:16:56.237084",
+  "finished": "2025-12-25T15:16:56.291341",
+  "entries": [
+    {
+      "input": "C:/Users/aakas/Downloads/BUSMASTERLogFile_0_M0.log (1).txt",
+      "detected_format": "log",
+      "status": "success",
+      "outputs": [
+        "C:\\Users\\aakas\\.gemini\\antigravity\\scratch\\SignalX\\converted_logs\\BUSMASTERLogFile_0_M0.log (1)_blf.blf"
+      ],
+      "warnings": [],
+      "errors": [],
+      "duration_ms": 53.5,
+      "notes": []
+    }
+  ]
+}

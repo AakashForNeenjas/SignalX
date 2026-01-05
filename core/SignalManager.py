@@ -1,7 +1,8 @@
 import json
 import os
+import sys
 from typing import Dict, Any, Callable
-from core.DBCParser import DBCParser
+from core.DBCParser import DBCParser, resource_path
 
 class SignalManager:
     """Manage CAN signal decoding and UI updates based on DBC and mapping configuration"""
@@ -15,7 +16,7 @@ class SignalManager:
     def load_signal_mapping(self, filename="signal_mapping.json"):
         """Load signal-to-UI mapping configuration"""
         try:
-            config_path = os.path.join(self.config_folder, filename)
+            config_path = resource_path(os.path.join(self.config_folder, filename))
             
             if not os.path.exists(config_path):
                 print(f"Signal mapping file not found: {config_path}")

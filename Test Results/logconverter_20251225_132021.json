@@ -1,0 +1,18 @@
+{
+  "started": "2025-12-25T13:20:21.477774",
+  "finished": "2025-12-25T13:20:21.479333",
+  "entries": [
+    {
+      "input": "C:/Users/aakas/.gemini/antigravity/scratch/SignalX/converted_logs/BUSMASTERLogFile_0_M0.log (1)_trc.trc",
+      "detected_format": "trc",
+      "status": "success",
+      "outputs": [
+        "C:\\Users\\aakas\\.gemini\\antigravity\\scratch\\SignalX\\converted_logs\\BUSMASTERLogFile_0_M0.log (1)_trc_log.log"
+      ],
+      "warnings": [],
+      "errors": [],
+      "duration_ms": 1.3,
+      "notes": []
+    }
+  ]
+}

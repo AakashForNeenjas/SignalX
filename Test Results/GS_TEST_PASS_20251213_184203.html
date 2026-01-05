@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>GS_TEST PASS</title>
+<style>
+body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; background: #0b111a; color: #e7f1ff; margin: 0; padding: 0; }
+.container { max-width: 1080px; margin: 0 auto; padding: 32px 24px 48px 24px; }
+.header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #233044; padding-bottom: 12px; margin-bottom: 16px; }
+.title { font-size: 28px; font-weight: 700; letter-spacing: 0.5px; color: #5ce1e6; }
+.badge { padding: 8px 14px; border-radius: 16px; font-weight: 700; text-transform: uppercase; }
+.status-pass { background: #0f3c2a; color: #5df0a1; border: 1px solid #1f6c46; }
+.status-fail { background: #3c1f1f; color: #ff9b9b; border: 1px solid #7a2f2f; }
+.meta { list-style: none; padding: 0; margin: 0 0 12px 0; display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 13px; color: #9db4d4; }
+.meta li b { color: #e7f1ff; }
+.dates { font-size: 13px; color: #9db4d4; margin-bottom: 8px; }
+table { width: 100%; border-collapse: collapse; margin-top: 16px; border: 1px solid #1f2b3d; }
+th, td { border: 1px solid #1f2b3d; padding: 10px; vertical-align: top; font-size: 13px; }
+th { background: #162133; color: #c8ddf5; text-align: left; }
+tr:nth-child(even) { background: #0f1726; }
+tr:nth-child(odd) { background: #0c141f; }
+.step-pass { color: #6dffb3; font-weight: 600; }
+.step-fail { color: #ff8f8f; font-weight: 600; }
+.step-running { color: #f6c343; font-weight: 600; }
+.section { margin-top: 18px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="title">GS TEST</div>
+    <div class="badge status-pass">PASS</div>
+  </div>
+  <div class="dates"><b>Started:</b> 2025-12-13 18:41:30.610359 &nbsp; <b>Ended:</b> 2025-12-13 18:42:03.015227 &nbsp; <b>Total:</b> 00:00:32</div>
+  <ul class="meta"><li><b>Author:</b> Aakash</li><li><b>Description:</b> Grid simulator test</li><li><b>Last_Modified:</b> 2025-12-13T18:37:10.250304</li><li><b>Name:</b> GS TEST</li><li><b>Tags:</b> ['Grid simulator test']</li><li><b>Version:</b> 1</li></ul>
+  <table>
+    <thead><tr><th>#</th><th>Action</th><th>Parameters</th><th>Status</th><th>Messages</th></tr></thead>
+    <tbody>
+    <tr><td>1</td><td>GS / Power: ON</td><td></td><td>Pass</td><td>GS Power ON</td></tr><tr><td>2</td><td>GS / Ramp Set & Measure</td><td>{"target": {"type": "GS_VOLT", "message": "", "signal": ""}, "start": 220.0, "step": 1.0, "end": 230.0, "dwell": 0.5, "tolerance": 0.5, "retries": 3, "verify": false, "measure": {"gs": true, "ps": true}}</td><td>Pass</td><td>Ramp completed (11 points)</td></tr>
+    </tbody>
+  </table>
+  <h2>Ramp Set &amp; Measure Results</h2><div class='section'><h3>Step 2 - GS / Ramp Set & Measure</h3><table><thead><tr><th>Set Value</th><th>Status</th><th>Message</th><th>GS V</th><th>GS I</th><th>GS P</th><th>PF</th><th>ITHD</th><th>VTHD</th><th>Freq</th><th>PS V</th><th>PS I</th><th>PS P</th><th>Efficiency (%)</th><th>Errors</th></tr></thead><tbody><tr><td>220.000</td><td>ok</td><td></td><td>219.999</td><td>3.188</td><td>692.741</td><td>0.987</td><td>8.813</td><td>0.181</td><td>49.997</td><td>69.992</td><td>-7.887</td><td>-552.005</td><td>-79.684</td><td></td></tr><tr><td>221.000</td><td>ok</td><td></td><td>220.995</td><td>3.173</td><td>692.753</td><td>0.988</td><td>8.803</td><td>0.192</td><td>49.997</td><td>69.992</td><td>-7.881</td><td>-551.628</td><td>-79.628</td><td></td></tr><tr><td>222.000</td><td>ok</td><td></td><td>221.999</td><td>3.161</td><td>693.017</td><td>0.988</td><td>9.049</td><td>0.177</td><td>49.997</td><td>69.993</td><td>-7.882</td><td>-551.650</td><td>-79.601</td><td></td></tr><tr><td>223.000</td><td>ok</td><td></td><td>222.995</td><td>3.147</td><td>692.923</td><td>0.988</td><td>8.785</td><td>0.183</td><td>49.997</td><td>69.993</td><td>-7.884</td><td>-551.835</td><td>-79.639</td><td></td></tr><tr><td>224.000</td><td>ok</td><td></td><td>223.999</td><td>3.134</td><td>692.888</td><td>0.987</td><td>8.804</td><td>0.191</td><td>49.997</td><td>69.992</td><td>-7.885</td><td>-551.914</td><td>-79.654</td><td></td></tr><tr><td>225.000</td><td>ok</td><td></td><td>224.995</td><td>3.121</td><td>692.812</td><td>0.987</td><td>9.035</td><td>0.187</td><td>49.997</td><td>69.992</td><td>-7.890</td><td>-552.242</td><td>-79.710</td><td></td></tr><tr><td>226.000</td><td>ok</td><td></td><td>225.995</td><td>3.107</td><td>692.594</td><td>0.986</td><td>9.456</td><td>0.182</td><td>49.997</td><td>69.992</td><td>-7.882</td><td>-551.651</td><td>-79.650</td><td></td></tr><tr><td>227.000</td><td>ok</td><td></td><td>226.995</td><td>3.094</td><td>692.675</td><td>0.985</td><td>9.208</td><td>0.176</td><td>49.997</td><td>69.992</td><td>-7.888</td><td>-552.084</td><td>-79.703</td><td></td></tr><tr><td>228.000</td><td>ok</td><td></td><td>227.995</td><td>3.082</td><td>692.441</td><td>0.986</td><td>9.507</td><td>0.184</td><td>49.997</td><td>69.992</td><td>-7.885</td><td>-551.887</td><td>-79.702</td><td></td></tr><tr><td>229.000</td><td>ok</td><td></td><td>228.994</td><td>3.072</td><td>692.670</td><td>0.985</td><td>9.563</td><td>0.176</td><td>49.997</td><td>69.992</td><td>-7.883</td><td>-551.750</td><td>-79.656</td><td></td></tr><tr><td>230.000</td><td>ok</td><td></td><td>229.995</td><td>3.064</td><td>692.334</td><td>0.983</td><td>10.586</td><td>0.179</td><td>49.997</td><td>69.992</td><td>-7.888</td><td>-552.075</td><td>-79.741</td><td></td></tr></tbody></table></div>
+</div>
+</body>
+</html>

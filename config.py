@@ -23,5 +23,14 @@ CYCLIC_CAN_MESSAGES = {
 INSTRUMENT_ADDRESSES = {
     'Bi-Directional Power Supply': 'TCPIP::192.168.4.53::INSTR',  # ITECH6000
     'Grid Emulator': 'TCPIP::192.168.4.52::INSTR',            # ITECH7900
-    'Oscilloscope': 'TCPIP::192.168.4.51::INSTR'              # SiglentSDX
+    'Oscilloscope': 'TCPIP::192.168.4.51::INSTR',             # SiglentSDX
+    # DC Electronic Load (Maynuo M97 series) via RS-232/USB
+    'DC Load': 'COM3'
 }
+
+# Optional update manifest location (JSON with version/url/sha256)
+# Example: UPDATE_MANIFEST_URL = "https://example.com/atomx/latest.json"
+UPDATE_MANIFEST_URL = ""
+
+# Standards (JSON) file shown in the Standards tab
+STANDARDS_JSON = r"docs/Charger_Standard.json"

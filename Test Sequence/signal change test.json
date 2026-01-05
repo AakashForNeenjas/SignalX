@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "author": "aakash",
+    "description": "aa",
+    "last_modified": "2025-12-10T15:33:42.669915",
+    "name": "signal change test",
+    "tags": [
+      "signal"
+    ],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "CAN / Set Signal Value",
+      "params": "{\"message_id\": \"0x12C\", \"signal_name\": \"Chrg_Curr_limit\", \"target_value\": 9.0, \"tolerance\": 0.0, \"verify_timeout\": 2.0}"
+    },
+    {
+      "action": "CAN / Set Signal Value",
+      "params": "{\"message_id\": \"0x12C\", \"signal_name\": \"DisChrg_Curr_limit\", \"target_value\": 19.0, \"tolerance\": 0.0, \"verify_timeout\": 2.0}"
+    }
+  ]
+}

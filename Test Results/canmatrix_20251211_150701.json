@@ -1,0 +1,6299 @@
+{
+  "suite": "Auto DBC Suite",
+  "overall_pass": false,
+  "summary": {
+    "static_pass": 66,
+    "static_total": 111,
+    "dynamic_pass": 0,
+    "dynamic_total": 111,
+    "suite_pass": false,
+    "suite_start": "2025-12-11T15:03:30.499323",
+    "suite_end": "2025-12-11T15:07:01.231797",
+    "suite_duration_s": 210.732,
+    "static_coverage": [
+      "Signal packing fits in DLC",
+      "Signal count matches DBC",
+      "DBC DLC matches definition"
+    ],
+    "dynamic_coverage": [
+      "Chrgr_Output_DC_Curr observed on bus",
+      "OBC_Output_Over_Vlt_Flt observed on bus",
+      "DCDC_Input_Over_Vlt_Lvl2 observed on bus",
+      "DCDC_Output_Open_Ckt observed on bus",
+      "HP_DCDC_Temp within [-1000, 655.35]",
+      "DcM_RunMode observed on bus",
+      "OBC_Contactor_or_Relay_Fail observed on bus",
+      "OBC_Low_temp observed on bus",
+      "DC_DC_Curr_Sensing_Fail observed on bus",
+      "Control_and_Proximity_Sts observed on bus",
+      "PreChrg_Sts observed on bus",
+      "Chrgr_Input_AC_Curr observed on bus",
+      "HP_DCDC_Output_DC_Vlt observed on bus",
+      "OBC_Input_AC_Distorted_Vlt observed on bus",
+      "DCDC_Temp_Snsr_Fail observed on bus",
+      "DCDC_Input_Over_Vlt observed on bus",
+      "RANGE:signal:Chrgr_Output_DC_Curr",
+      "HP_DCDC_Input_DC_Vlt observed on bus",
+      "RANGE:signal:OBC_temp",
+      "Chrgr_Input_AC_Vlt within [0, 655.35]",
+      "DLC observed on bus",
+      "OBC_Output_Sts observed on bus",
+      "OBC_Hardware_Version observed on bus",
+      "DCDC_Low_Temp observed on bus",
+      "OBC_Bus_Over_Vlt_Flt observed on bus",
+      "DCDC_Input_Over_Curr observed on bus",
+      "HP_DCDC_Input_DC_Vlt within [0, 655.35]",
+      "RANGE:signal:HP_DCDC_Input_DC_Curr",
+      "AcState observed on bus",
+      "OBC_Output_Over_Curr observed on bus",
+      "DCDC_High_Temp observed on bus",
+      "HP_DCDC_Temp observed on bus",
+      "OBC_Bus_Short_Out_Flt observed on bus",
+      "AcMode observed on bus",
+      "Chrgr_Input_AC_Curr within [0, 655.35]",
+      "Chrgr_Output_DC_Vlt within [0, 655.35]",
+      "OBC_Input_AC_Over_Vlt observed on bus",
+      "OBC_FET_Temp observed on bus",
+      "OBC_High_Temp observed on bus",
+      "OBC_Output_Under_Vlt_Flt observed on bus",
+      "HP_DCDC_Output_DC_Curr observed on bus",
+      "HP_DCDC_Input_DC_Curr within [0, 655.35]",
+      "DCDC_Contactor_or_Relay_Fail observed on bus",
+      "Chrgr_Output_DC_Curr within [0, 655.35]",
+      "RANGE:signal:Chrgr_Output_DC_Vlt",
+      "RANGE:signal:OBC_FET_Temp",
+      "OBC_Input_AC_under_Vlt observed on bus",
+      "RANGE:signal:Chrgr_Input_AC_Vlt",
+      "OBC_temp observed on bus",
+      "Chrgr_Output_DC_Vlt observed on bus",
+      "Heartbeat_Fail_From_VCU observed on bus",
+      "RANGE:signal:HP_DCDC_Input_DC_Vlt",
+      "OBC_Coolant_FAN_Sts observed on bus",
+      "OBC_Temp_Snsr_Fail observed on bus",
+      "DCDC_Output_Under_Vlt_Flt observed on bus",
+      "RANGE:signal:OBC_Hardware_Version",
+      "DcM_WorkStat observed on bus",
+      "OBC_Input_Over_Curr observed on bus",
+      "OBC_Curr_Sensing_Fail observed on bus",
+      "OBC_Hardware_Version within [0, 4294967295]",
+      "HP_DCDC_Output_DC_Vlt within [0, 655.35]",
+      "OBC_Wakeup observed on bus",
+      "OBC_temp within [-1000, 655.35]",
+      "OBC_FET_Temp within [-1000, 655.35]",
+      "RANGE:signal:Chrgr_Input_AC_Curr",
+      "RANGE:signal:HP_DCDC_Output_DC_Vlt",
+      "DCDC_Output_Over_Curr observed on bus",
+      "RANGE:signal:HP_DCDC_Output_DC_Curr",
+      "HP_DCDC_Input_DC_Curr observed on bus",
+      "OBC_Input_Shrt_Ckt_Fail observed on bus",
+      "DCDC_Output_Over_Vlt_Flt observed on bus",
+      "DCDC_Output_Shrt_Ckt observed on bus",
+      "Chrgr_Input_AC_Vlt observed on bus",
+      "HPDCDC_Output_Sts observed on bus",
+      "OBC_Output_Open_Ckt observed on bus",
+      "OBC_Output_Shrt_Ckt_Fail observed on bus",
+      "Chrgr_Mode observed on bus",
+      "HP_DCDC_Output_DC_Curr within [0, 655.35]",
+      "DCDC_Input_Under_Vlt observed on bus",
+      "RANGE:signal:HP_DCDC_Temp",
+      "Charger_Sts_Signal observed on bus",
+      "Heartbeat_Fail_From_BMS observed on bus"
+    ],
+    "static_asserts": {
+      "passed": 285,
+      "total": 330
+    },
+    "dynamic_asserts": {
+      "passed": 75,
+      "total": 128
+    }
+  },
+  "results": [
+    {
+      "case_id": "ST-GET_DEBUG_MSG",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445610.4993412,
+      "end_ts": 1765445610.4993732,
+      "assertions": [
+        {
+          "target": "dbc_msg:GET_DEBUG_MSG:dlc",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:GET_DEBUG_MSG:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:GET_DEBUG_MSG:dlc",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-GET_DEBUG_MSG",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message GET_DEBUG_MSG",
+        "Error: Timeout waiting for message GET_DEBUG_MSG"
+      ],
+      "start_ts": 1765445610.4993813,
+      "end_ts": 1765445612.4993076,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info10",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445612.4993432,
+      "end_ts": 1765445612.4994001,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info10:dlc",
+          "op": "==",
+          "expected": 0,
+          "value": 0,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info10:signal_count",
+          "op": "==",
+          "expected": 0,
+          "value": 0,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info10",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info10",
+        "Error: Timeout waiting for message Debug_Info10"
+      ],
+      "start_ts": 1765445612.4994109,
+      "end_ts": 1765445614.4996982,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info9",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445614.4997277,
+      "end_ts": 1765445614.4997864,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info9:dlc",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info9:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Debug_Info9:dlc",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info9",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info9",
+        "Error: Timeout waiting for message Debug_Info9"
+      ],
+      "start_ts": 1765445614.4997985,
+      "end_ts": 1765445616.5000415,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info8",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445616.5000756,
+      "end_ts": 1765445616.500109,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info8:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info8:signal_count",
+          "op": "==",
+          "expected": 0,
+          "value": 0,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info8",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info8",
+        "Error: Timeout waiting for message Debug_Info8"
+      ],
+      "start_ts": 1765445616.5001159,
+      "end_ts": 1765445618.501348,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info7",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445618.5013733,
+      "end_ts": 1765445618.5014179,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info7:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info7:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Debug_Info7:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info7",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info7",
+        "Error: Timeout waiting for message Debug_Info7"
+      ],
+      "start_ts": 1765445618.5014255,
+      "end_ts": 1765445620.5021636,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info12_Rx",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445620.5021913,
+      "end_ts": 1765445620.5022402,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info12_Rx:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info12_Rx:signal_count",
+          "op": "==",
+          "expected": 0,
+          "value": 0,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info12_Rx",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info12_Rx",
+        "Error: Timeout waiting for message Debug_Info12_Rx"
+      ],
+      "start_ts": 1765445620.502249,
+      "end_ts": 1765445622.5031772,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info11_Rx",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445622.5032034,
+      "end_ts": 1765445622.5032468,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info11_Rx:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info11_Rx:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Debug_Info11_Rx:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info11_Rx",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info11_Rx",
+        "Error: Timeout waiting for message Debug_Info11_Rx"
+      ],
+      "start_ts": 1765445622.503255,
+      "end_ts": 1765445624.503838,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-New_Message_104",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:New_Message_104:dlc', 'op': '==', 'expected': 6, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445624.5038698,
+      "end_ts": 1765445624.503959,
+      "assertions": [
+        {
+          "target": "dbc_msg:New_Message_104:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:New_Message_104:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:New_Message_104:dlc",
+          "op": "==",
+          "expected": 6,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-New_Message_104",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message New_Message_104",
+        "Error: Timeout waiting for message New_Message_104"
+      ],
+      "start_ts": 1765445624.50397,
+      "end_ts": 1765445626.504681,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-New_Message_103",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:New_Message_103:dlc', 'op': '==', 'expected': 2, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445626.504702,
+      "end_ts": 1765445626.504759,
+      "assertions": [
+        {
+          "target": "dbc_msg:New_Message_103:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:New_Message_103:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:New_Message_103:dlc",
+          "op": "==",
+          "expected": 2,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-New_Message_103",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message New_Message_103",
+        "Error: Timeout waiting for message New_Message_103"
+      ],
+      "start_ts": 1765445626.5047662,
+      "end_ts": 1765445628.5055923,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-New_Message_102",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:New_Message_102:dlc', 'op': '==', 'expected': 5, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445628.5056243,
+      "end_ts": 1765445628.5056992,
+      "assertions": [
+        {
+          "target": "dbc_msg:New_Message_102:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:New_Message_102:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:New_Message_102:dlc",
+          "op": "==",
+          "expected": 5,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-New_Message_102",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message New_Message_102",
+        "Error: Timeout waiting for message New_Message_102"
+      ],
+      "start_ts": 1765445628.5057073,
+      "end_ts": 1765445630.5058193,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-New_Message_101",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:New_Message_101:dlc', 'op': '==', 'expected': 1, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445630.5058427,
+      "end_ts": 1765445630.5059016,
+      "assertions": [
+        {
+          "target": "dbc_msg:New_Message_101:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:New_Message_101:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:New_Message_101:dlc",
+          "op": "==",
+          "expected": 1,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-New_Message_101",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message New_Message_101",
+        "Error: Timeout waiting for message New_Message_101"
+      ],
+      "start_ts": 1765445630.5059092,
+      "end_ts": 1765445632.5064557,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-New_Message_100",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:New_Message_100:dlc', 'op': '==', 'expected': 6, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445632.5064774,
+      "end_ts": 1765445632.506533,
+      "assertions": [
+        {
+          "target": "dbc_msg:New_Message_100:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:New_Message_100:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:New_Message_100:dlc",
+          "op": "==",
+          "expected": 6,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-New_Message_100",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message New_Message_100",
+        "Error: Timeout waiting for message New_Message_100"
+      ],
+      "start_ts": 1765445632.50654,
+      "end_ts": 1765445634.5067477,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-New_Message_99",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:New_Message_99:dlc', 'op': '==', 'expected': 2, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445634.5067685,
+      "end_ts": 1765445634.5068207,
+      "assertions": [
+        {
+          "target": "dbc_msg:New_Message_99:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:New_Message_99:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:New_Message_99:dlc",
+          "op": "==",
+          "expected": 2,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-New_Message_99",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message New_Message_99",
+        "Error: Timeout waiting for message New_Message_99"
+      ],
+      "start_ts": 1765445634.5068276,
+      "end_ts": 1765445636.5076313,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-New_Message_98",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:New_Message_98:dlc', 'op': '==', 'expected': 5, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445636.5076544,
+      "end_ts": 1765445636.5077126,
+      "assertions": [
+        {
+          "target": "dbc_msg:New_Message_98:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:New_Message_98:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:New_Message_98:dlc",
+          "op": "==",
+          "expected": 5,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-New_Message_98",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message New_Message_98",
+        "Error: Timeout waiting for message New_Message_98"
+      ],
+      "start_ts": 1765445636.507723,
+      "end_ts": 1765445638.5085387,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-New_Message_97",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:New_Message_97:dlc', 'op': '==', 'expected': 1, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445638.5085585,
+      "end_ts": 1765445638.508607,
+      "assertions": [
+        {
+          "target": "dbc_msg:New_Message_97:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:New_Message_97:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:New_Message_97:dlc",
+          "op": "==",
+          "expected": 1,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-New_Message_97",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message New_Message_97",
+        "Error: Timeout waiting for message New_Message_97"
+      ],
+      "start_ts": 1765445638.5086133,
+      "end_ts": 1765445640.5086331,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info6",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445640.508658,
+      "end_ts": 1765445640.5087056,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info6:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info6:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Debug_Info6:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info6",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info6",
+        "Error: Timeout waiting for message Debug_Info6"
+      ],
+      "start_ts": 1765445640.508713,
+      "end_ts": 1765445642.5096226,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info5",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445642.509649,
+      "end_ts": 1765445642.5097005,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info5:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info5:signal_count",
+          "op": "==",
+          "expected": 11,
+          "value": 11,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Debug_Info5:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info5",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info5",
+        "Error: Timeout waiting for message Debug_Info5"
+      ],
+      "start_ts": 1765445642.509709,
+      "end_ts": 1765445644.5102909,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info4",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445644.510312,
+      "end_ts": 1765445644.5103555,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info4:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info4:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Debug_Info4:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info4",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info4",
+        "Error: Timeout waiting for message Debug_Info4"
+      ],
+      "start_ts": 1765445644.5103626,
+      "end_ts": 1765445646.5102835,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info3",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445646.510308,
+      "end_ts": 1765445646.5103557,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info3:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info3:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Debug_Info3:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info3",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info3",
+        "Error: Timeout waiting for message Debug_Info3"
+      ],
+      "start_ts": 1765445646.510363,
+      "end_ts": 1765445648.5112307,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info2",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445648.5112593,
+      "end_ts": 1765445648.5113153,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info2:signal_count",
+          "op": "==",
+          "expected": 63,
+          "value": 63,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Debug_Info2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info2",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info2",
+        "Error: Timeout waiting for message Debug_Info2"
+      ],
+      "start_ts": 1765445648.5113244,
+      "end_ts": 1765445650.5116208,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Debug_Info1",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445650.5116482,
+      "end_ts": 1765445650.5117042,
+      "assertions": [
+        {
+          "target": "dbc_msg:Debug_Info1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Debug_Info1:signal_count",
+          "op": "==",
+          "expected": 6,
+          "value": 6,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Debug_Info1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Debug_Info1",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Debug_Info1",
+        "Error: Timeout waiting for message Debug_Info1"
+      ],
+      "start_ts": 1765445650.511714,
+      "end_ts": 1765445652.512294,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BLE_Data",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:BLE_Data:dlc', 'op': '==', 'expected': 2, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445652.5123127,
+      "end_ts": 1765445652.5123577,
+      "assertions": [
+        {
+          "target": "dbc_msg:BLE_Data:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BLE_Data:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BLE_Data:dlc",
+          "op": "==",
+          "expected": 2,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BLE_Data",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BLE_Data",
+        "Error: Timeout waiting for message BLE_Data"
+      ],
+      "start_ts": 1765445652.5123637,
+      "end_ts": 1765445654.5128043,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_Data7",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445654.5128298,
+      "end_ts": 1765445654.5128825,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_Data7:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_Data7:signal_count",
+          "op": "==",
+          "expected": 5,
+          "value": 5,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_Data7:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_Data7",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_Data7",
+        "Error: Timeout waiting for message VCU_Data7"
+      ],
+      "start_ts": 1765445654.5128908,
+      "end_ts": 1765445656.5127652,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Vehicle_RSC",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:Vehicle_RSC:dlc', 'op': '==', 'expected': 3, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445656.5127866,
+      "end_ts": 1765445656.5128372,
+      "assertions": [
+        {
+          "target": "dbc_msg:Vehicle_RSC:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Vehicle_RSC:signal_count",
+          "op": "==",
+          "expected": 14,
+          "value": 14,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Vehicle_RSC:dlc",
+          "op": "==",
+          "expected": 3,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Vehicle_RSC",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Vehicle_RSC",
+        "Error: Timeout waiting for message Vehicle_RSC"
+      ],
+      "start_ts": 1765445656.5128446,
+      "end_ts": 1765445658.5134284,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Vehicle_LSC",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445658.5134559,
+      "end_ts": 1765445658.5135064,
+      "assertions": [
+        {
+          "target": "dbc_msg:Vehicle_LSC:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Vehicle_LSC:signal_count",
+          "op": "==",
+          "expected": 30,
+          "value": 30,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Vehicle_LSC:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Vehicle_LSC",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Vehicle_LSC",
+        "Error: Timeout waiting for message Vehicle_LSC"
+      ],
+      "start_ts": 1765445658.5135145,
+      "end_ts": 1765445660.5134223,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-ABS_Y_AXIS",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445660.5134428,
+      "end_ts": 1765445660.5134833,
+      "assertions": [
+        {
+          "target": "dbc_msg:ABS_Y_AXIS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:ABS_Y_AXIS:signal_count",
+          "op": "==",
+          "expected": 7,
+          "value": 7,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:ABS_Y_AXIS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-ABS_Y_AXIS",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message ABS_Y_AXIS",
+        "Error: Timeout waiting for message ABS_Y_AXIS"
+      ],
+      "start_ts": 1765445660.5134897,
+      "end_ts": 1765445662.5138953,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-ABS_X_AXIS",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445662.5139205,
+      "end_ts": 1765445662.5139768,
+      "assertions": [
+        {
+          "target": "dbc_msg:ABS_X_AXIS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:ABS_X_AXIS:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:ABS_X_AXIS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-ABS_X_AXIS",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message ABS_X_AXIS",
+        "Error: Timeout waiting for message ABS_X_AXIS"
+      ],
+      "start_ts": 1765445662.5139847,
+      "end_ts": 1765445664.5139544,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-MCU_DATA_6",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:MCU_DATA_6:dlc', 'op': '==', 'expected': 2, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445664.5139766,
+      "end_ts": 1765445664.5140352,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_DATA_6:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_DATA_6:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_DATA_6:dlc",
+          "op": "==",
+          "expected": 2,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_DATA_6",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_DATA_6",
+        "Error: Timeout waiting for message MCU_DATA_6"
+      ],
+      "start_ts": 1765445664.514043,
+      "end_ts": 1765445666.5165644,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_Data4",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:VCU_Data4:dlc', 'op': '==', 'expected': 7, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445666.5165875,
+      "end_ts": 1765445666.5167527,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_Data4:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_Data4:signal_count",
+          "op": "==",
+          "expected": 5,
+          "value": 5,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_Data4:dlc",
+          "op": "==",
+          "expected": 7,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_Data4",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_Data4",
+        "Error: Timeout waiting for message VCU_Data4"
+      ],
+      "start_ts": 1765445666.5167947,
+      "end_ts": 1765445668.5172687,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_Data3",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:VCU_Data3:dlc', 'op': '==', 'expected': 6, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445668.5173023,
+      "end_ts": 1765445668.5174778,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_Data3:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_Data3:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_Data3:dlc",
+          "op": "==",
+          "expected": 6,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_Data3",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_Data3",
+        "Error: Timeout waiting for message VCU_Data3"
+      ],
+      "start_ts": 1765445668.5174882,
+      "end_ts": 1765445670.5179503,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_Data2",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:VCU_Data2:dlc', 'op': '==', 'expected': 6, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445670.51797,
+      "end_ts": 1765445670.5180197,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_Data2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_Data2:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_Data2:dlc",
+          "op": "==",
+          "expected": 6,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_Data2",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_Data2",
+        "Error: Timeout waiting for message VCU_Data2"
+      ],
+      "start_ts": 1765445670.5180264,
+      "end_ts": 1765445672.5187283,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_Data6",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445672.5187526,
+      "end_ts": 1765445672.5188005,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_Data6:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_Data6:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_Data6:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_Data6",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_Data6",
+        "Error: Timeout waiting for message VCU_Data6"
+      ],
+      "start_ts": 1765445672.5188081,
+      "end_ts": 1765445674.5197222,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_Data5",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445674.519744,
+      "end_ts": 1765445674.519787,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_Data5:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_Data5:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_Data5:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_Data5",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_Data5",
+        "Error: Timeout waiting for message VCU_Data5"
+      ],
+      "start_ts": 1765445674.519812,
+      "end_ts": 1765445676.519975,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-EHBL_SW_VER",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445676.519997,
+      "end_ts": 1765445676.5200393,
+      "assertions": [
+        {
+          "target": "dbc_msg:EHBL_SW_VER:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:EHBL_SW_VER:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:EHBL_SW_VER:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-EHBL_SW_VER",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message EHBL_SW_VER",
+        "Error: Timeout waiting for message EHBL_SW_VER"
+      ],
+      "start_ts": 1765445676.520046,
+      "end_ts": 1765445678.52042,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BCM_SW_VER",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445678.520444,
+      "end_ts": 1765445678.520485,
+      "assertions": [
+        {
+          "target": "dbc_msg:BCM_SW_VER:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BCM_SW_VER:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BCM_SW_VER:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BCM_SW_VER",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BCM_SW_VER",
+        "Error: Timeout waiting for message BCM_SW_VER"
+      ],
+      "start_ts": 1765445678.5204914,
+      "end_ts": 1765445680.5209918,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-EHBL_OUTPUT_Data",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:EHBL_OUTPUT_Data:dlc', 'op': '==', 'expected': 2, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445680.521013,
+      "end_ts": 1765445680.5210662,
+      "assertions": [
+        {
+          "target": "dbc_msg:EHBL_OUTPUT_Data:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:EHBL_OUTPUT_Data:signal_count",
+          "op": "==",
+          "expected": 5,
+          "value": 5,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:EHBL_OUTPUT_Data:dlc",
+          "op": "==",
+          "expected": 2,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-EHBL_OUTPUT_Data",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message EHBL_OUTPUT_Data",
+        "Error: Timeout waiting for message EHBL_OUTPUT_Data"
+      ],
+      "start_ts": 1765445680.521073,
+      "end_ts": 1765445682.521924,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-EHBL_to_VCU_Auth_Response",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:EHBL_to_VCU_Auth_Response:dlc', 'op': '==', 'expected': 6, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445682.5219584,
+      "end_ts": 1765445682.5219917,
+      "assertions": [
+        {
+          "target": "dbc_msg:EHBL_to_VCU_Auth_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:EHBL_to_VCU_Auth_Response:signal_count",
+          "op": "==",
+          "expected": 3,
+          "value": 3,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:EHBL_to_VCU_Auth_Response:dlc",
+          "op": "==",
+          "expected": 6,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-EHBL_to_VCU_Auth_Response",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message EHBL_to_VCU_Auth_Response",
+        "Error: Timeout waiting for message EHBL_to_VCU_Auth_Response"
+      ],
+      "start_ts": 1765445682.5219984,
+      "end_ts": 1765445684.5228257,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_to_EHBL_Auth_Request",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:VCU_to_EHBL_Auth_Request:dlc', 'op': '==', 'expected': 5, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445684.522849,
+      "end_ts": 1765445684.5229118,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_to_EHBL_Auth_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_to_EHBL_Auth_Request:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_to_EHBL_Auth_Request:dlc",
+          "op": "==",
+          "expected": 5,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_to_EHBL_Auth_Request",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_to_EHBL_Auth_Request",
+        "Error: Timeout waiting for message VCU_to_EHBL_Auth_Request"
+      ],
+      "start_ts": 1765445684.5229197,
+      "end_ts": 1765445686.523374,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_TO_ABS",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:VCU_TO_ABS:dlc', 'op': '==', 'expected': 1, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445686.5233917,
+      "end_ts": 1765445686.5234337,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_TO_ABS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_TO_ABS:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_TO_ABS:dlc",
+          "op": "==",
+          "expected": 1,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_TO_ABS",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_TO_ABS",
+        "Error: Timeout waiting for message VCU_TO_ABS"
+      ],
+      "start_ts": 1765445686.5234432,
+      "end_ts": 1765445688.524336,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-ABS_Flt_Info",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:ABS_Flt_Info:dlc', 'op': '==', 'expected': 3, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445688.5243578,
+      "end_ts": 1765445688.5244114,
+      "assertions": [
+        {
+          "target": "dbc_msg:ABS_Flt_Info:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:ABS_Flt_Info:signal_count",
+          "op": "==",
+          "expected": 24,
+          "value": 24,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:ABS_Flt_Info:dlc",
+          "op": "==",
+          "expected": 3,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-ABS_Flt_Info",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message ABS_Flt_Info",
+        "Error: Timeout waiting for message ABS_Flt_Info"
+      ],
+      "start_ts": 1765445688.5244184,
+      "end_ts": 1765445690.524529,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-MCU_FLT_COUNTER",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:MCU_FLT_COUNTER:dlc', 'op': '==', 'expected': 4, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445690.5245545,
+      "end_ts": 1765445690.5246074,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_FLT_COUNTER:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_FLT_COUNTER:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_FLT_COUNTER:dlc",
+          "op": "==",
+          "expected": 4,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_FLT_COUNTER",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_FLT_COUNTER",
+        "Error: Timeout waiting for message MCU_FLT_COUNTER"
+      ],
+      "start_ts": 1765445690.5246136,
+      "end_ts": 1765445692.5248623,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-MCU_Data5",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445692.5248833,
+      "end_ts": 1765445692.5249283,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_Data5:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_Data5:signal_count",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_Data5:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_Data5",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_Data5",
+        "Error: Timeout waiting for message MCU_Data5"
+      ],
+      "start_ts": 1765445692.5249362,
+      "end_ts": 1765445694.5250049,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-ISOLATION_Resistance_Monitor",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445694.525023,
+      "end_ts": 1765445694.5250611,
+      "assertions": [
+        {
+          "target": "dbc_msg:ISOLATION_Resistance_Monitor:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:ISOLATION_Resistance_Monitor:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:ISOLATION_Resistance_Monitor:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-ISOLATION_Resistance_Monitor",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message ISOLATION_Resistance_Monitor",
+        "Error: Timeout waiting for message ISOLATION_Resistance_Monitor"
+      ],
+      "start_ts": 1765445694.525068,
+      "end_ts": 1765445696.5250795,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-SOM_Settings_Data",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:SOM_Settings_Data:dlc', 'op': '==', 'expected': 6, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445696.5251052,
+      "end_ts": 1765445696.5251687,
+      "assertions": [
+        {
+          "target": "dbc_msg:SOM_Settings_Data:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:SOM_Settings_Data:signal_count",
+          "op": "==",
+          "expected": 17,
+          "value": 17,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:SOM_Settings_Data:dlc",
+          "op": "==",
+          "expected": 6,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-SOM_Settings_Data",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message SOM_Settings_Data",
+        "Error: Timeout waiting for message SOM_Settings_Data"
+      ],
+      "start_ts": 1765445696.5251777,
+      "end_ts": 1765445698.5260715,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-MCU_Data3",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445698.5260952,
+      "end_ts": 1765445698.5261464,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_Data3:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_Data3:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_Data3:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_Data3",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_Data3",
+        "Error: Timeout waiting for message MCU_Data3"
+      ],
+      "start_ts": 1765445698.5261557,
+      "end_ts": 1765445700.5266657,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Traction_Control2",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:Traction_Control2:dlc', 'op': '==', 'expected': 2, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445700.5266895,
+      "end_ts": 1765445700.5267367,
+      "assertions": [
+        {
+          "target": "dbc_msg:Traction_Control2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Traction_Control2:signal_count",
+          "op": "==",
+          "expected": 3,
+          "value": 3,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Traction_Control2:dlc",
+          "op": "==",
+          "expected": 2,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Traction_Control2",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Traction_Control2",
+        "Error: Timeout waiting for message Traction_Control2"
+      ],
+      "start_ts": 1765445700.5267425,
+      "end_ts": 1765445702.5272005,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BCM_Diagnostic_Request",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445702.527225,
+      "end_ts": 1765445702.5272727,
+      "assertions": [
+        {
+          "target": "dbc_msg:BCM_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BCM_Diagnostic_Request:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BCM_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BCM_Diagnostic_Request",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BCM_Diagnostic_Request",
+        "Error: Timeout waiting for message BCM_Diagnostic_Request"
+      ],
+      "start_ts": 1765445702.5272872,
+      "end_ts": 1765445704.5277739,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BCM_Diagnostic_Response",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445704.527846,
+      "end_ts": 1765445704.5279,
+      "assertions": [
+        {
+          "target": "dbc_msg:BCM_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BCM_Diagnostic_Response:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BCM_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BCM_Diagnostic_Response",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BCM_Diagnostic_Response",
+        "Error: Timeout waiting for message BCM_Diagnostic_Response"
+      ],
+      "start_ts": 1765445704.527909,
+      "end_ts": 1765445706.528191,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Custom_Mode",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:Custom_Mode:dlc', 'op': '==', 'expected': 4, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445706.5282168,
+      "end_ts": 1765445706.528282,
+      "assertions": [
+        {
+          "target": "dbc_msg:Custom_Mode:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Custom_Mode:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Custom_Mode:dlc",
+          "op": "==",
+          "expected": 4,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Custom_Mode",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Custom_Mode",
+        "Error: Timeout waiting for message Custom_Mode"
+      ],
+      "start_ts": 1765445706.5282907,
+      "end_ts": 1765445708.5287979,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-EHBL_Diagnostic_Response",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445708.5288181,
+      "end_ts": 1765445708.5288584,
+      "assertions": [
+        {
+          "target": "dbc_msg:EHBL_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:EHBL_Diagnostic_Response:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:EHBL_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-EHBL_Diagnostic_Response",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message EHBL_Diagnostic_Response",
+        "Error: Timeout waiting for message EHBL_Diagnostic_Response"
+      ],
+      "start_ts": 1765445708.5288653,
+      "end_ts": 1765445710.5293374,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-ABS_Info",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:ABS_Info:dlc', 'op': '==', 'expected': 6, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445710.5296261,
+      "end_ts": 1765445710.5296636,
+      "assertions": [
+        {
+          "target": "dbc_msg:ABS_Info:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:ABS_Info:signal_count",
+          "op": "==",
+          "expected": 9,
+          "value": 9,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:ABS_Info:dlc",
+          "op": "==",
+          "expected": 6,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-ABS_Info",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message ABS_Info",
+        "Error: Timeout waiting for message ABS_Info"
+      ],
+      "start_ts": 1765445710.52967,
+      "end_ts": 1765445712.529521,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_FLT_2",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:BMS_FLT_2:dlc', 'op': '==', 'expected': 6, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445712.5295408,
+      "end_ts": 1765445712.5295904,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_FLT_2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_FLT_2:signal_count",
+          "op": "==",
+          "expected": 43,
+          "value": 43,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_FLT_2:dlc",
+          "op": "==",
+          "expected": 6,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_FLT_2",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_FLT_2",
+        "Error: Timeout waiting for message BMS_FLT_2"
+      ],
+      "start_ts": 1765445712.5295973,
+      "end_ts": 1765445714.530256,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_FLT_1",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:BMS_FLT_1:dlc', 'op': '==', 'expected': 5, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445714.5302806,
+      "end_ts": 1765445714.5303488,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_FLT_1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_FLT_1:signal_count",
+          "op": "==",
+          "expected": 34,
+          "value": 34,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_FLT_1:dlc",
+          "op": "==",
+          "expected": 5,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_FLT_1",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_FLT_1",
+        "Error: Timeout waiting for message BMS_FLT_1"
+      ],
+      "start_ts": 1765445714.5303564,
+      "end_ts": 1765445716.5297313,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Batt_Energy_Cycles",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445716.5297506,
+      "end_ts": 1765445716.5297978,
+      "assertions": [
+        {
+          "target": "dbc_msg:Batt_Energy_Cycles:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Batt_Energy_Cycles:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Batt_Energy_Cycles:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Batt_Energy_Cycles",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Batt_Energy_Cycles",
+        "Error: Timeout waiting for message Batt_Energy_Cycles"
+      ],
+      "start_ts": 1765445716.529804,
+      "end_ts": 1765445718.5304205,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_Diagnostic_Response",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445718.5304444,
+      "end_ts": 1765445718.5304825,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_Diagnostic_Response:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_Diagnostic_Response",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_Diagnostic_Response",
+        "Error: Timeout waiting for message BMS_Diagnostic_Response"
+      ],
+      "start_ts": 1765445718.530493,
+      "end_ts": 1765445720.5311291,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-OBC_Diagnostic_Response",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445720.5311558,
+      "end_ts": 1765445720.5312102,
+      "assertions": [
+        {
+          "target": "dbc_msg:OBC_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:OBC_Diagnostic_Response:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:OBC_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-OBC_Diagnostic_Response",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message OBC_Diagnostic_Response",
+        "Error: Timeout waiting for message OBC_Diagnostic_Response"
+      ],
+      "start_ts": 1765445720.5312173,
+      "end_ts": 1765445722.5317104,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-OBC_HP_DCDC_Parameter1",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445722.5317357,
+      "end_ts": 1765445722.5317845,
+      "assertions": [
+        {
+          "target": "dbc_msg:OBC_HP_DCDC_Parameter1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:OBC_HP_DCDC_Parameter1:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:OBC_HP_DCDC_Parameter1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-OBC_HP_DCDC_Parameter1",
+      "passed": false,
+      "log": [
+        "Received message OBC_HP_DCDC_Parameter1",
+        "Assertion failed: {'target': '0x50f', 'op': '==', 'expected': 100, 'value': None, 'passed': False, 'msg': 'Cycle time within tolerance'}",
+        "Assertion failed: {'target': '0x50f', 'op': '<=', 'expected': 300, 'value': 1765408427787.2498, 'passed': False, 'msg': 'No missing frame beyond timeout'}"
+      ],
+      "start_ts": 1765445722.5318055,
+      "end_ts": 1765445722.553914,
+      "assertions": [
+        {
+          "target": "0x50f",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DLC observed on bus"
+        },
+        {
+          "target": "0x50f",
+          "op": "==",
+          "expected": 100,
+          "value": null,
+          "passed": false,
+          "msg": "Cycle time within tolerance"
+        },
+        {
+          "target": "0x50f",
+          "op": "<=",
+          "expected": 300,
+          "value": 1765408427787.2498,
+          "passed": false,
+          "msg": "No missing frame beyond timeout"
+        },
+        {
+          "target": "signal:HP_DCDC_Input_DC_Vlt",
+          "op": "not_none",
+          "expected": 0,
+          "value": 0.0,
+          "passed": true,
+          "msg": "HP_DCDC_Input_DC_Vlt observed on bus"
+        },
+        {
+          "target": "signal:HP_DCDC_Input_DC_Vlt",
+          "op": "in_range",
+          "expected": [
+            0,
+            655.35
+          ],
+          "value": 0.0,
+          "passed": true,
+          "msg": "HP_DCDC_Input_DC_Vlt within [0, 655.35]"
+        },
+        {
+          "target": "signal:HP_DCDC_Input_DC_Curr",
+          "op": "not_none",
+          "expected": 0,
+          "value": 0.0,
+          "passed": true,
+          "msg": "HP_DCDC_Input_DC_Curr observed on bus"
+        },
+        {
+          "target": "signal:HP_DCDC_Input_DC_Curr",
+          "op": "in_range",
+          "expected": [
+            0,
+            655.35
+          ],
+          "value": 0.0,
+          "passed": true,
+          "msg": "HP_DCDC_Input_DC_Curr within [0, 655.35]"
+        },
+        {
+          "target": "signal:HP_DCDC_Output_DC_Vlt",
+          "op": "not_none",
+          "expected": 0,
+          "value": 0.0,
+          "passed": true,
+          "msg": "HP_DCDC_Output_DC_Vlt observed on bus"
+        },
+        {
+          "target": "signal:HP_DCDC_Output_DC_Vlt",
+          "op": "in_range",
+          "expected": [
+            0,
+            655.35
+          ],
+          "value": 0.0,
+          "passed": true,
+          "msg": "HP_DCDC_Output_DC_Vlt within [0, 655.35]"
+        },
+        {
+          "target": "signal:HP_DCDC_Output_DC_Curr",
+          "op": "not_none",
+          "expected": 0,
+          "value": 0.32,
+          "passed": true,
+          "msg": "HP_DCDC_Output_DC_Curr observed on bus"
+        },
+        {
+          "target": "signal:HP_DCDC_Output_DC_Curr",
+          "op": "in_range",
+          "expected": [
+            0,
+            655.35
+          ],
+          "value": 0.32,
+          "passed": true,
+          "msg": "HP_DCDC_Output_DC_Curr within [0, 655.35]"
+        }
+      ]
+    },
+    {
+      "case_id": "ST-OBC_to_VCU_Auth_Resp",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:OBC_to_VCU_Auth_Resp:dlc', 'op': '==', 'expected': 4, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445722.5539382,
+      "end_ts": 1765445722.5539792,
+      "assertions": [
+        {
+          "target": "dbc_msg:OBC_to_VCU_Auth_Resp:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:OBC_to_VCU_Auth_Resp:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:OBC_to_VCU_Auth_Resp:dlc",
+          "op": "==",
+          "expected": 4,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-OBC_to_VCU_Auth_Resp",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message OBC_to_VCU_Auth_Resp",
+        "Error: Timeout waiting for message OBC_to_VCU_Auth_Resp"
+      ],
+      "start_ts": 1765445722.553988,
+      "end_ts": 1765445724.5543294,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-OBC_SW_Version",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445724.5543506,
+      "end_ts": 1765445724.5543947,
+      "assertions": [
+        {
+          "target": "dbc_msg:OBC_SW_Version:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:OBC_SW_Version:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:OBC_SW_Version:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-OBC_SW_Version",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message OBC_SW_Version",
+        "Error: Timeout waiting for message OBC_SW_Version"
+      ],
+      "start_ts": 1765445724.5544167,
+      "end_ts": 1765445726.5544658,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-OBC_HW_Version",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:OBC_HW_Version:dlc', 'op': '==', 'expected': 6, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445726.5545182,
+      "end_ts": 1765445726.5545628,
+      "assertions": [
+        {
+          "target": "dbc_msg:OBC_HW_Version:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:OBC_HW_Version:signal_count",
+          "op": "==",
+          "expected": 3,
+          "value": 3,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:OBC_HW_Version:dlc",
+          "op": "==",
+          "expected": 6,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-OBC_HW_Version",
+      "passed": false,
+      "log": [
+        "Received message OBC_HW_Version",
+        "Assertion failed: {'target': '0x645', 'op': '==', 'expected': 5000, 'value': None, 'passed': False, 'msg': 'Cycle time within tolerance'}",
+        "Assertion failed: {'target': '0x645', 'op': '<=', 'expected': 15000, 'value': 1765408427786.94, 'passed': False, 'msg': 'No missing frame beyond timeout'}"
+      ],
+      "start_ts": 1765445726.5545685,
+      "end_ts": 1765445726.883352,
+      "assertions": [
+        {
+          "target": "0x645",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DLC observed on bus"
+        },
+        {
+          "target": "0x645",
+          "op": "==",
+          "expected": 5000,
+          "value": null,
+          "passed": false,
+          "msg": "Cycle time within tolerance"
+        },
+        {
+          "target": "0x645",
+          "op": "<=",
+          "expected": 15000,
+          "value": 1765408427786.94,
+          "passed": false,
+          "msg": "No missing frame beyond timeout"
+        },
+        {
+          "target": "signal:OBC_Hardware_Version",
+          "op": "not_none",
+          "expected": 0,
+          "value": 5,
+          "passed": true,
+          "msg": "OBC_Hardware_Version observed on bus"
+        },
+        {
+          "target": "signal:OBC_Hardware_Version",
+          "op": "in_range",
+          "expected": [
+            0,
+            4294967295
+          ],
+          "value": 5,
+          "passed": true,
+          "msg": "OBC_Hardware_Version within [0, 4294967295]"
+        },
+        {
+          "target": "signal:DcM_WorkStat",
+          "op": "not_none",
+          "expected": 0,
+          "value": "DC_STAT_INIT",
+          "passed": true,
+          "msg": "DcM_WorkStat observed on bus"
+        },
+        {
+          "target": "signal:DcM_RunMode",
+          "op": "not_none",
+          "expected": 0,
+          "value": "DC_MODE_IDLE",
+          "passed": true,
+          "msg": "DcM_RunMode observed on bus"
+        }
+      ]
+    },
+    {
+      "case_id": "ST-MCU_Diagnostic_Response",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445726.8833668,
+      "end_ts": 1765445726.8833888,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_Diagnostic_Response:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_Diagnostic_Response",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_Diagnostic_Response",
+        "Error: Timeout waiting for message MCU_Diagnostic_Response"
+      ],
+      "start_ts": 1765445726.883395,
+      "end_ts": 1765445728.8837001,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Environment_Data",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:Environment_Data:dlc', 'op': '==', 'expected': 3, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445728.8837194,
+      "end_ts": 1765445728.883767,
+      "assertions": [
+        {
+          "target": "dbc_msg:Environment_Data:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Environment_Data:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Environment_Data:dlc",
+          "op": "==",
+          "expected": 3,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Environment_Data",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Environment_Data",
+        "Error: Timeout waiting for message Environment_Data"
+      ],
+      "start_ts": 1765445728.8837729,
+      "end_ts": 1765445730.884471,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-ICM_Error",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:ICM_Error:dlc', 'op': '==', 'expected': 2, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445730.8844938,
+      "end_ts": 1765445730.8845656,
+      "assertions": [
+        {
+          "target": "dbc_msg:ICM_Error:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:ICM_Error:signal_count",
+          "op": "==",
+          "expected": 9,
+          "value": 9,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:ICM_Error:dlc",
+          "op": "==",
+          "expected": 2,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-ICM_Error",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message ICM_Error",
+        "Error: Timeout waiting for message ICM_Error"
+      ],
+      "start_ts": 1765445730.8845732,
+      "end_ts": 1765445732.8846014,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-HU_Diagnostic_Response",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445732.8846219,
+      "end_ts": 1765445732.8846602,
+      "assertions": [
+        {
+          "target": "dbc_msg:HU_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:HU_Diagnostic_Response:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:HU_Diagnostic_Response:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-HU_Diagnostic_Response",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message HU_Diagnostic_Response",
+        "Error: Timeout waiting for message HU_Diagnostic_Response"
+      ],
+      "start_ts": 1765445732.8846667,
+      "end_ts": 1765445734.8846374,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-IC_Paramter_1",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445734.8846595,
+      "end_ts": 1765445734.8847013,
+      "assertions": [
+        {
+          "target": "dbc_msg:IC_Paramter_1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:IC_Paramter_1:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:IC_Paramter_1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-IC_Paramter_1",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message IC_Paramter_1",
+        "Error: Timeout waiting for message IC_Paramter_1"
+      ],
+      "start_ts": 1765445734.8847125,
+      "end_ts": 1765445736.885089,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-ICM_Digital_Input",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:ICM_Digital_Input:dlc', 'op': '==', 'expected': 4, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445736.8851125,
+      "end_ts": 1765445736.8851752,
+      "assertions": [
+        {
+          "target": "dbc_msg:ICM_Digital_Input:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:ICM_Digital_Input:signal_count",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:ICM_Digital_Input:dlc",
+          "op": "==",
+          "expected": 4,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-ICM_Digital_Input",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message ICM_Digital_Input",
+        "Error: Timeout waiting for message ICM_Digital_Input"
+      ],
+      "start_ts": 1765445736.8851833,
+      "end_ts": 1765445738.8860471,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-ICM_SW_Version",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445738.8860714,
+      "end_ts": 1765445738.886117,
+      "assertions": [
+        {
+          "target": "dbc_msg:ICM_SW_Version:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:ICM_SW_Version:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:ICM_SW_Version:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-ICM_SW_Version",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message ICM_SW_Version",
+        "Error: Timeout waiting for message ICM_SW_Version"
+      ],
+      "start_ts": 1765445738.8861258,
+      "end_ts": 1765445740.886396,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-ICM_HW_Version_Info",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445740.886415,
+      "end_ts": 1765445740.8864477,
+      "assertions": [
+        {
+          "target": "dbc_msg:ICM_HW_Version_Info:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:ICM_HW_Version_Info:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:ICM_HW_Version_Info:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-ICM_HW_Version_Info",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message ICM_HW_Version_Info",
+        "Error: Timeout waiting for message ICM_HW_Version_Info"
+      ],
+      "start_ts": 1765445740.8864527,
+      "end_ts": 1765445742.8872042,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_Data",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:VCU_Data:dlc', 'op': '==', 'expected': 5, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445742.8872237,
+      "end_ts": 1765445742.8872888,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_Data:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_Data:signal_count",
+          "op": "==",
+          "expected": 31,
+          "value": 31,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_Data:dlc",
+          "op": "==",
+          "expected": 5,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_Data",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_Data",
+        "Error: Timeout waiting for message VCU_Data"
+      ],
+      "start_ts": 1765445742.887295,
+      "end_ts": 1765445744.8877156,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-EHBL_Diagnostic_Request",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445744.8877404,
+      "end_ts": 1765445744.8877888,
+      "assertions": [
+        {
+          "target": "dbc_msg:EHBL_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:EHBL_Diagnostic_Request:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:EHBL_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-EHBL_Diagnostic_Request",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message EHBL_Diagnostic_Request",
+        "Error: Timeout waiting for message EHBL_Diagnostic_Request"
+      ],
+      "start_ts": 1765445744.8877985,
+      "end_ts": 1765445746.8878524,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-SOM_Parameters_1",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:SOM_Parameters_1:dlc', 'op': '==', 'expected': 2, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445746.887872,
+      "end_ts": 1765445746.88792,
+      "assertions": [
+        {
+          "target": "dbc_msg:SOM_Parameters_1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:SOM_Parameters_1:signal_count",
+          "op": "==",
+          "expected": 7,
+          "value": 7,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:SOM_Parameters_1:dlc",
+          "op": "==",
+          "expected": 2,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-SOM_Parameters_1",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message SOM_Parameters_1",
+        "Error: Timeout waiting for message SOM_Parameters_1"
+      ],
+      "start_ts": 1765445746.8879259,
+      "end_ts": 1765445748.888769,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Traction_Control",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:Traction_Control:dlc', 'op': '==', 'expected': 7, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445748.8887844,
+      "end_ts": 1765445748.8888128,
+      "assertions": [
+        {
+          "target": "dbc_msg:Traction_Control:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Traction_Control:signal_count",
+          "op": "==",
+          "expected": 7,
+          "value": 7,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Traction_Control:dlc",
+          "op": "==",
+          "expected": 7,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Traction_Control",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Traction_Control",
+        "Error: Timeout waiting for message Traction_Control"
+      ],
+      "start_ts": 1765445748.8888156,
+      "end_ts": 1765445750.8894832,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_Diagnostic_Request",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445750.8895137,
+      "end_ts": 1765445750.8895762,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_Diagnostic_Request:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_Diagnostic_Request",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_Diagnostic_Request",
+        "Error: Timeout waiting for message BMS_Diagnostic_Request"
+      ],
+      "start_ts": 1765445750.8895862,
+      "end_ts": 1765445752.8900664,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-OBC_Diagnostic_Request",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445752.8900938,
+      "end_ts": 1765445752.890151,
+      "assertions": [
+        {
+          "target": "dbc_msg:OBC_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:OBC_Diagnostic_Request:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:OBC_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-OBC_Diagnostic_Request",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message OBC_Diagnostic_Request",
+        "Error: Timeout waiting for message OBC_Diagnostic_Request"
+      ],
+      "start_ts": 1765445752.8901603,
+      "end_ts": 1765445754.89067,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_to_OBC_Auth_Stat",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:VCU_to_OBC_Auth_Stat:dlc', 'op': '==', 'expected': 1, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445754.890697,
+      "end_ts": 1765445754.8907747,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_to_OBC_Auth_Stat:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_to_OBC_Auth_Stat:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_to_OBC_Auth_Stat:dlc",
+          "op": "==",
+          "expected": 1,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_to_OBC_Auth_Stat",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_to_OBC_Auth_Stat",
+        "Error: Timeout waiting for message VCU_to_OBC_Auth_Stat"
+      ],
+      "start_ts": 1765445754.8907864,
+      "end_ts": 1765445756.890858,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-VCU_to_OBC_Auth_Req",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:VCU_to_OBC_Auth_Req:dlc', 'op': '==', 'expected': 4, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445756.8908846,
+      "end_ts": 1765445756.8909526,
+      "assertions": [
+        {
+          "target": "dbc_msg:VCU_to_OBC_Auth_Req:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:VCU_to_OBC_Auth_Req:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:VCU_to_OBC_Auth_Req:dlc",
+          "op": "==",
+          "expected": 4,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-VCU_to_OBC_Auth_Req",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message VCU_to_OBC_Auth_Req",
+        "Error: Timeout waiting for message VCU_to_OBC_Auth_Req"
+      ],
+      "start_ts": 1765445756.8909614,
+      "end_ts": 1765445758.8913593,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Vehicle_Mode",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:Vehicle_Mode:dlc', 'op': '==', 'expected': 3, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445758.8913803,
+      "end_ts": 1765445758.8914304,
+      "assertions": [
+        {
+          "target": "dbc_msg:Vehicle_Mode:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Vehicle_Mode:signal_count",
+          "op": "==",
+          "expected": 3,
+          "value": 3,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Vehicle_Mode:dlc",
+          "op": "==",
+          "expected": 3,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Vehicle_Mode",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Vehicle_Mode",
+        "Error: Timeout waiting for message Vehicle_Mode"
+      ],
+      "start_ts": 1765445758.8914368,
+      "end_ts": 1765445760.8920019,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-OTA_Status",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:OTA_Status:dlc', 'op': '==', 'expected': 1, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445760.892032,
+      "end_ts": 1765445760.8921108,
+      "assertions": [
+        {
+          "target": "dbc_msg:OTA_Status:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:OTA_Status:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:OTA_Status:dlc",
+          "op": "==",
+          "expected": 1,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-OTA_Status",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message OTA_Status",
+        "Error: Timeout waiting for message OTA_Status"
+      ],
+      "start_ts": 1765445760.892121,
+      "end_ts": 1765445762.8920767,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-MCU_Diagnostic_Request",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445762.892102,
+      "end_ts": 1765445762.8921533,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_Diagnostic_Request:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_Diagnostic_Request",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_Diagnostic_Request",
+        "Error: Timeout waiting for message MCU_Diagnostic_Request"
+      ],
+      "start_ts": 1765445762.8921614,
+      "end_ts": 1765445764.8925407,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Vehicle_Functions",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445764.8925607,
+      "end_ts": 1765445764.8925986,
+      "assertions": [
+        {
+          "target": "dbc_msg:Vehicle_Functions:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Vehicle_Functions:signal_count",
+          "op": "==",
+          "expected": 16,
+          "value": 16,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Vehicle_Functions:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Vehicle_Functions",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Vehicle_Functions",
+        "Error: Timeout waiting for message Vehicle_Functions"
+      ],
+      "start_ts": 1765445764.8926044,
+      "end_ts": 1765445766.8932016,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-IMU_Data_Z",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445766.8932211,
+      "end_ts": 1765445766.8932576,
+      "assertions": [
+        {
+          "target": "dbc_msg:IMU_Data_Z:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:IMU_Data_Z:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:IMU_Data_Z:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-IMU_Data_Z",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message IMU_Data_Z",
+        "Error: Timeout waiting for message IMU_Data_Z"
+      ],
+      "start_ts": 1765445766.893264,
+      "end_ts": 1765445768.8938012,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-IMU_Data_Y",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445768.8938215,
+      "end_ts": 1765445768.8939414,
+      "assertions": [
+        {
+          "target": "dbc_msg:IMU_Data_Y:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:IMU_Data_Y:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:IMU_Data_Y:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-IMU_Data_Y",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message IMU_Data_Y",
+        "Error: Timeout waiting for message IMU_Data_Y"
+      ],
+      "start_ts": 1765445768.89395,
+      "end_ts": 1765445770.8939805,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-IMU_Data_X",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445770.8940015,
+      "end_ts": 1765445770.8940442,
+      "assertions": [
+        {
+          "target": "dbc_msg:IMU_Data_X:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:IMU_Data_X:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:IMU_Data_X:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-IMU_Data_X",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message IMU_Data_X",
+        "Error: Timeout waiting for message IMU_Data_X"
+      ],
+      "start_ts": 1765445770.8940506,
+      "end_ts": 1765445772.8942118,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-TimeStamp_Sync_Message",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445772.894235,
+      "end_ts": 1765445772.8942804,
+      "assertions": [
+        {
+          "target": "dbc_msg:TimeStamp_Sync_Message:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:TimeStamp_Sync_Message:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:TimeStamp_Sync_Message:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-TimeStamp_Sync_Message",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message TimeStamp_Sync_Message",
+        "Error: Timeout waiting for message TimeStamp_Sync_Message"
+      ],
+      "start_ts": 1765445772.894287,
+      "end_ts": 1765445774.8949232,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-Display_info",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445774.8949444,
+      "end_ts": 1765445774.8949864,
+      "assertions": [
+        {
+          "target": "dbc_msg:Display_info:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Display_info:signal_count",
+          "op": "==",
+          "expected": 15,
+          "value": 15,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Display_info:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Display_info",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message Display_info",
+        "Error: Timeout waiting for message Display_info"
+      ],
+      "start_ts": 1765445774.8949933,
+      "end_ts": 1765445776.8957915,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-HU_Diagnostic_Request",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445776.8958237,
+      "end_ts": 1765445776.8958838,
+      "assertions": [
+        {
+          "target": "dbc_msg:HU_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:HU_Diagnostic_Request:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:HU_Diagnostic_Request:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-HU_Diagnostic_Request",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message HU_Diagnostic_Request",
+        "Error: Timeout waiting for message HU_Diagnostic_Request"
+      ],
+      "start_ts": 1765445776.8958933,
+      "end_ts": 1765445778.896421,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-OBC_HP_DCDC_Parameter_2",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445778.896446,
+      "end_ts": 1765445778.8964956,
+      "assertions": [
+        {
+          "target": "dbc_msg:OBC_HP_DCDC_Parameter_2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:OBC_HP_DCDC_Parameter_2:signal_count",
+          "op": "==",
+          "expected": 7,
+          "value": 7,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:OBC_HP_DCDC_Parameter_2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-OBC_HP_DCDC_Parameter_2",
+      "passed": false,
+      "log": [
+        "Received message OBC_HP_DCDC_Parameter_2",
+        "Assertion failed: {'target': '0x1a7', 'op': '==', 'expected': 100, 'value': None, 'passed': False, 'msg': 'Cycle time within tolerance'}",
+        "Assertion failed: {'target': '0x1a7', 'op': '<=', 'expected': 300, 'value': 1765408427786.9014, 'passed': False, 'msg': 'No missing frame beyond timeout'}",
+        "Assertion failed: {'target': 'signal:OBC_Output_Sts', 'op': 'in_range', 'expected': (0, 1), 'value': 'Disable', 'passed': False, 'msg': 'OBC_Output_Sts within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Coolant_FAN_Sts', 'op': 'in_range', 'expected': (0, 1), 'value': 'Disable', 'passed': False, 'msg': 'OBC_Coolant_FAN_Sts within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:Control_and_Proximity_Sts', 'op': 'in_range', 'expected': (0, 1), 'value': 'Disable', 'passed': False, 'msg': 'Control_and_Proximity_Sts within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:HPDCDC_Output_Sts', 'op': 'in_range', 'expected': (0, 1), 'value': 'Disable', 'passed': False, 'msg': 'HPDCDC_Output_Sts within [0, 1]'}"
+      ],
+      "start_ts": 1765445778.8965201,
+      "end_ts": 1765445778.9614313,
+      "assertions": [
+        {
+          "target": "0x1a7",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DLC observed on bus"
+        },
+        {
+          "target": "0x1a7",
+          "op": "==",
+          "expected": 100,
+          "value": null,
+          "passed": false,
+          "msg": "Cycle time within tolerance"
+        },
+        {
+          "target": "0x1a7",
+          "op": "<=",
+          "expected": 300,
+          "value": 1765408427786.9014,
+          "passed": false,
+          "msg": "No missing frame beyond timeout"
+        },
+        {
+          "target": "signal:OBC_temp",
+          "op": "not_none",
+          "expected": 0,
+          "value": 0.0,
+          "passed": true,
+          "msg": "OBC_temp observed on bus"
+        },
+        {
+          "target": "signal:OBC_temp",
+          "op": "in_range",
+          "expected": [
+            -1000,
+            655.35
+          ],
+          "value": 0.0,
+          "passed": true,
+          "msg": "OBC_temp within [-1000, 655.35]"
+        },
+        {
+          "target": "signal:HP_DCDC_Temp",
+          "op": "not_none",
+          "expected": 0,
+          "value": -32.0,
+          "passed": true,
+          "msg": "HP_DCDC_Temp observed on bus"
+        },
+        {
+          "target": "signal:HP_DCDC_Temp",
+          "op": "in_range",
+          "expected": [
+            -1000,
+            655.35
+          ],
+          "value": -32.0,
+          "passed": true,
+          "msg": "HP_DCDC_Temp within [-1000, 655.35]"
+        },
+        {
+          "target": "signal:OBC_Output_Sts",
+          "op": "not_none",
+          "expected": 0,
+          "value": "Disable",
+          "passed": true,
+          "msg": "OBC_Output_Sts observed on bus"
+        },
+        {
+          "target": "signal:OBC_Output_Sts",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "Disable",
+          "passed": false,
+          "msg": "OBC_Output_Sts within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Coolant_FAN_Sts",
+          "op": "not_none",
+          "expected": 0,
+          "value": "Disable",
+          "passed": true,
+          "msg": "OBC_Coolant_FAN_Sts observed on bus"
+        },
+        {
+          "target": "signal:OBC_Coolant_FAN_Sts",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "Disable",
+          "passed": false,
+          "msg": "OBC_Coolant_FAN_Sts within [0, 1]"
+        },
+        {
+          "target": "signal:Control_and_Proximity_Sts",
+          "op": "not_none",
+          "expected": 0,
+          "value": "Disable",
+          "passed": true,
+          "msg": "Control_and_Proximity_Sts observed on bus"
+        },
+        {
+          "target": "signal:Control_and_Proximity_Sts",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "Disable",
+          "passed": false,
+          "msg": "Control_and_Proximity_Sts within [0, 1]"
+        },
+        {
+          "target": "signal:HPDCDC_Output_Sts",
+          "op": "not_none",
+          "expected": 0,
+          "value": "Disable",
+          "passed": true,
+          "msg": "HPDCDC_Output_Sts observed on bus"
+        },
+        {
+          "target": "signal:HPDCDC_Output_Sts",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "Disable",
+          "passed": false,
+          "msg": "HPDCDC_Output_Sts within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_FET_Temp",
+          "op": "not_none",
+          "expected": 0,
+          "value": -32.0,
+          "passed": true,
+          "msg": "OBC_FET_Temp observed on bus"
+        },
+        {
+          "target": "signal:OBC_FET_Temp",
+          "op": "in_range",
+          "expected": [
+            -1000,
+            655.35
+          ],
+          "value": -32.0,
+          "passed": true,
+          "msg": "OBC_FET_Temp within [-1000, 655.35]"
+        }
+      ]
+    },
+    {
+      "case_id": "ST-Chrgr_Parameter_1",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445778.9614475,
+      "end_ts": 1765445778.9614713,
+      "assertions": [
+        {
+          "target": "dbc_msg:Chrgr_Parameter_1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Chrgr_Parameter_1:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Chrgr_Parameter_1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Chrgr_Parameter_1",
+      "passed": false,
+      "log": [
+        "Received message Chrgr_Parameter_1",
+        "Assertion failed: {'target': '0x19f', 'op': '==', 'expected': 100, 'value': None, 'passed': False, 'msg': 'Cycle time within tolerance'}",
+        "Assertion failed: {'target': '0x19f', 'op': '<=', 'expected': 300, 'value': 1765408427787.4746, 'passed': False, 'msg': 'No missing frame beyond timeout'}"
+      ],
+      "start_ts": 1765445778.961477,
+      "end_ts": 1765445779.0418408,
+      "assertions": [
+        {
+          "target": "0x19f",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DLC observed on bus"
+        },
+        {
+          "target": "0x19f",
+          "op": "==",
+          "expected": 100,
+          "value": null,
+          "passed": false,
+          "msg": "Cycle time within tolerance"
+        },
+        {
+          "target": "0x19f",
+          "op": "<=",
+          "expected": 300,
+          "value": 1765408427787.4746,
+          "passed": false,
+          "msg": "No missing frame beyond timeout"
+        },
+        {
+          "target": "signal:Chrgr_Input_AC_Vlt",
+          "op": "not_none",
+          "expected": 0,
+          "value": 0.0,
+          "passed": true,
+          "msg": "Chrgr_Input_AC_Vlt observed on bus"
+        },
+        {
+          "target": "signal:Chrgr_Input_AC_Vlt",
+          "op": "in_range",
+          "expected": [
+            0,
+            655.35
+          ],
+          "value": 0.0,
+          "passed": true,
+          "msg": "Chrgr_Input_AC_Vlt within [0, 655.35]"
+        },
+        {
+          "target": "signal:Chrgr_Input_AC_Curr",
+          "op": "not_none",
+          "expected": 0,
+          "value": 0.0,
+          "passed": true,
+          "msg": "Chrgr_Input_AC_Curr observed on bus"
+        },
+        {
+          "target": "signal:Chrgr_Input_AC_Curr",
+          "op": "in_range",
+          "expected": [
+            0,
+            655.35
+          ],
+          "value": 0.0,
+          "passed": true,
+          "msg": "Chrgr_Input_AC_Curr within [0, 655.35]"
+        },
+        {
+          "target": "signal:Chrgr_Output_DC_Vlt",
+          "op": "not_none",
+          "expected": 0,
+          "value": 0.0,
+          "passed": true,
+          "msg": "Chrgr_Output_DC_Vlt observed on bus"
+        },
+        {
+          "target": "signal:Chrgr_Output_DC_Vlt",
+          "op": "in_range",
+          "expected": [
+            0,
+            655.35
+          ],
+          "value": 0.0,
+          "passed": true,
+          "msg": "Chrgr_Output_DC_Vlt within [0, 655.35]"
+        },
+        {
+          "target": "signal:Chrgr_Output_DC_Curr",
+          "op": "not_none",
+          "expected": 0,
+          "value": 0.0,
+          "passed": true,
+          "msg": "Chrgr_Output_DC_Curr observed on bus"
+        },
+        {
+          "target": "signal:Chrgr_Output_DC_Curr",
+          "op": "in_range",
+          "expected": [
+            0,
+            655.35
+          ],
+          "value": 0.0,
+          "passed": true,
+          "msg": "Chrgr_Output_DC_Curr within [0, 655.35]"
+        }
+      ]
+    },
+    {
+      "case_id": "ST-Chrgr_FLT_Info",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:Chrgr_FLT_Info:dlc', 'op': '==', 'expected': 4, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445779.0418594,
+      "end_ts": 1765445779.0418885,
+      "assertions": [
+        {
+          "target": "dbc_msg:Chrgr_FLT_Info:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Chrgr_FLT_Info:signal_count",
+          "op": "==",
+          "expected": 31,
+          "value": 31,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Chrgr_FLT_Info:dlc",
+          "op": "==",
+          "expected": 4,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Chrgr_FLT_Info",
+      "passed": false,
+      "log": [
+        "Received message Chrgr_FLT_Info",
+        "Assertion failed: {'target': '0x50e', 'op': '==', 'expected': 100, 'value': None, 'passed': False, 'msg': 'Cycle time within tolerance'}",
+        "Assertion failed: {'target': '0x50e', 'op': '<=', 'expected': 300, 'value': 1765408427786.9207, 'passed': False, 'msg': 'No missing frame beyond timeout'}",
+        "Assertion failed: {'target': 'signal:OBC_Input_AC_Over_Vlt', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Input_AC_Over_Vlt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Input_AC_under_Vlt', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Input_AC_under_Vlt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Input_Over_Curr', 'op': 'in_range', 'expected': (0, 1), 'value': 'ERROR', 'passed': False, 'msg': 'OBC_Input_Over_Curr within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Output_Over_Curr', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Output_Over_Curr within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_High_Temp', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_High_Temp within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Low_temp', 'op': 'in_range', 'expected': (0, 1), 'value': 'ERROR', 'passed': False, 'msg': 'OBC_Low_temp within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Temp_Snsr_Fail', 'op': 'in_range', 'expected': (0, 1), 'value': 'ERROR', 'passed': False, 'msg': 'OBC_Temp_Snsr_Fail within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Curr_Sensing_Fail', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Curr_Sensing_Fail within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Contactor_or_Relay_Fail', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Contactor_or_Relay_Fail within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Output_Open_Ckt', 'op': 'in_range', 'expected': (0, 1), 'value': 'ERROR', 'passed': False, 'msg': 'OBC_Output_Open_Ckt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Output_Shrt_Ckt_Fail', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Output_Shrt_Ckt_Fail within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Output_Over_Vlt_Flt', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Output_Over_Vlt_Flt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Output_Under_Vlt_Flt', 'op': 'in_range', 'expected': (0, 1), 'value': 'ERROR', 'passed': False, 'msg': 'OBC_Output_Under_Vlt_Flt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Output_Over_Vlt_Flt', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'DCDC_Output_Over_Vlt_Flt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Input_Over_Vlt', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'DCDC_Input_Over_Vlt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Input_Under_Vlt', 'op': 'in_range', 'expected': (0, 1), 'value': 'ERROR', 'passed': False, 'msg': 'DCDC_Input_Under_Vlt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Input_Over_Curr', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'DCDC_Input_Over_Curr within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Output_Over_Curr', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'DCDC_Output_Over_Curr within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_High_Temp', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'DCDC_High_Temp within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Low_Temp', 'op': 'in_range', 'expected': (0, 1), 'value': 'ERROR', 'passed': False, 'msg': 'DCDC_Low_Temp within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Temp_Snsr_Fail', 'op': 'in_range', 'expected': (0, 1), 'value': 'ERROR', 'passed': False, 'msg': 'DCDC_Temp_Snsr_Fail within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DC_DC_Curr_Sensing_Fail', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'DC_DC_Curr_Sensing_Fail within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Contactor_or_Relay_Fail', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'DCDC_Contactor_or_Relay_Fail within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Output_Open_Ckt', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'DCDC_Output_Open_Ckt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Output_Shrt_Ckt', 'op': 'in_range', 'expected': (0, 1), 'value': 'ERROR', 'passed': False, 'msg': 'DCDC_Output_Shrt_Ckt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Output_Under_Vlt_Flt', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'DCDC_Output_Under_Vlt_Flt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:DCDC_Input_Over_Vlt_Lvl2', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'DCDC_Input_Over_Vlt_Lvl2 within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Input_AC_Distorted_Vlt', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Input_AC_Distorted_Vlt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Input_Shrt_Ckt_Fail', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Input_Shrt_Ckt_Fail within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Bus_Over_Vlt_Flt', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Bus_Over_Vlt_Flt within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Bus_Short_Out_Flt', 'op': 'in_range', 'expected': (0, 1), 'value': 'No Error', 'passed': False, 'msg': 'OBC_Bus_Short_Out_Flt within [0, 1]'}"
+      ],
+      "start_ts": 1765445779.0418952,
+      "end_ts": 1765445779.131656,
+      "assertions": [
+        {
+          "target": "0x50e",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DLC observed on bus"
+        },
+        {
+          "target": "0x50e",
+          "op": "==",
+          "expected": 100,
+          "value": null,
+          "passed": false,
+          "msg": "Cycle time within tolerance"
+        },
+        {
+          "target": "0x50e",
+          "op": "<=",
+          "expected": 300,
+          "value": 1765408427786.9207,
+          "passed": false,
+          "msg": "No missing frame beyond timeout"
+        },
+        {
+          "target": "signal:OBC_Input_AC_Over_Vlt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Input_AC_Over_Vlt observed on bus"
+        },
+        {
+          "target": "signal:OBC_Input_AC_Over_Vlt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Input_AC_Over_Vlt within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Input_AC_under_Vlt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Input_AC_under_Vlt observed on bus"
+        },
+        {
+          "target": "signal:OBC_Input_AC_under_Vlt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Input_AC_under_Vlt within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Input_Over_Curr",
+          "op": "not_none",
+          "expected": 0,
+          "value": "ERROR",
+          "passed": true,
+          "msg": "OBC_Input_Over_Curr observed on bus"
+        },
+        {
+          "target": "signal:OBC_Input_Over_Curr",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "ERROR",
+          "passed": false,
+          "msg": "OBC_Input_Over_Curr within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Output_Over_Curr",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Output_Over_Curr observed on bus"
+        },
+        {
+          "target": "signal:OBC_Output_Over_Curr",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Output_Over_Curr within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_High_Temp",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_High_Temp observed on bus"
+        },
+        {
+          "target": "signal:OBC_High_Temp",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_High_Temp within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Low_temp",
+          "op": "not_none",
+          "expected": 0,
+          "value": "ERROR",
+          "passed": true,
+          "msg": "OBC_Low_temp observed on bus"
+        },
+        {
+          "target": "signal:OBC_Low_temp",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "ERROR",
+          "passed": false,
+          "msg": "OBC_Low_temp within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Temp_Snsr_Fail",
+          "op": "not_none",
+          "expected": 0,
+          "value": "ERROR",
+          "passed": true,
+          "msg": "OBC_Temp_Snsr_Fail observed on bus"
+        },
+        {
+          "target": "signal:OBC_Temp_Snsr_Fail",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "ERROR",
+          "passed": false,
+          "msg": "OBC_Temp_Snsr_Fail within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Curr_Sensing_Fail",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Curr_Sensing_Fail observed on bus"
+        },
+        {
+          "target": "signal:OBC_Curr_Sensing_Fail",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Curr_Sensing_Fail within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Contactor_or_Relay_Fail",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Contactor_or_Relay_Fail observed on bus"
+        },
+        {
+          "target": "signal:OBC_Contactor_or_Relay_Fail",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Contactor_or_Relay_Fail within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Output_Open_Ckt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "ERROR",
+          "passed": true,
+          "msg": "OBC_Output_Open_Ckt observed on bus"
+        },
+        {
+          "target": "signal:OBC_Output_Open_Ckt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "ERROR",
+          "passed": false,
+          "msg": "OBC_Output_Open_Ckt within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Output_Shrt_Ckt_Fail",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Output_Shrt_Ckt_Fail observed on bus"
+        },
+        {
+          "target": "signal:OBC_Output_Shrt_Ckt_Fail",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Output_Shrt_Ckt_Fail within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Output_Over_Vlt_Flt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Output_Over_Vlt_Flt observed on bus"
+        },
+        {
+          "target": "signal:OBC_Output_Over_Vlt_Flt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Output_Over_Vlt_Flt within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Output_Under_Vlt_Flt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "ERROR",
+          "passed": true,
+          "msg": "OBC_Output_Under_Vlt_Flt observed on bus"
+        },
+        {
+          "target": "signal:OBC_Output_Under_Vlt_Flt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "ERROR",
+          "passed": false,
+          "msg": "OBC_Output_Under_Vlt_Flt within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Output_Over_Vlt_Flt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "DCDC_Output_Over_Vlt_Flt observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Output_Over_Vlt_Flt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "DCDC_Output_Over_Vlt_Flt within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Input_Over_Vlt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "DCDC_Input_Over_Vlt observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Input_Over_Vlt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "DCDC_Input_Over_Vlt within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Input_Under_Vlt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "ERROR",
+          "passed": true,
+          "msg": "DCDC_Input_Under_Vlt observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Input_Under_Vlt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "ERROR",
+          "passed": false,
+          "msg": "DCDC_Input_Under_Vlt within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Input_Over_Curr",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "DCDC_Input_Over_Curr observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Input_Over_Curr",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "DCDC_Input_Over_Curr within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Output_Over_Curr",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "DCDC_Output_Over_Curr observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Output_Over_Curr",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "DCDC_Output_Over_Curr within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_High_Temp",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "DCDC_High_Temp observed on bus"
+        },
+        {
+          "target": "signal:DCDC_High_Temp",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "DCDC_High_Temp within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Low_Temp",
+          "op": "not_none",
+          "expected": 0,
+          "value": "ERROR",
+          "passed": true,
+          "msg": "DCDC_Low_Temp observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Low_Temp",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "ERROR",
+          "passed": false,
+          "msg": "DCDC_Low_Temp within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Temp_Snsr_Fail",
+          "op": "not_none",
+          "expected": 0,
+          "value": "ERROR",
+          "passed": true,
+          "msg": "DCDC_Temp_Snsr_Fail observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Temp_Snsr_Fail",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "ERROR",
+          "passed": false,
+          "msg": "DCDC_Temp_Snsr_Fail within [0, 1]"
+        },
+        {
+          "target": "signal:DC_DC_Curr_Sensing_Fail",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "DC_DC_Curr_Sensing_Fail observed on bus"
+        },
+        {
+          "target": "signal:DC_DC_Curr_Sensing_Fail",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "DC_DC_Curr_Sensing_Fail within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Contactor_or_Relay_Fail",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "DCDC_Contactor_or_Relay_Fail observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Contactor_or_Relay_Fail",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "DCDC_Contactor_or_Relay_Fail within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Output_Open_Ckt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "DCDC_Output_Open_Ckt observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Output_Open_Ckt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "DCDC_Output_Open_Ckt within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Output_Shrt_Ckt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "ERROR",
+          "passed": true,
+          "msg": "DCDC_Output_Shrt_Ckt observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Output_Shrt_Ckt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "ERROR",
+          "passed": false,
+          "msg": "DCDC_Output_Shrt_Ckt within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Output_Under_Vlt_Flt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "DCDC_Output_Under_Vlt_Flt observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Output_Under_Vlt_Flt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "DCDC_Output_Under_Vlt_Flt within [0, 1]"
+        },
+        {
+          "target": "signal:DCDC_Input_Over_Vlt_Lvl2",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "DCDC_Input_Over_Vlt_Lvl2 observed on bus"
+        },
+        {
+          "target": "signal:DCDC_Input_Over_Vlt_Lvl2",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "DCDC_Input_Over_Vlt_Lvl2 within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Input_AC_Distorted_Vlt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Input_AC_Distorted_Vlt observed on bus"
+        },
+        {
+          "target": "signal:OBC_Input_AC_Distorted_Vlt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Input_AC_Distorted_Vlt within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Input_Shrt_Ckt_Fail",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Input_Shrt_Ckt_Fail observed on bus"
+        },
+        {
+          "target": "signal:OBC_Input_Shrt_Ckt_Fail",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Input_Shrt_Ckt_Fail within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Bus_Over_Vlt_Flt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Bus_Over_Vlt_Flt observed on bus"
+        },
+        {
+          "target": "signal:OBC_Bus_Over_Vlt_Flt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Bus_Over_Vlt_Flt within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Bus_Short_Out_Flt",
+          "op": "not_none",
+          "expected": 0,
+          "value": "No Error",
+          "passed": true,
+          "msg": "OBC_Bus_Short_Out_Flt observed on bus"
+        },
+        {
+          "target": "signal:OBC_Bus_Short_Out_Flt",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "No Error",
+          "passed": false,
+          "msg": "OBC_Bus_Short_Out_Flt within [0, 1]"
+        }
+      ]
+    },
+    {
+      "case_id": "ST-Chrgr_STS_Info",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:Chrgr_STS_Info:dlc', 'op': '==', 'expected': 4, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445779.1317081,
+      "end_ts": 1765445779.1317363,
+      "assertions": [
+        {
+          "target": "dbc_msg:Chrgr_STS_Info:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:Chrgr_STS_Info:signal_count",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:Chrgr_STS_Info:dlc",
+          "op": "==",
+          "expected": 4,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-Chrgr_STS_Info",
+      "passed": false,
+      "log": [
+        "Received message Chrgr_STS_Info",
+        "Assertion failed: {'target': '0x310', 'op': '==', 'expected': 100, 'value': None, 'passed': False, 'msg': 'Cycle time within tolerance'}",
+        "Assertion failed: {'target': '0x310', 'op': '<=', 'expected': 300, 'value': 1765408427787.007, 'passed': False, 'msg': 'No missing frame beyond timeout'}",
+        "Assertion failed: {'target': 'signal:Charger_Sts_Signal', 'op': 'in_range', 'expected': (0, 1), 'value': 'Ready', 'passed': False, 'msg': 'Charger_Sts_Signal within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:Chrgr_Mode', 'op': 'in_range', 'expected': (0, 15), 'value': 'OFF', 'passed': False, 'msg': 'Chrgr_Mode within [0, 15]'}",
+        "Assertion failed: {'target': 'signal:Heartbeat_Fail_From_VCU', 'op': 'in_range', 'expected': (0, 1), 'value': 'False', 'passed': False, 'msg': 'Heartbeat_Fail_From_VCU within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:Heartbeat_Fail_From_BMS', 'op': 'in_range', 'expected': (0, 1), 'value': 'False', 'passed': False, 'msg': 'Heartbeat_Fail_From_BMS within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:OBC_Wakeup', 'op': 'in_range', 'expected': (0, 1), 'value': 'Sleep', 'passed': False, 'msg': 'OBC_Wakeup within [0, 1]'}",
+        "Assertion failed: {'target': 'signal:PreChrg_Sts', 'op': 'in_range', 'expected': (0, 3), 'value': 'SNA', 'passed': False, 'msg': 'PreChrg_Sts within [0, 3]'}"
+      ],
+      "start_ts": 1765445779.1317422,
+      "end_ts": 1765445779.22149,
+      "assertions": [
+        {
+          "target": "0x310",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DLC observed on bus"
+        },
+        {
+          "target": "0x310",
+          "op": "==",
+          "expected": 100,
+          "value": null,
+          "passed": false,
+          "msg": "Cycle time within tolerance"
+        },
+        {
+          "target": "0x310",
+          "op": "<=",
+          "expected": 300,
+          "value": 1765408427787.007,
+          "passed": false,
+          "msg": "No missing frame beyond timeout"
+        },
+        {
+          "target": "signal:Charger_Sts_Signal",
+          "op": "not_none",
+          "expected": 0,
+          "value": "Ready",
+          "passed": true,
+          "msg": "Charger_Sts_Signal observed on bus"
+        },
+        {
+          "target": "signal:Charger_Sts_Signal",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "Ready",
+          "passed": false,
+          "msg": "Charger_Sts_Signal within [0, 1]"
+        },
+        {
+          "target": "signal:Chrgr_Mode",
+          "op": "not_none",
+          "expected": 0,
+          "value": "OFF",
+          "passed": true,
+          "msg": "Chrgr_Mode observed on bus"
+        },
+        {
+          "target": "signal:Chrgr_Mode",
+          "op": "in_range",
+          "expected": [
+            0,
+            15
+          ],
+          "value": "OFF",
+          "passed": false,
+          "msg": "Chrgr_Mode within [0, 15]"
+        },
+        {
+          "target": "signal:Heartbeat_Fail_From_VCU",
+          "op": "not_none",
+          "expected": 0,
+          "value": "False",
+          "passed": true,
+          "msg": "Heartbeat_Fail_From_VCU observed on bus"
+        },
+        {
+          "target": "signal:Heartbeat_Fail_From_VCU",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "False",
+          "passed": false,
+          "msg": "Heartbeat_Fail_From_VCU within [0, 1]"
+        },
+        {
+          "target": "signal:Heartbeat_Fail_From_BMS",
+          "op": "not_none",
+          "expected": 0,
+          "value": "False",
+          "passed": true,
+          "msg": "Heartbeat_Fail_From_BMS observed on bus"
+        },
+        {
+          "target": "signal:Heartbeat_Fail_From_BMS",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "False",
+          "passed": false,
+          "msg": "Heartbeat_Fail_From_BMS within [0, 1]"
+        },
+        {
+          "target": "signal:OBC_Wakeup",
+          "op": "not_none",
+          "expected": 0,
+          "value": "Sleep",
+          "passed": true,
+          "msg": "OBC_Wakeup observed on bus"
+        },
+        {
+          "target": "signal:OBC_Wakeup",
+          "op": "in_range",
+          "expected": [
+            0,
+            1
+          ],
+          "value": "Sleep",
+          "passed": false,
+          "msg": "OBC_Wakeup within [0, 1]"
+        },
+        {
+          "target": "signal:PreChrg_Sts",
+          "op": "not_none",
+          "expected": 0,
+          "value": "SNA",
+          "passed": true,
+          "msg": "PreChrg_Sts observed on bus"
+        },
+        {
+          "target": "signal:PreChrg_Sts",
+          "op": "in_range",
+          "expected": [
+            0,
+            3
+          ],
+          "value": "SNA",
+          "passed": false,
+          "msg": "PreChrg_Sts within [0, 3]"
+        },
+        {
+          "target": "signal:AcState",
+          "op": "not_none",
+          "expected": 0,
+          "value": "SysStandby",
+          "passed": true,
+          "msg": "AcState observed on bus"
+        },
+        {
+          "target": "signal:AcMode",
+          "op": "not_none",
+          "expected": 0,
+          "value": "STANDBY_STATE",
+          "passed": true,
+          "msg": "AcMode observed on bus"
+        }
+      ]
+    },
+    {
+      "case_id": "ST-MCU_Data4",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:MCU_Data4:dlc', 'op': '==', 'expected': 6, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445779.221508,
+      "end_ts": 1765445779.2215378,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_Data4:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_Data4:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_Data4:dlc",
+          "op": "==",
+          "expected": 6,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_Data4",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_Data4",
+        "Error: Timeout waiting for message MCU_Data4"
+      ],
+      "start_ts": 1765445779.2215502,
+      "end_ts": 1765445781.221973,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-MCU_SW_Version",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445781.221995,
+      "end_ts": 1765445781.2220395,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_SW_Version:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_SW_Version:signal_count",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_SW_Version:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_SW_Version",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_SW_Version",
+        "Error: Timeout waiting for message MCU_SW_Version"
+      ],
+      "start_ts": 1765445781.222061,
+      "end_ts": 1765445783.2229176,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-MCU_FLT_Data",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:MCU_FLT_Data:dlc', 'op': '==', 'expected': 7, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445783.2229362,
+      "end_ts": 1765445783.2229848,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_FLT_Data:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_FLT_Data:signal_count",
+          "op": "==",
+          "expected": 51,
+          "value": 51,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_FLT_Data:dlc",
+          "op": "==",
+          "expected": 7,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_FLT_Data",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_FLT_Data",
+        "Error: Timeout waiting for message MCU_FLT_Data"
+      ],
+      "start_ts": 1765445783.2229908,
+      "end_ts": 1765445785.223493,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-MCU_Data2",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445785.2235076,
+      "end_ts": 1765445785.2235367,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_Data2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_Data2:signal_count",
+          "op": "==",
+          "expected": 10,
+          "value": 10,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_Data2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_Data2",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_Data2",
+        "Error: Timeout waiting for message MCU_Data2"
+      ],
+      "start_ts": 1765445785.2235415,
+      "end_ts": 1765445787.2235193,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-MCU_Data1",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445787.2235415,
+      "end_ts": 1765445787.2235863,
+      "assertions": [
+        {
+          "target": "dbc_msg:MCU_Data1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:MCU_Data1:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:MCU_Data1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-MCU_Data1",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message MCU_Data1",
+        "Error: Timeout waiting for message MCU_Data1"
+      ],
+      "start_ts": 1765445787.2235937,
+      "end_ts": 1765445789.2245061,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_HARDWARE_VERSION",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:BMS_HARDWARE_VERSION:dlc', 'op': '==', 'expected': 4, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445789.2245264,
+      "end_ts": 1765445789.224578,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_HARDWARE_VERSION:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_HARDWARE_VERSION:signal_count",
+          "op": "==",
+          "expected": 1,
+          "value": 1,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_HARDWARE_VERSION:dlc",
+          "op": "==",
+          "expected": 4,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_HARDWARE_VERSION",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_HARDWARE_VERSION",
+        "Error: Timeout waiting for message BMS_HARDWARE_VERSION"
+      ],
+      "start_ts": 1765445789.2245848,
+      "end_ts": 1765445791.2245557,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_CELL_STS",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445791.224582,
+      "end_ts": 1765445791.2246337,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_CELL_STS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_STS:signal_count",
+          "op": "==",
+          "expected": 31,
+          "value": 31,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_STS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_CELL_STS",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_CELL_STS",
+        "Error: Timeout waiting for message BMS_CELL_STS"
+      ],
+      "start_ts": 1765445791.2246425,
+      "end_ts": 1765445793.2252283,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BATT_TEMP",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445793.225251,
+      "end_ts": 1765445793.2252944,
+      "assertions": [
+        {
+          "target": "dbc_msg:BATT_TEMP:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BATT_TEMP:signal_count",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BATT_TEMP:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BATT_TEMP",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BATT_TEMP",
+        "Error: Timeout waiting for message BATT_TEMP"
+      ],
+      "start_ts": 1765445793.2253015,
+      "end_ts": 1765445795.225555,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_SOFTWARE_VERSIONS",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445795.2255745,
+      "end_ts": 1765445795.225613,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_SOFTWARE_VERSIONS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_SOFTWARE_VERSIONS:signal_count",
+          "op": "==",
+          "expected": 2,
+          "value": 2,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_SOFTWARE_VERSIONS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_SOFTWARE_VERSIONS",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_SOFTWARE_VERSIONS",
+        "Error: Timeout waiting for message BMS_SOFTWARE_VERSIONS"
+      ],
+      "start_ts": 1765445795.2256196,
+      "end_ts": 1765445797.2256906,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_PARAMETER_3",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:BMS_PARAMETER_3:dlc', 'op': '==', 'expected': 7, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445797.2257135,
+      "end_ts": 1765445797.2257671,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_PARAMETER_3:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_PARAMETER_3:signal_count",
+          "op": "==",
+          "expected": 5,
+          "value": 5,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_PARAMETER_3:dlc",
+          "op": "==",
+          "expected": 7,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_PARAMETER_3",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_PARAMETER_3",
+        "Error: Timeout waiting for message BMS_PARAMETER_3"
+      ],
+      "start_ts": 1765445797.2257738,
+      "end_ts": 1765445799.2263637,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_PARAMETER_2_Limits",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445799.226393,
+      "end_ts": 1765445799.2264478,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_PARAMETER_2_Limits:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_PARAMETER_2_Limits:signal_count",
+          "op": "==",
+          "expected": 5,
+          "value": 5,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_PARAMETER_2_Limits:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_PARAMETER_2_Limits",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_PARAMETER_2_Limits",
+        "Error: Timeout waiting for message BMS_PARAMETER_2_Limits"
+      ],
+      "start_ts": 1765445799.226463,
+      "end_ts": 1765445801.2269516,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_PARAMETER_1",
+      "passed": false,
+      "log": [
+        "Assertion failed: {'target': 'dbc_msg:BMS_PARAMETER_1:dlc', 'op': '==', 'expected': 7, 'value': 8, 'passed': False, 'msg': 'Signal packing fits in DLC'}"
+      ],
+      "start_ts": 1765445801.2270103,
+      "end_ts": 1765445801.2270808,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_PARAMETER_1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_PARAMETER_1:signal_count",
+          "op": "==",
+          "expected": 12,
+          "value": 12,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_PARAMETER_1:dlc",
+          "op": "==",
+          "expected": 7,
+          "value": 8,
+          "passed": false,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_PARAMETER_1",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_PARAMETER_1",
+        "Error: Timeout waiting for message BMS_PARAMETER_1"
+      ],
+      "start_ts": 1765445801.2270863,
+      "end_ts": 1765445803.2273712,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_CELL_VLT_7",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445803.2273986,
+      "end_ts": 1765445803.2274506,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_7:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_7:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_7:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_CELL_VLT_7",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_CELL_VLT_7",
+        "Error: Timeout waiting for message BMS_CELL_VLT_7"
+      ],
+      "start_ts": 1765445803.227459,
+      "end_ts": 1765445805.228313,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_CELL_VLT_6",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445805.2283335,
+      "end_ts": 1765445805.228373,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_6:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_6:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_6:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_CELL_VLT_6",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_CELL_VLT_6",
+        "Error: Timeout waiting for message BMS_CELL_VLT_6"
+      ],
+      "start_ts": 1765445805.2283924,
+      "end_ts": 1765445807.2284842,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_CELL_VLT_5",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445807.2285106,
+      "end_ts": 1765445807.228564,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_5:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_5:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_5:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_CELL_VLT_5",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_CELL_VLT_5",
+        "Error: Timeout waiting for message BMS_CELL_VLT_5"
+      ],
+      "start_ts": 1765445807.2285714,
+      "end_ts": 1765445809.22874,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_CELL_VLT_4",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445809.2287657,
+      "end_ts": 1765445809.2288158,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_4:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_4:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_4:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_CELL_VLT_4",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_CELL_VLT_4",
+        "Error: Timeout waiting for message BMS_CELL_VLT_4"
+      ],
+      "start_ts": 1765445809.2288232,
+      "end_ts": 1765445811.2290645,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_CELL_VLT_3",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445811.2290885,
+      "end_ts": 1765445811.229132,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_3:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_3:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_3:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_CELL_VLT_3",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_CELL_VLT_3",
+        "Error: Timeout waiting for message BMS_CELL_VLT_3"
+      ],
+      "start_ts": 1765445811.2291386,
+      "end_ts": 1765445813.230036,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_CELL_VLT_2",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445813.2300549,
+      "end_ts": 1765445813.2300937,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_2:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_2:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_CELL_VLT_2",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_CELL_VLT_2",
+        "Error: Timeout waiting for message BMS_CELL_VLT_2"
+      ],
+      "start_ts": 1765445813.2301006,
+      "end_ts": 1765445815.230175,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BMS_CELL_VLT_1",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445815.2301955,
+      "end_ts": 1765445815.2302353,
+      "assertions": [
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_1:signal_count",
+          "op": "==",
+          "expected": 4,
+          "value": 4,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BMS_CELL_VLT_1:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BMS_CELL_VLT_1",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BMS_CELL_VLT_1",
+        "Error: Timeout waiting for message BMS_CELL_VLT_1"
+      ],
+      "start_ts": 1765445815.230242,
+      "end_ts": 1765445817.2308407,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BATTERY_LIMITS",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445817.230862,
+      "end_ts": 1765445817.2309022,
+      "assertions": [
+        {
+          "target": "dbc_msg:BATTERY_LIMITS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BATTERY_LIMITS:signal_count",
+          "op": "==",
+          "expected": 5,
+          "value": 5,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BATTERY_LIMITS:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BATTERY_LIMITS",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BATTERY_LIMITS",
+        "Error: Timeout waiting for message BATTERY_LIMITS"
+      ],
+      "start_ts": 1765445817.2309093,
+      "end_ts": 1765445819.2313218,
+      "assertions": []
+    },
+    {
+      "case_id": "ST-BATTERY_STS_INFO",
+      "passed": true,
+      "log": [],
+      "start_ts": 1765445819.2313416,
+      "end_ts": 1765445819.2313967,
+      "assertions": [
+        {
+          "target": "dbc_msg:BATTERY_STS_INFO:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "DBC DLC matches definition"
+        },
+        {
+          "target": "dbc_msg:BATTERY_STS_INFO:signal_count",
+          "op": "==",
+          "expected": 6,
+          "value": 6,
+          "passed": true,
+          "msg": "Signal count matches DBC"
+        },
+        {
+          "target": "dbc_msg:BATTERY_STS_INFO:dlc",
+          "op": "==",
+          "expected": 8,
+          "value": 8,
+          "passed": true,
+          "msg": "Signal packing fits in DLC"
+        }
+      ]
+    },
+    {
+      "case_id": "DYN-BATTERY_STS_INFO",
+      "passed": false,
+      "log": [
+        "Timeout waiting for message BATTERY_STS_INFO",
+        "Error: Timeout waiting for message BATTERY_STS_INFO"
+      ],
+      "start_ts": 1765445819.2314038,
+      "end_ts": 1765445821.2317657,
+      "assertions": []
+    }
+  ]
+}

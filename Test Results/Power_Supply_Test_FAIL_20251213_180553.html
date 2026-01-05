@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Power_Supply_Test FAIL</title>
+<style>
+body { font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; background: #0b111a; color: #e7f1ff; margin: 0; padding: 0; }
+.container { max-width: 1080px; margin: 0 auto; padding: 32px 24px 48px 24px; }
+.header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #233044; padding-bottom: 12px; margin-bottom: 16px; }
+.title { font-size: 28px; font-weight: 700; letter-spacing: 0.5px; color: #5ce1e6; }
+.badge { padding: 8px 14px; border-radius: 16px; font-weight: 700; text-transform: uppercase; }
+.status-pass { background: #0f3c2a; color: #5df0a1; border: 1px solid #1f6c46; }
+.status-fail { background: #3c1f1f; color: #ff9b9b; border: 1px solid #7a2f2f; }
+.meta { list-style: none; padding: 0; margin: 0 0 12px 0; display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 13px; color: #9db4d4; }
+.meta li b { color: #e7f1ff; }
+.dates { font-size: 13px; color: #9db4d4; margin-bottom: 8px; }
+table { width: 100%; border-collapse: collapse; margin-top: 16px; border: 1px solid #1f2b3d; }
+th, td { border: 1px solid #1f2b3d; padding: 10px; vertical-align: top; font-size: 13px; }
+th { background: #162133; color: #c8ddf5; text-align: left; }
+tr:nth-child(even) { background: #0f1726; }
+tr:nth-child(odd) { background: #0c141f; }
+.step-pass { color: #6dffb3; font-weight: 600; }
+.step-fail { color: #ff8f8f; font-weight: 600; }
+.step-running { color: #f6c343; font-weight: 600; }
+.section { margin-top: 18px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="title">Power Supply Test</div>
+    <div class="badge status-fail">FAIL</div>
+  </div>
+  <div class="dates"><b>Started:</b> 2025-12-13 18:05:53.630671 &nbsp; <b>Ended:</b> 2025-12-13 18:05:53.654085 &nbsp; <b>Total:</b> 00:00:00</div>
+  <ul class="meta"><li><b>Author:</b> Aakash</li><li><b>Description:</b> demo</li><li><b>Last_Modified:</b> 2025-12-13T18:05:10.179277</li><li><b>Name:</b> Power Supply Test</li><li><b>Tags:</b> ['demo']</li><li><b>Version:</b> 1</li></ul>
+  <table>
+    <thead><tr><th>#</th><th>Action</th><th>Parameters</th><th>Status</th><th>Messages</th></tr></thead>
+    <tbody>
+    <tr><td>1</td><td>GS / Ramp Set & Measure</td><td>{"target": {"type": "PS_VOLT", "message": "", "signal": ""}, "start": 85.0, "step": 1.0, "end": 115.0, "dwell": 2.0, "tolerance": 0.5, "retries": 3, "verify": true, "measure": {"gs": true, "ps": true}}</td><td>Fail</td><td>Ramp aborted at 85.0: PS not initialized</td></tr>
+    </tbody>
+  </table>
+  
+</div>
+</body>
+</html>

@@ -1,9 +1,25 @@
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton, 
-                             QTableWidget, QTableWidgetItem, QLabel, QComboBox, 
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QPushButton,
+                             QTableWidget, QTableWidgetItem, QLabel, QComboBox,
                              QGridLayout, QDialog, QFrame, QTextEdit, QInputDialog, QMessageBox, QHeaderView,
                              QDialogButtonBox, QFormLayout, QDoubleSpinBox, QSpinBox, QLineEdit, QSpacerItem, QSizePolicy)
-from PyQt6.QtCore import Qt, pyqtSignal, QTimer
-from PyQt6.QtGui import QColor, QPainter, QBrush
+from PyQt6.QtCore import Qt, pyqtSignal, QTimer, QPropertyAnimation
+from PyQt6.QtGui import QColor, QPainter, QBrush, QPalette
+import time
+import json
+import csv
+from core.action_registry import INSTRUMENT_ACTIONS, ACTION_LOOKUP
+
+
+def _parse_can_id(text: str) -> int:
+    """Parse CAN ID from user input (hex like 0x123 or decimal). Raises ValueError on bad input."""
+    if text is None:
+        raise ValueError("Missing CAN ID")
+    raw = str(text).strip()
+    if not raw:
+        raise ValueError("Missing CAN ID")
+    if raw.lower().startswith("0x"):
+        return int(raw, 16)
+    return int(raw)
 
 # ... (LEDIndicator class remains same, skipping for brevity in this tool call if possible, but replace_file_content needs contiguous block. 
 # I will assume I need to replace the imports and the Dashboard class methods related to UI and logic)
@@ -51,17 +67,33 @@ class LEDIndicator(QWidget):
 
 
 class RampDialog(QDialog):
-    """Dialog to get ramp parameters: start, step, end, delay, tolerance, retries"""
+    """Dialog to get ramp parameters and target selection."""
     def __init__(self, action_type="GS / Ramp Up Voltage", initial=None, parent=None):
         super().__init__(parent)
         self.setWindowTitle(action_type)
         self.layout = QVBoxLayout(self)
         form = QFormLayout()
 
+        # Target selection
+        self.combo_target = QComboBox()
+        self.combo_target.addItems(["GS_VOLT", "PS_VOLT", "CAN_SIGNAL"])
+        if initial and initial.get("target", {}).get("type"):
+            t = initial["target"]["type"].upper()
+            idx = self.combo_target.findText(t)
+            if idx >= 0:
+                self.combo_target.setCurrentIndex(idx)
+        self.edit_msg = QLineEdit(initial.get("target", {}).get("message", "") if initial else "")
+        self.edit_sig = QLineEdit(initial.get("target", {}).get("signal", "") if initial else "")
+        self.edit_msg.setPlaceholderText("CAN message name")
+        self.edit_sig.setPlaceholderText("CAN signal name")
+        form.addRow("Target Type", self.combo_target)
+        form.addRow("CAN Message", self.edit_msg)
+        form.addRow("CAN Signal", self.edit_sig)
+
         self.spin_start = QDoubleSpinBox()
         self.spin_start.setRange(-10000, 10000)
         self.spin_start.setDecimals(3)
-        self.spin_start.setValue(initial.get('start', 230) if initial else 230)
+        self.spin_start.setValue(initial.get('start', 0) if initial else 0)
 
         self.spin_step = QDoubleSpinBox()
         self.spin_step.setRange(0.0001, 10000)
@@ -87,12 +119,25 @@ class RampDialog(QDialog):
         self.spin_retries.setRange(0, 100)
         self.spin_retries.setValue(initial.get('retries', 3) if initial else 3)
 
-        form.addRow("Start Voltage (V)", self.spin_start)
-        form.addRow("Step Increment (V)", self.spin_step)
-        form.addRow("End Voltage (V)", self.spin_end)
-        form.addRow("Delay between steps (s)", self.spin_delay)
-        form.addRow("Tolerance (V)", self.spin_tol)
+        self.check_verify = QPushButton("Verify setpoint (enable)")
+        self.check_verify.setCheckable(True)
+        self.check_verify.setChecked(bool(initial.get("verify", False)) if initial else False)
+
+        self.check_measure_gs = QPushButton("Measure GS")
+        self.check_measure_gs.setCheckable(True)
+        self.check_measure_gs.setChecked(bool(initial.get("measure", {}).get("gs", True)) if initial else True)
+        self.check_measure_ps = QPushButton("Measure PS")
+        self.check_measure_ps.setCheckable(True)
+        self.check_measure_ps.setChecked(bool(initial.get("measure", {}).get("ps", True)) if initial else True)
+
+        form.addRow("Start", self.spin_start)
+        form.addRow("Step", self.spin_step)
+        form.addRow("End", self.spin_end)
+        form.addRow("Dwell between steps (s)", self.spin_delay)
+        form.addRow("Tolerance", self.spin_tol)
         form.addRow("Retries", self.spin_retries)
+        form.addRow("Verify setpoint", self.check_verify)
+        form.addRow("Measure toggles", self._build_measure_row())
 
         self.layout.addLayout(form)
 
@@ -100,15 +145,45 @@ class RampDialog(QDialog):
         self.buttons.accepted.connect(self.accept)
         self.buttons.rejected.connect(self.reject)
         self.layout.addWidget(self.buttons)
+        hint = QLabel("JSON: {target:{type,msg,signal}, start, step, end, dwell, tolerance, retries, verify, measure:{gs,ps}}")
+        hint.setStyleSheet("color: #888; font-size: 10px;")
+        self.layout.addWidget(hint)
+
+        # Enable/disable CAN fields based on target type
+        self.combo_target.currentTextChanged.connect(self._toggle_can_fields)
+        self._toggle_can_fields(self.combo_target.currentText())
+
+    def _build_measure_row(self):
+        row = QHBoxLayout()
+        row.addWidget(self.check_measure_gs)
+        row.addWidget(self.check_measure_ps)
+        w = QWidget()
+        w.setLayout(row)
+        return w
+
+    def _toggle_can_fields(self, text):
+        is_can = text.upper() == "CAN_SIGNAL"
+        self.edit_msg.setEnabled(is_can)
+        self.edit_sig.setEnabled(is_can)
 
     def get_values(self):
         return {
+            'target': {
+                'type': self.combo_target.currentText(),
+                'message': self.edit_msg.text().strip(),
+                'signal': self.edit_sig.text().strip()
+            },
             'start': self.spin_start.value(),
             'step': self.spin_step.value(),
             'end': self.spin_end.value(),
-            'delay': self.spin_delay.value(),
+            'dwell': self.spin_delay.value(),
             'tolerance': self.spin_tol.value(),
-            'retries': self.spin_retries.value()
+            'retries': self.spin_retries.value(),
+            'verify': self.check_verify.isChecked(),
+            'measure': {
+                'gs': self.check_measure_gs.isChecked(),
+                'ps': self.check_measure_ps.isChecked()
+            }
         }
 
 
@@ -418,15 +493,14 @@ class CANCompareSignalsDialog(QDialog):
 
 class CANSetAndVerifyDialog(QDialog):
     """Dialog for CAN / Set Signal and Verify"""
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, initial=None):
         super().__init__(parent)
         self.setWindowTitle("CAN / Set Signal and Verify")
         layout = QVBoxLayout(self)
         form = QFormLayout()
         
-        self.spin_msg_id = QSpinBox()
-        self.spin_msg_id.setRange(0, 0x7FF)
-        self.spin_msg_id.setValue(0x100)
+        self.txt_msg_id = QLineEdit()
+        self.txt_msg_id.setPlaceholderText("e.g., 0x123 or 291")
         self.txt_signal = QLineEdit()
         self.txt_signal.setPlaceholderText("e.g., GridVol")
         self.spin_target = QDoubleSpinBox()
@@ -440,8 +514,31 @@ class CANSetAndVerifyDialog(QDialog):
         self.spin_tolerance.setRange(0, 10000)
         self.spin_tolerance.setValue(0.5)
         self.spin_tolerance.setDecimals(3)
+
+        # Apply initial values if provided
+        if initial:
+            mid = initial.get('message_id')
+            if mid is not None:
+                self.txt_msg_id.setText(str(mid))
+            if 'signal_name' in initial:
+                self.txt_signal.setText(str(initial.get('signal_name', '')))
+            if 'target_value' in initial:
+                try:
+                    self.spin_target.setValue(float(initial.get('target_value')))
+                except Exception:
+                    pass
+            if 'tolerance' in initial:
+                try:
+                    self.spin_tolerance.setValue(float(initial.get('tolerance')))
+                except Exception:
+                    pass
+            if 'verify_timeout' in initial:
+                try:
+                    self.spin_verify_timeout.setValue(float(initial.get('verify_timeout')))
+                except Exception:
+                    pass
         
-        form.addRow("Message ID (hex):", self.spin_msg_id)
+        form.addRow("Message ID (hex or dec):", self.txt_msg_id)
         form.addRow("Signal Name:", self.txt_signal)
         form.addRow("Target Value:", self.spin_target)
         form.addRow("Tolerance:", self.spin_tolerance)
@@ -455,8 +552,8 @@ class CANSetAndVerifyDialog(QDialog):
     
     def get_values(self):
         return {
-            'message_id': self.spin_msg_id.value(),
-            'signal_name': self.txt_signal.text(),
+            'message_id': self.txt_msg_id.text().strip(),
+            'signal_name': self.txt_signal.text().strip(),
             'target_value': self.spin_target.value(),
             'tolerance': self.spin_tolerance.value(),
             'verify_timeout': self.spin_verify_timeout.value()
@@ -465,6 +562,11 @@ class CANSetAndVerifyDialog(QDialog):
     def accept(self):
         if not self.txt_signal.text().strip():
             QMessageBox.warning(self, "Missing Signal", "Signal name is required.")
+            return
+        try:
+            _parse_can_id(self.txt_msg_id.text())
+        except Exception as exc:
+            QMessageBox.warning(self, "Invalid ID", f"Message ID must be hex (0x123) or decimal (291).\nDetails: {exc}")
             return
         super().accept()
 
@@ -537,43 +639,82 @@ class Dashboard(QWidget):
         # 2. Sequence Editor
         seq_control_layout = QHBoxLayout()
         self.combo_step = QComboBox()
-        self.combo_step.addItems([
-                # Keep only GS-prefixed, CAN-prefixed, Wait, and Initialize Instruments
-                # Grid Simulator (GS) Actions - prefixed with shortform 'GS'
-                "GS / Check Error", "GS / Clear Protection", "GS / Get IDN",
-                "GS / Measure Current AC", "GS / Measure Current DC", "GS / Measure Frequency",
-                "GS / Measure Voltage AC", "GS / Measure Voltage DC",
-                "GS / Measure Power Apparent", "GS / Measure Power Real", "GS / Measure Power Reactive",
-                "GS / Measure THD Current", "GS / Measure THD Voltage",
-                "GS / Power: OFF", "GS / Power: ON", "GS / Ramp Down Voltage", "GS / Ramp Up Voltage",
-                "GS / Reset System", "GS / Set Current AC", "GS / Set Current DC",
-                "GS / Set Frequency", "GS / Set Voltage AC", "GS / Set Voltage DC",
-                # Power Supply (PS) actions - prefix as 'PS'
-                "PS / HV: Connect", "PS / HV: Disconnect", "PS / HV: Output ON", "PS / HV: Output OFF",
-                "PS / HV: Measure VI", "PS / HV: Set Voltage DC", "PS / HV: Set Current (CC)", "PS / HV: Set Current (CV)",
-                "PS / HV: Ramp Up Voltage", "PS / HV: Ramp Down Voltage", "PS / HV: Battery Set Charge (V,I)",
-                "PS / HV: Battery Set Discharge (V,I)", "PS / HV: Read Errors", "PS / HV: Clear Errors",
-                "PS / HV: Sweep Voltage and Log", "PS / HV: Sweep Current and Log", "PS / Advanced: HV Sweep Voltage and Log",
-                # CAN (CAN Manager) Actions - prefixed with 'CAN /'
-                "CAN / Connect", "CAN / Disconnect", "CAN / Start Cyclic CAN", "CAN / Stop Cyclic CAN",
-                "CAN / Start Trace", "CAN / Stop Trace", "CAN / Send Message", "CAN / Start Cyclic By Name",
-                "CAN / Stop Cyclic By Name", "CAN / Check Message", "CAN / Listen For Message",
-                "CAN / Read Signal Value", "CAN / Check Signal (Tolerance)", "CAN / Conditional Jump",
-                "CAN / Wait For Signal Change", "CAN / Monitor Signal Range", "CAN / Compare Two Signals",
-                "CAN / Set Signal and Verify",
-                # Utility Actions
-                "Wait",
-                # Button Actions (UI Controls)
-                "Initialize Instruments"
-            ])
+        # Build action list from registry for consistency
+        instrument_actions = INSTRUMENT_ACTIONS
+        can_actions = [
+            "CAN / Connect", "CAN / Disconnect", "CAN / Start Cyclic CAN", "CAN / Stop Cyclic CAN",
+            "CAN / Start Trace", "CAN / Stop Trace", "CAN / Send Message", "CAN / Start Cyclic By Name",
+            "CAN / Stop Cyclic By Name", "CAN / Check Message", "CAN / Listen For Message",
+            "CAN / Read Signal Value", "CAN / Check Signal (Tolerance)", "CAN / Conditional Jump",
+            "CAN / Wait For Signal Change", "CAN / Monitor Signal Range", "CAN / Compare Two Signals",
+            "CAN / Set Signal and Verify", "CAN / Set Signal Value",
+        ]
+        utility_actions = ["Wait"]
+
+        def _add_header(text: str):
+            idx = self.combo_step.count()
+            self.combo_step.addItem(text)
+            item = self.combo_step.model().item(idx)
+            item.setEnabled(False)
+            font = item.font()
+            font.setItalic(True)
+            item.setFont(font)
+            item.setForeground(QBrush(QColor("#888888")))
+            item.setData(Qt.AlignmentFlag.AlignCenter, Qt.ItemDataRole.TextAlignmentRole)
+
+        # Instrument actions grouped
+        grouped = {"GS": [], "PS": [], "OS": [], "LOAD": [], "INSTR": [], "RAMP": []}
+        for act in instrument_actions:
+            grouped.setdefault(act.group, []).append(act)
+        for group_name in ["GS", "PS", "OS", "LOAD", "INSTR", "RAMP"]:
+            acts = grouped.get(group_name, [])
+            if not acts:
+                continue
+            _add_header(f"--- {group_name} ---")
+            for act in acts:
+                self.combo_step.addItem(act.name)
+                if act.description:
+                    self.combo_step.setItemData(self.combo_step.count() - 1, f"{act.group}: {act.description}", Qt.ItemDataRole.ToolTipRole)
+                else:
+                    self.combo_step.setItemData(self.combo_step.count() - 1, act.group, Qt.ItemDataRole.ToolTipRole)
+
+        # CAN actions
+        _add_header("--- CAN ---")
+        for act in can_actions:
+            self.combo_step.addItem(act)
+        # Utility actions
+        _add_header("--- Utility ---")
+        for act in utility_actions:
+            self.combo_step.addItem(act)
+        # Default selection: first enabled item
+        for idx in range(self.combo_step.count()):
+            if self.combo_step.model().item(idx).isEnabled():
+                self.combo_step.setCurrentIndex(idx)
+                break
         self.btn_add_step = QPushButton("+ Add Step")
         self.running_test_label = QLabel("")  # Label to show running test name
         self.running_test_label.setStyleSheet("color: #00FF00; font-weight: bold;")
+        # Run header: name + status + timer
+        self.run_status_label = QLabel("Idle")
+        self.run_status_label.setStyleSheet("color: #9db4d4;")
+        self.run_timer_label = QLabel("00:00")
+        self.run_timer_label.setStyleSheet("color: #9db4d4;")
+        self.run_timer = QTimer()
+        self.run_timer.setInterval(1000)
+        self.run_timer.timeout.connect(self._tick_timer)
+        self.run_start_ts = None
+        # Toast label (hidden by default)
+        self.toast_label = QLabel("")
+        self.toast_label.setStyleSheet("background: #444; color: #fff; padding: 6px 10px; border-radius: 6px;")
+        self.toast_label.setVisible(False)
         
         seq_control_layout.addWidget(QLabel("Test Step"))
         seq_control_layout.addWidget(self.combo_step)
         seq_control_layout.addWidget(self.btn_add_step)
         seq_control_layout.addWidget(self.running_test_label)
+        seq_control_layout.addWidget(self.run_status_label)
+        seq_control_layout.addWidget(self.run_timer_label)
+        seq_control_layout.addWidget(self.toast_label)
         seq_control_layout.addStretch()
         
         left_layout.addLayout(seq_control_layout)
@@ -773,8 +914,8 @@ class Dashboard(QWidget):
     def add_step(self):
         action = self.combo_step.currentText()
         params = ""
-        # Handle GS Ramp actions with a structured dialog
-        if action.startswith("GS / Ramp"):
+        # Handle Ramp actions with a structured dialog
+        if action.startswith("GS / Ramp") or action.startswith("RAMP / Ramp"):
             # Show dialog to get start, step, end, delay, tolerance and retries
             dialog = RampDialog(action_type=action)
             if dialog.exec() == QDialog.DialogCode.Accepted:
@@ -792,16 +933,13 @@ class Dashboard(QWidget):
                     # Normalize input to JSON
                     try:
                         parts = [p.strip() for p in text.split(',') if p.strip()]
-                        msg_id_raw = parts[0]
-                        if msg_id_raw.lower().startswith('0x'):
-                            msg_id = int(msg_id_raw, 16)
-                        else:
-                            msg_id = int(msg_id_raw)
+                        msg_id = _parse_can_id(parts[0])
                         data_bytes = [int(x, 16) if x.lower().startswith('0x') else int(x) for x in parts[1:]]
                         import json
                         params = json.dumps({'id': msg_id, 'data': data_bytes})
-                    except Exception:
-                        params = text
+                    except Exception as exc:
+                        QMessageBox.warning(self, "Invalid CAN Send", f"Could not parse input. Use e.g. 0x123,01,02\nDetails: {exc}")
+                        return
                 else:
                     return
             elif "Start Cyclic By Name" in action or "Stop Cyclic By Name" in action:
@@ -811,8 +949,9 @@ class Dashboard(QWidget):
                         msg_name, cycle = [p.strip() for p in text.split(',')]
                         import json
                         params = json.dumps({'message_name': msg_name, 'cycle_time': int(cycle)})
-                    except Exception:
-                        params = text
+                    except Exception as exc:
+                        QMessageBox.warning(self, "Invalid CAN Cyclic", f"Use format MessageName,PeriodMs\nDetails: {exc}")
+                        return
                 else:
                     return
             elif "Check Message" in action or "Listen For Message" in action:
@@ -870,12 +1009,41 @@ class Dashboard(QWidget):
                     params = json.dumps(dialog.get_values())
                 else:
                     return
+            elif "Set Signal Value" in action:
+                dialog = CANSetAndVerifyDialog(parent=self)
+                dialog.setWindowTitle("CAN / Set Signal Value")
+                if dialog.exec() == QDialog.DialogCode.Accepted:
+                    import json
+                    params = json.dumps(dialog.get_values())
+                else:
+                    return
             else:
                 # Other CAN actions: no params, leave blank
                 params = ""
+        elif action.startswith("LOAD /"):
+            # DC Load actions
+            meta = ACTION_LOOKUP.get(action)
+            if meta and meta.param_type == "float":
+                val, ok = QInputDialog.getDouble(self, "LOAD Parameter", f"Enter value for {action}:", decimals=4)
+                if ok:
+                    params = str(val)
+                else:
+                    return
+            elif meta and meta.param_type == "str":
+                text, ok = QInputDialog.getText(self, "LOAD Parameter", f"Enter value for {action}:")
+                if ok:
+                    params = text
+                else:
+                    return
+            else:
+                # measure/connect/disconnect/input or unknown -> no params
+                params = ""
         elif action.startswith("PS /"):
             # Power Supply (HV) actions
-            if "Battery Set Charge" in action or "Battery Set Discharge" in action:
+            if action.startswith("PS / Measure"):
+                # Measurement actions require no parameters
+                params = ""
+            elif "Battery Set Charge" in action or "Battery Set Discharge" in action:
                 # Show a small dialog to collect voltage and current
                 # Parse possible initial JSON
                 try:
@@ -905,7 +1073,7 @@ class Dashboard(QWidget):
                 else:
                     return
             elif "Ramp" in action:
-                # Reuse ramp dialog for PS ramp
+                # Reuse ramp dialog for PS ramp or generic RAMP
                 dialog = RampDialog(action_type=action)
                 if dialog.exec() == QDialog.DialogCode.Accepted:
                     data = dialog.get_values()
@@ -914,25 +1082,77 @@ class Dashboard(QWidget):
                 else:
                     return
             elif "Set" in action or "Measure" in action or "Read Errors" in action or "Clear Errors" in action:
-                # These actions likely take a single value (Set Voltage/Current or Set Mode)
+                # Use registry hint for parameter type
+                meta = ACTION_LOOKUP.get(action)
+                if meta and meta.param_type == "float":
+                    val, ok = QInputDialog.getDouble(self, "Input Parameters", f"Enter value for {action}:", decimals=4)
+                    if ok:
+                        params = str(val)
+                    else:
+                        return
+                elif meta and meta.param_type == "str":
+                    text, ok = QInputDialog.getText(self, "Input Parameters", f"Enter value for {action}:")
+                    if ok:
+                        params = text
+                    else:
+                        return
+                else:
+                    params = ""
+        elif action.startswith("OS /"):
+            meta = ACTION_LOOKUP.get(action)
+            if meta and meta.param_type == "float":
+                val, ok = QInputDialog.getDouble(self, "Input Parameters", f"Enter value for {action}:", decimals=4)
+                if ok:
+                    params = str(val)
+                else:
+                    return
+            elif meta and meta.param_type == "str":
                 text, ok = QInputDialog.getText(self, "Input Parameters", f"Enter value for {action}:")
                 if ok:
                     params = text
                 else:
                     return
-        elif "Set" in action or "Wait" in action:
-            text, ok = QInputDialog.getText(self, "Input Parameters", f"Enter value for {action}:")
-            if ok:
-                params = text
             else:
-                return # Cancelled
+                params = ""
+        elif action in ACTION_LOOKUP:
+            # Generic registry-backed prompt (GS/PS/OS/LOAD/INSTR with no special handling)
+            meta = ACTION_LOOKUP[action]
+            if meta.param_type == "float":
+                val, ok = QInputDialog.getDouble(self, "Input Parameters", f"Enter value for {action}:", decimals=4)
+                if ok:
+                    params = str(val)
+                else:
+                    return
+            elif meta.param_type == "str":
+                text, ok = QInputDialog.getText(self, "Input Parameters", f"Enter value for {action}:")
+                if ok:
+                    params = text
+                else:
+                    return
+            else:
+                params = ""
+        elif "Set" in action or "Wait" in action:
+            # Fallback for legacy actions not in registry
+            meta = ACTION_LOOKUP.get(action)
+            if meta and meta.param_type == "float":
+                val, ok = QInputDialog.getDouble(self, "Input Parameters", f"Enter value for {action}:", decimals=4)
+                if ok:
+                    params = str(val)
+                else:
+                    return
+            else:
+                text, ok = QInputDialog.getText(self, "Input Parameters", f"Enter value for {action}:")
+                if ok:
+                    params = text
+                else:
+                    return # Cancelled
         
         row = self.sequence_table.rowCount()
         self.sequence_table.insertRow(row)
         self.sequence_table.setItem(row, 0, QTableWidgetItem(str(row + 1)))
         self.sequence_table.setItem(row, 1, QTableWidgetItem(action))
-        # If ramp GC param JSON, create a friendly display text and save JSON in UserRole
-        if action.startswith("GS / Ramp") and params:
+        # If ramp param JSON, create a friendly display text and save JSON in UserRole
+        if (action.startswith("GS / Ramp") or action.startswith("RAMP / Ramp")) and params:
             import json
             try:
                 data = json.loads(params)
@@ -957,6 +1177,10 @@ class Dashboard(QWidget):
             except Exception:
                 display = params
             item = QTableWidgetItem(display)
+            item.setData(Qt.ItemDataRole.UserRole, params)
+            self.sequence_table.setItem(row, 2, item)
+        elif action.startswith("GS / Set") and params:
+            item = QTableWidgetItem(params)
             item.setData(Qt.ItemDataRole.UserRole, params)
             self.sequence_table.setItem(row, 2, item)
         else:
@@ -1000,6 +1224,19 @@ class Dashboard(QWidget):
 
     def edit_step(self):
         import json
+
+        def _ensure_json_dict(raw, title):
+            """Validate JSON string -> dict; warn and return None on failure."""
+            if not raw:
+                return {}
+            if isinstance(raw, dict):
+                return raw
+            try:
+                return json.loads(raw)
+            except Exception as exc:
+                QMessageBox.warning(self, title, f"Parameters are not valid JSON.\nDetails: {exc}")
+                return None
+
         row = self.sequence_table.currentRow()
         if row >= 0:
             current_action = self.sequence_table.item(row, 1).text()
@@ -1010,13 +1247,11 @@ class Dashboard(QWidget):
                 current_params = params_item.text() if params_item else ""
             
             # Parse initial params
-            initial = {}
-            try:
-                initial = json.loads(current_params) if isinstance(current_params, str) else current_params
-            except Exception:
-                pass
+            initial = _ensure_json_dict(current_params, "Invalid Parameters")
+            if initial is None:
+                return  # abort edit if params are malformed
             
-            if current_action.startswith("GS / Ramp"):
+            if (current_action.startswith("GS / Ramp") or current_action.startswith("RAMP / Ramp")):
                 dialog = RampDialog(action_type=current_action, initial=initial)
                 if dialog.exec() == QDialog.DialogCode.Accepted:
                     data = dialog.get_values()
@@ -1105,6 +1340,18 @@ class Dashboard(QWidget):
                         item.setData(Qt.ItemDataRole.UserRole, json_text)
                         self.sequence_table.setItem(row, 2, item)
                         self.is_modified = True
+
+                elif "Set Signal Value" in current_action:
+                    dialog = CANSetAndVerifyDialog(initial=initial)
+                    dialog.setWindowTitle("CAN / Set Signal Value")
+                    if dialog.exec() == QDialog.DialogCode.Accepted:
+                        data = dialog.get_values()
+                        json_text = json.dumps(data)
+                        display = f"Signal:{data.get('signal_name')} = {data.get('target_value')}"
+                        item = QTableWidgetItem(display)
+                        item.setData(Qt.ItemDataRole.UserRole, json_text)
+                        self.sequence_table.setItem(row, 2, item)
+                        self.is_modified = True
                         
                 elif "Send Message" in current_action:
                     text, ok = QInputDialog.getText(self, "Edit CAN Send", "Enter ID (hex) and Data (comma separated):", text=current_params)
@@ -1136,10 +1383,36 @@ class Dashboard(QWidget):
                     if ok:
                         self.sequence_table.setItem(row, 2, QTableWidgetItem(text))
                         self.is_modified = True
+            elif current_action.startswith("LOAD /"):
+                if "Measure" in current_action or "Connect" in current_action or "Disconnect" in current_action or "Input" in current_action:
+                    return
+                text, ok = QInputDialog.getText(self, "Edit LOAD Parameter", f"Enter value for {current_action}:", text=current_params)
+                if ok:
+                    self.sequence_table.setItem(row, 2, QTableWidgetItem(text))
+                    self.is_modified = True
+                return
+            
+            elif current_action in ACTION_LOOKUP:
+                meta = ACTION_LOOKUP[current_action]
+                if meta.param_type == "float":
+                    val, ok = QInputDialog.getDouble(self, "Edit Parameters", f"Enter value for {current_action}:", text=current_params if current_params else "0", decimals=4)
+                    if ok:
+                        self.sequence_table.setItem(row, 2, QTableWidgetItem(str(val)))
+                        self.is_modified = True
+                    return
+                elif meta.param_type == "str":
+                    text, ok = QInputDialog.getText(self, "Edit Parameters", f"Enter value for {current_action}:", text=current_params)
+                    if ok:
+                        self.sequence_table.setItem(row, 2, QTableWidgetItem(text))
+                        self.is_modified = True
+                    return
                 else:
-                    QMessageBox.information(self, "Info", "No parameters for this CAN action.")
-                    
+                    QMessageBox.information(self, "Info", "This action has no parameters to edit.")
+                    return
+
             elif current_action.startswith("PS /"):
+                if current_action.startswith("PS / Measure"):
+                    return  # measurement actions need no params edit
                 if "Battery Set Charge" in current_action or "Battery Set Discharge" in current_action:
                     dialog = PSVISetDialog(action_type=current_action, initial=initial)
                     if dialog.exec() == QDialog.DialogCode.Accepted:
@@ -1151,6 +1424,11 @@ class Dashboard(QWidget):
                         self.sequence_table.setItem(row, 2, item)
                         self.is_modified = True
                 elif "Sweep" in current_action or "Ramp" in current_action:
+                    # Ensure existing params are valid JSON before editing
+                    if current_params and not isinstance(initial, dict):
+                        initial = _ensure_json_dict(current_params, "Invalid Sweep Parameters")
+                        if initial is None:
+                            return
                     dialog = RampDialog(action_type=current_action, initial=initial)
                     if dialog.exec() == QDialog.DialogCode.Accepted:
                         data = dialog.get_values()
@@ -1193,6 +1471,25 @@ class Dashboard(QWidget):
     def clear_output(self):
         """Clear the output diagnosis log"""
         self.output_log.clear()
+
+    def show_warning(self, message: str):
+        """Inline warning helper to surface potential issues near the log area."""
+        label = message if message.lower().startswith("warning") else f"Sequence Warning: {message}"
+        self._show_toast(label, kind="warning")
+        self.output_log.append(f"[WARNING] {message}")
+
+    def _show_toast(self, message: str, kind: str = "info", duration_ms: int = 2500):
+        """Non-blocking toast/badge near the step controls."""
+        if not hasattr(self, "toast_label"):
+            return
+        self.toast_label.setText(message)
+        if kind == "warning":
+            self.toast_label.setStyleSheet("background: #7a2f2f; color: #ffdddd; padding: 6px 10px; border-radius: 6px;")
+        else:
+            self.toast_label.setStyleSheet("background: #2f4f7a; color: #dce9ff; padding: 6px 10px; border-radius: 6px;")
+        self.toast_label.setVisible(True)
+        # Simple timer to hide
+        QTimer.singleShot(duration_ms, lambda: self.toast_label.setVisible(False))
 
     def save_sequence(self):
         """Save current sequence to Test Sequence folder"""
@@ -1319,7 +1616,7 @@ class Dashboard(QWidget):
                     try:
                         import json
                         data = json.loads(params_text) if params_text else None
-                        if data and step['action'].startswith('GS / Ramp'):
+                        if data and (step['action'].startswith('GS / Ramp') or step['action'].startswith('RAMP / Ramp')):
                             display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay')}s"
                             item = QTableWidgetItem(display)
                             item.setData(Qt.ItemDataRole.UserRole, params_text)
@@ -1390,24 +1687,40 @@ class Dashboard(QWidget):
         if index < self.sequence_table.rowCount():
             item = QTableWidgetItem(status)
             item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-            
             # Set font color based on status (no background color)
             if status == "Pass":
                 item.setForeground(QBrush(QColor(0, 255, 0)))  # Bright Green
+                item.setBackground(QBrush(QColor(0, 80, 40)))
             elif status == "Fail":
                 item.setForeground(QBrush(QColor(255, 0, 0)))  # Bright Red
+                item.setBackground(QBrush(QColor(80, 0, 0)))
             elif status == "Running":
-                item.setForeground(QBrush(QColor(255, 165, 0)))  # Orange
-            # Pending remains default color
-            
+                item.setForeground(QBrush(QColor(255, 200, 0)))  # Yellow/Orange
+                item.setBackground(QBrush(QColor(60, 45, 0)))
             self.sequence_table.setItem(index, 3, item)
-    
+
     def set_running_test_name(self, test_name):
         """Display the currently running test name"""
         self.running_test_label.setText(f"Running: {test_name}")
+        self.run_status_label.setText("Running")
+        self.run_status_label.setStyleSheet("color: #5df0a1;")
+        self.run_start_ts = time.time()
+        self.run_timer.start()
     
     def clear_running_test_name(self):
         """Clear the running test name display"""
         self.running_test_label.setText("")
-        
+        self.run_status_label.setText("Idle")
+        self.run_status_label.setStyleSheet("color: #9db4d4;")
+        self.run_timer.stop()
+        self.run_timer_label.setText("00:00")
+        self.run_start_ts = None
+
+    def _tick_timer(self):
+        if self.run_start_ts:
+            elapsed = int(time.time() - self.run_start_ts)
+            mins = elapsed // 60
+            secs = elapsed % 60
+            self.run_timer_label.setText(f"{mins:02d}:{secs:02d}")
+    
 

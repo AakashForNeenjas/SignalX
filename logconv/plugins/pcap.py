@@ -9,6 +9,9 @@ class PcapPlugin(LogFormatPlugin):
     def capabilities(self) -> FormatCapabilities:
         return FormatCapabilities(supports_streaming=True, supports_signals=False, bus_types=[BusType.ETHERNET])
 
+    def detect(self, path: str, sample: bytes = None) -> bool:
+        return bool(path and (path.lower().endswith(".pcap") or path.lower().endswith(".pcapng")))
+
     def parse(self, path, options=None) -> LogDocument:
         meta = {"path": path, "format": "pcap"}
         try:
@@ -24,7 +27,8 @@ class PcapPlugin(LogFormatPlugin):
             raw_bytes = log_doc.metadata.get("raw_bytes", b"")
             with open(path, "wb") as f:
                 f.write(raw_bytes)
-            return WriteResult(success=True, output_paths=[path])
+            warnings = ["PCAP plugin performs passthrough copy; protocol decoding not implemented."]
+            return WriteResult(success=True, output_paths=[path], warnings=warnings)
         except Exception as e:
             return WriteResult(success=False, messages=[str(e)])
 

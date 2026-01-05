@@ -1,0 +1,145 @@
+{
+  "meta": {
+    "author": "Aakash",
+    "description": "Line and Load Regulation",
+    "last_modified": "2025-12-10T17:43:46.550016",
+    "name": "Line and Load Regulation",
+    "tags": [
+      "Line",
+      "Load",
+      "OBC",
+      "HPDC"
+    ],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "CAN / Connect",
+      "params": ""
+    },
+    {
+      "action": "CAN / Start Trace",
+      "params": ""
+    },
+    {
+      "action": "CAN / Start Cyclic CAN",
+      "params": ""
+    },
+    {
+      "action": "PS / HV: Battery Set Discharge (V,I)",
+      "params": "{\"voltage\": 84.0, \"current\": 30.0}"
+    },
+    {
+      "action": "PS / HV: Output ON",
+      "params": ""
+    },
+    {
+      "action": "Wait",
+      "params": "10"
+    },
+    {
+      "action": "PS / HV: Measure Voltage, Current, Power",
+      "params": "0"
+    },
+    {
+      "action": "GS / Set Voltage AC",
+      "params": "103"
+    },
+    {
+      "action": "GS / Check Error",
+      "params": ""
+    },
+    {
+      "action": "GS / Power: ON",
+      "params": ""
+    },
+    {
+      "action": "CAN / Set Signal Value",
+      "params": "{\"message_id\": \"0x12C\", \"signal_name\": \"Chrg_Curr_limit\", \"target_value\": 30.0, \"tolerance\": 0.0, \"verify_timeout\": 2.0}"
+    },
+    {
+      "action": "Wait",
+      "params": "5"
+    },
+    {
+      "action": "GS / Measure Current AC",
+      "params": ""
+    },
+    {
+      "action": "GS / Measure Voltage AC",
+      "params": ""
+    },
+    {
+      "action": "GS / Measure Power Real",
+      "params": ""
+    },
+    {
+      "action": "GS / Measure THD Current",
+      "params": ""
+    },
+    {
+      "action": "GS / Measure THD Voltage",
+      "params": ""
+    },
+    {
+      "action": "GS / Measure Power Factor",
+      "params": ""
+    },
+    {
+      "action": "PS / HV: Measure Voltage, Current, Power",
+      "params": "0"
+    },
+    {
+      "action": "CAN / Set Signal Value",
+      "params": "{\"message_id\": \"0x12C\", \"signal_name\": \"Chrg_Curr_limit\", \"target_value\": 8.0, \"tolerance\": 0.0, \"verify_timeout\": 2.0}"
+    },
+    {
+      "action": "Wait",
+      "params": "5"
+    },
+    {
+      "action": "PS / HV: Measure Voltage, Current, Power",
+      "params": "0"
+    },
+    {
+      "action": "CAN / Set Signal Value",
+      "params": "{\"message_id\": \"0x12C\", \"signal_name\": \"Chrg_Curr_limit\", \"target_value\": 7.0, \"tolerance\": 0.0, \"verify_timeout\": 2.0}"
+    },
+    {
+      "action": "Wait",
+      "params": "5"
+    },
+    {
+      "action": "PS / HV: Measure Voltage, Current, Power",
+      "params": "0"
+    },
+    {
+      "action": "CAN / Set Signal Value",
+      "params": "{\"message_id\": \"0x12C\", \"signal_name\": \"Chrg_Curr_limit\", \"target_value\": 6.0, \"tolerance\": 0.0, \"verify_timeout\": 2.0}"
+    },
+    {
+      "action": "Wait",
+      "params": "5"
+    },
+    {
+      "action": "PS / HV: Measure Voltage, Current, Power",
+      "params": "0"
+    },
+    {
+      "action": "GS / Power: OFF",
+      "params": ""
+    },
+    {
+      "action": "PS / HV: Output OFF",
+      "params": ""
+    },
+    {
+      "action": "CAN / Stop Trace",
+      "params": ""
+    },
+    {
+      "action": "CAN / Stop Cyclic CAN",
+      "params": ""
+    }
+  ]
+}

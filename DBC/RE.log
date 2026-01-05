@@ -1,0 +1,156 @@
+Conversion Warnings Log
+
+
+MSG_ID: 135866939 	MSG_TYPE: X 	MSG_NAME: GET_DEBUG_MSG
+	SIG_NAME: GET_DEBUG_MSG, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 268435977 	MSG_TYPE: X 	MSG_NAME: Debug_Info9
+	SIG_NAME: PI_GridRefCur, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 268435975 	MSG_TYPE: X 	MSG_NAME: Debug_Info7
+	SIG_NAME: u16DebugTestSignal8, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: u16DebugTestSignal7, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: u16DebugTestSignal6, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: u16DebugTestSignal5, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 268435985 	MSG_TYPE: X 	MSG_NAME: Debug_Info11_Rx
+	SIG_NAME: u16DebugTestSignal4, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: u16DebugTestSignal3, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: u16DebugTestSignal2, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: u16DebugTestSignal1, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 7 	MSG_TYPE: S 	MSG_NAME: New_Message_104
+	SIG_NAME: New_Signal_649, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 6 	MSG_TYPE: S 	MSG_NAME: New_Message_103
+	SIG_NAME: New_Signal_648, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 5 	MSG_TYPE: S 	MSG_NAME: New_Message_102
+	SIG_NAME: New_Signal_647, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 4 	MSG_TYPE: S 	MSG_NAME: New_Message_101
+	SIG_NAME: New_Signal_646, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 3 	MSG_TYPE: S 	MSG_NAME: New_Message_100
+	SIG_NAME: New_Signal_645, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 2 	MSG_TYPE: S 	MSG_NAME: New_Message_99
+	SIG_NAME: New_Signal_644, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1 	MSG_TYPE: S 	MSG_NAME: New_Message_98
+	SIG_NAME: New_Signal_643, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 0 	MSG_TYPE: S 	MSG_NAME: New_Message_97
+	SIG_NAME: New_Signal_642, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 268435974 	MSG_TYPE: X 	MSG_NAME: Debug_Info6
+	SIG_NAME: Transformer_temp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: HP_DCDC_Temp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: OBC_FET_Temp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: OBC_temp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 268435973 	MSG_TYPE: X 	MSG_NAME: Debug_Info5
+	SIG_NAME: OutputPowerBasedDeratingFlag, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: OutputPowerBasedDeratingFactor, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: AggregateDeratingFactor, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: TpriTransformerBasedDeratingFlag, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: TsecMosfetTempBasDeratingFactor, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: TpriTransformerBasDeratingFactor, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: OutputVoltageBasedDeratingFactor, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: InputVoltageBasedDeratingFactor, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: TsecMosfetTempBasedDeratingFlag, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: OutputVoltageBasedDeratingFlag, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: InputVoltageBasedDeratingFlag, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 268435972 	MSG_TYPE: X 	MSG_NAME: Debug_Info4
+	SIG_NAME: LvCur, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: LvVol, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: HvCur, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: HvVol, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 268435971 	MSG_TYPE: X 	MSG_NAME: Debug_Info3
+	SIG_NAME: BmsVol, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: BusVol, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: GridCur, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: GridVol, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 268435969 	MSG_TYPE: X 	MSG_NAME: Debug_Info1
+	SIG_NAME: Record_State, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: CMPSS_TZFLG, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: AcM_WorkStat, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: AcM_RunMode, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: DcM_WorkStat, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: DcM_RunMode, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 128 	MSG_TYPE: S 	MSG_NAME: Vehicle_LSC
+	SIG_NAME: LH_LIN_Faults, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 390 	MSG_TYPE: S 	MSG_NAME: VCU_Data3
+	SIG_NAME: T2_Max_Speed, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 561 	MSG_TYPE: S 	MSG_NAME: MCU_Data3
+	SIG_NAME: B_Phase_Curr_MCU, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: Y_Phase_Curr_MCU, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: R_Phase_Curr_MCU, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 2011 	MSG_TYPE: S 	MSG_NAME: BCM_Diagnostic_Request
+	SIG_NAME: BCM_Diag_Request, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 2010 	MSG_TYPE: S 	MSG_NAME: BCM_Diagnostic_Response
+	SIG_NAME: BCM_Diag_Response, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 2008 	MSG_TYPE: S 	MSG_NAME: EHBL_Diagnostic_Response
+	SIG_NAME: EHBL_Diag_Response, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1653 	MSG_TYPE: S 	MSG_NAME: BMS_Diagnostic_Response
+	SIG_NAME: BMS_Diag_Resp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1989 	MSG_TYPE: S 	MSG_NAME: OBC_Diagnostic_Response
+	SIG_NAME: OBC_Diag_Resp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1605 	MSG_TYPE: S 	MSG_NAME: OBC_HW_Version
+	SIG_NAME: DcM_RunMode, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: DcM_WorkStat, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1986 	MSG_TYPE: S 	MSG_NAME: MCU_Diagnostic_Response
+	SIG_NAME: MCU_Diagnostic_Response, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1799 	MSG_TYPE: S 	MSG_NAME: ICM_Error
+	SIG_NAME: High_Temp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 2006 	MSG_TYPE: S 	MSG_NAME: HU_Diagnostic_Response
+	SIG_NAME: HU_Diag_Response, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1601 	MSG_TYPE: S 	MSG_NAME: ICM_HW_Version_Info
+	SIG_NAME: ICM_Hardware_Version, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 2009 	MSG_TYPE: S 	MSG_NAME: EHBL_Diagnostic_Request
+	SIG_NAME: EHBL_Diag_Request, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1652 	MSG_TYPE: S 	MSG_NAME: BMS_Diagnostic_Request
+	SIG_NAME: BMS_Diag_Request, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1996 	MSG_TYPE: S 	MSG_NAME: OBC_Diagnostic_Request
+	SIG_NAME: OBC_Diag_Request, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1972 	MSG_TYPE: S 	MSG_NAME: MCU_Diagnostic_Request
+	SIG_NAME: MCU_Diag_Request, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1807 	MSG_TYPE: S 	MSG_NAME: TimeStamp_Sync_Message
+	SIG_NAME: VCU_TimeStamp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 2007 	MSG_TYPE: S 	MSG_NAME: HU_Diagnostic_Request
+	SIG_NAME: HU_Diag_Req, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 423 	MSG_TYPE: S 	MSG_NAME: OBC_HP_DCDC_Parameter_2
+	SIG_NAME: OBC_FET_Temp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: HP_DCDC_Temp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: OBC_temp, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 784 	MSG_TYPE: S 	MSG_NAME: Chrgr_STS_Info
+	SIG_NAME: AcMode, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: AcState, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 1073741824 	MSG_TYPE: X 	MSG_NAME: VECTOR__INDEPENDENT_SIG_MSG
+	SIG_NAME: FloatSignal2, STATUS: No error, ACTION: Signal Discarded
+	SIG_NAME: FloatSignal1, STATUS: No error, ACTION: Signal Discarded

@@ -1,0 +1,31 @@
+{
+  "name": "Unsaved Test",
+  "meta": {
+    "name": "Unsaved Sequence",
+    "author": "",
+    "description": "",
+    "tags": [],
+    "version": 1
+  },
+  "start_time": "2025-12-13 18:21:21.717747",
+  "steps": [
+    {
+      "index": 1,
+      "action": "GS / Set Voltage AC",
+      "params": "233.0",
+      "status": "Pass",
+      "messages": [
+        "GS Set Voltage: 233.0V"
+      ]
+    },
+    {
+      "index": 2,
+      "action": "GS / Power: ON",
+      "params": "",
+      "status": "Pass",
+      "messages": [
+        "GS Power ON"
+      ]
+    }
+  ]
+}

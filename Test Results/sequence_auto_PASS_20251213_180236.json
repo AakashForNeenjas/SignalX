@@ -1,0 +1,282 @@
+{
+  "name": "sequence auto",
+  "meta": {
+    "name": "sequence auto",
+    "author": "Aakash",
+    "description": "demo",
+    "tags": [
+      "demo"
+    ],
+    "version": 1,
+    "last_modified": "2025-12-13T18:02:08.026021"
+  },
+  "start_time": "2025-12-13 18:02:10.072460",
+  "steps": [
+    {
+      "index": 1,
+      "action": "GS / Ramp Set & Measure",
+      "params": "{\"target\": {\"type\": \"GS_VOLT\", \"message\": \"\", \"signal\": \"\"}, \"start\": 100.0, \"step\": 1.0, \"end\": 150.0, \"dwell\": 0.5, \"tolerance\": 0.5, \"retries\": 3, \"verify\": false, \"measure\": {\"gs\": false, \"ps\": false}}",
+      "status": "Pass",
+      "messages": [
+        "Ramp completed (51 points)"
+      ],
+      "ramp_logs": [
+        {
+          "value": 100.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 101.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 102.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 103.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 104.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 105.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 106.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 107.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 108.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 109.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 110.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 111.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 112.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 113.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 114.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 115.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 116.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 117.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 118.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 119.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 120.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 121.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 122.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 123.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 124.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 125.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 126.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 127.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 128.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 129.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 130.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 131.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 132.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 133.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 134.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 135.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 136.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 137.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 138.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 139.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 140.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 141.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 142.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 143.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 144.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 145.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 146.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 147.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 148.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 149.0,
+          "status": "ok",
+          "readings": {}
+        },
+        {
+          "value": 150.0,
+          "status": "ok",
+          "readings": {}
+        }
+      ]
+    }
+  ]
+}

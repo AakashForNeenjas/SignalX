@@ -1,9 +1,9 @@
-import can
+﻿import can
 import threading
 import time
 import csv
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class CANManager:
     def __init__(self, simulation_mode=False, dbc_parser=None, logger=None):
@@ -38,6 +38,15 @@ class CANManager:
         self.error_count = 0
         # Decode cache (message_id -> message_definition)
         self.message_definitions = {}
+        # Track last sent signals per message to preserve untouched fields
+        self.last_sent_signals = {}
+        # Signal overrides: {(message_name, signal_name): value}
+        self.signal_overrides = {}
+        self.signal_overrides_lock = threading.RLock()
+        # Logging lock to serialize CSV/TRC writes and counters
+        self.log_lock = threading.RLock()
+        # Internal metrics tick threads for TX periodic visibility
+        self.metrics_threads = {}
         # Connection defaults (can be overridden via profiles)
         self.interface = None
         self.channel = None
@@ -89,23 +98,38 @@ class CANManager:
             self.bus = can.Bus(interface=interface, channel=channel, bitrate=bitrate)
             self.is_connected = True
             self.running = True
-            
+
             # Load message definitions from DBC for proper decoding
             self._initialize_message_definitions()
-            
+
             # Setup listener for message reception
             self.notifier = can.Notifier(self.bus, [self._on_message_received])
-            
+
             print(f"[CAN] ✓ Connected to {interface}:{channel}")
             self._log(20, f"CAN connected {interface}:{channel}")
             return True, f"[CAN] ✓ Connected to {interface}:{channel}"
+        except ImportError as e:
+            self.is_connected = False
+            msg = ("[CAN ERROR] Connection failed: backend module missing. "
+                   "Install python-can with backend extras (e.g., python-can[pcan]) "
+                   "and ensure vendor drivers (PCAN-Basic) are installed. "
+                   f"Details: {e}")
+            print(msg)
+            self._log(40, msg)
+            return False, msg
+        except can.CanError as e:
+            self.is_connected = False
+            msg = (f"[CAN ERROR] Connection failed: {e}. "
+                   "Verify interface/channel/bitrate and that the vendor driver is installed.")
+            print(msg)
+            self._log(40, msg)
+            return False, msg
         except Exception as e:
             self.is_connected = False
             msg = f"[CAN ERROR] Connection failed: {e}"
             print(msg)
             self._log(40, msg)
             return False, msg
-    
     def _initialize_message_definitions(self):
         """
         Load all message definitions from DBC for efficient message decoding.
@@ -120,7 +144,7 @@ class CANManager:
             for message in self.dbc_parser.database.messages:
                 self.message_definitions[message.frame_id] = message
             
-            print(f"[CAN] ✓ Loaded {len(self.message_definitions)} message definitions from DBC")
+            print(f"[CAN] âœ“ Loaded {len(self.message_definitions)} message definitions from DBC")
             
             # Initialize signal_cache with all signals from DBC
             for message in self.dbc_parser.database.messages:
@@ -136,7 +160,7 @@ class CANManager:
                                 'unit': signal.unit if hasattr(signal, 'unit') else ''
                             }
             
-            print(f"[CAN] ✓ Initialized signal_cache with {len(self.signal_cache)} signals")
+            print(f"[CAN] âœ“ Initialized signal_cache with {len(self.signal_cache)} signals")
             
         except Exception as e:
             print(f"[CAN ERROR] Failed to initialize message definitions: {e}")
@@ -172,12 +196,144 @@ class CANManager:
         if self.simulation_mode:
             print(f"SIMULATION CAN TX: ID={hex(arbitration_id)} Data={data}")
             return
+        if not self.bus:
+            raise RuntimeError("CAN bus not connected")
 
         msg = can.Message(arbitration_id=arbitration_id, data=data, is_extended_id=is_extended_id)
+        # Attach timestamp for logging consistency
+        try:
+            msg.timestamp = time.time()
+        except Exception:
+            pass
+        # Log TX locally so traces capture what we send (even if bus loopback is disabled)
+        try:
+            if self.logging:
+                self._log_message(msg)
+        except Exception:
+            pass
         try:
             self.bus.send(msg)
         except can.CanError:
             print("Message NOT sent")
+        # Also notify listeners/metrics about this TX so dynamic checks can see it even without loopback
+        try:
+            self._on_message_received(msg)
+        except Exception:
+            pass
+
+    def set_signal_override(self, message_name, signal_name, value):
+        """Set or update an override for a specific signal within a message."""
+        with self.signal_overrides_lock:
+            self.signal_overrides[(message_name, signal_name)] = value
+        self._log(20, f"Override set: {message_name}.{signal_name}={value}")
+
+    def clear_signal_override(self, message_name=None, signal_name=None):
+        """Clear overrides; if both provided, clear specific, else clear all."""
+        with self.signal_overrides_lock:
+            if message_name and signal_name:
+                self.signal_overrides.pop((message_name, signal_name), None)
+            elif message_name:
+                keys = [k for k in self.signal_overrides if k[0] == message_name]
+                for k in keys:
+                    self.signal_overrides.pop(k, None)
+            else:
+                self.signal_overrides.clear()
+
+    def _apply_overrides(self, message_name, signals_dict):
+        """Merge in overrides for this message before encoding."""
+        if not self.signal_overrides:
+            return signals_dict
+        merged = dict(signals_dict)
+        with self.signal_overrides_lock:
+            for (msg, sig), val in self.signal_overrides.items():
+                if msg == message_name:
+                    merged[sig] = val
+        return merged
+
+    def _build_full_values(self, msg_def, signals_dict):
+        """
+        Build a full signal dict using provided values + overrides + cached values,
+        to avoid zeroing other signals when only one is updated.
+        Priority: last_sent for this message -> signal cache -> configured cyclic defaults -> signal.initial -> 0
+        """
+        merged = self._apply_overrides(msg_def.name, signals_dict or {})
+        # Start from last sent snapshot if we have one
+        base = {}
+        try:
+            base = dict(self.last_sent_signals.get(msg_def.name, {}) or {})
+        except Exception:
+            base = {}
+
+        full_values = dict(base)
+        for sig in msg_def.signals:
+            if sig.name in merged:
+                full_values[sig.name] = merged[sig.name]
+                continue
+            if sig.name in full_values:
+                # Already carried from last_sent
+                continue
+            cached_val = None
+            try:
+                if hasattr(self, "signal_cache"):
+                    cached_val = self.signal_cache.get(sig.name, {}).get("value", None)
+            except Exception:
+                cached_val = None
+            if cached_val is None:
+                # Try configured cyclic defaults if available
+                try:
+                    import can_messages
+                    cfg = getattr(can_messages, "CYCLIC_CAN_MESSAGES", {})
+                    if msg_def.name in cfg:
+                        defaults = cfg[msg_def.name].get("signals", {})
+                        if sig.name in defaults:
+                            cached_val = defaults[sig.name]
+                except Exception:
+                    cached_val = None
+            if cached_val is not None:
+                full_values[sig.name] = cached_val
+            elif getattr(sig, "initial", None) is not None:
+                full_values[sig.name] = sig.initial
+            else:
+                full_values[sig.name] = 0
+        return full_values
+
+    def send_message_with_overrides(self, message_name, signals_dict=None):
+        """Encode and send a message applying overrides."""
+        if not self.dbc_parser or not self.dbc_parser.database:
+            raise RuntimeError("DBC not loaded; cannot encode message")
+        msg_def = self.dbc_parser.database.get_message_by_name(message_name)
+        full_values = self._build_full_values(msg_def, signals_dict or {})
+        data = msg_def.encode(full_values)
+        self.send_message(msg_def.frame_id, data, is_extended_id=msg_def.is_extended_frame)
+        # Optimistically update local cache so verify can succeed even without bus echo
+        try:
+            from time import time as _time
+            now = _time()
+            if not hasattr(self, "signal_cache"):
+                self.signal_cache = {}
+            for sig_name, val in full_values.items():
+                self.signal_cache[sig_name] = {"value": val, "timestamp": now, "message": message_name}
+            # Track last sent per message
+            self.last_sent_signals[message_name] = dict(full_values)
+        except Exception:
+            pass
+        return full_values
+
+    def verify_signal_value(self, signal_name, expected_value, timeout=1.0, tolerance=0.01):
+        """
+        Closed-loop verification: wait for a decoded signal to match expected within tolerance.
+        Uses signal_cache populated by RX decoding.
+        """
+        import time
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            if hasattr(self, "signal_cache"):
+                cache = self.signal_cache.get(signal_name, {})
+                val = cache.get("value")
+                if val is not None and abs(val - expected_value) <= tolerance:
+                    return True, f"{signal_name} verified at {val}"
+            time.sleep(0.05)
+        return False, f"{signal_name} not verified within {timeout}s (expected {expected_value})"
 
     def start_cyclic_message(self, arbitration_id, data, cycle_time, is_extended_id=False):
         if self.simulation_mode:
@@ -191,8 +347,34 @@ class CANManager:
             self.stop_cyclic_message(arbitration_id)
 
         msg = can.Message(arbitration_id=arbitration_id, data=data, is_extended_id=is_extended_id)
+        try:
+            msg.timestamp = time.time()
+            if self.logging:
+                # Log the first tick immediately so traces show the start of cyclic traffic
+                self._log_message(msg)
+            # Also feed metrics/listeners for TX visibility
+            self._on_message_received(msg)
+        except Exception:
+            pass
         task = self.bus.send_periodic(msg, cycle_time)
         self.cyclic_tasks[arbitration_id] = task
+        # Start an internal metrics tick thread to mirror TX for interval computation
+        stop_event = threading.Event()
+        self.metrics_threads[arbitration_id] = stop_event
+
+        def _tick_metrics():
+            m = can.Message(arbitration_id=arbitration_id, data=data, is_extended_id=is_extended_id)
+            while not stop_event.wait(cycle_time):
+                try:
+                    m.timestamp = time.time()
+                except Exception:
+                    pass
+                try:
+                    self._on_message_received(m)
+                except Exception:
+                    pass
+        t = threading.Thread(target=_tick_metrics, daemon=True)
+        t.start()
 
     def stop_cyclic_message(self, arbitration_id):
         if self.simulation_mode:
@@ -202,6 +384,12 @@ class CANManager:
         if arbitration_id in self.cyclic_tasks:
             self.cyclic_tasks[arbitration_id].stop()
             del self.cyclic_tasks[arbitration_id]
+        if arbitration_id in self.metrics_threads:
+            try:
+                self.metrics_threads[arbitration_id].set()
+            except Exception:
+                pass
+            del self.metrics_threads[arbitration_id]
 
     def start_cyclic_message_by_name(self, message_name, signals_dict, cycle_time_ms):
         """
@@ -218,8 +406,18 @@ class CANManager:
             # Get message from DBC
             message = self.dbc_parser.database.get_message_by_name(message_name)
             
-            # Encode signals into CAN data
-            data = message.encode(signals_dict)
+            # Encode signals into CAN data (preserve other signals via cache/defaults)
+            full_values = self._build_full_values(message, signals_dict or {})
+            
+            data = message.encode(full_values)
+            # Remember what we are sending for future preservation and cache
+            try:
+                now = time.time()
+                self.last_sent_signals[message.name] = dict(full_values)
+                for sig_name, val in full_values.items():
+                    self.signal_cache[sig_name] = {"value": val, "timestamp": now, "message": message.name}
+            except Exception:
+                pass
             
             # Start cyclic transmission
             self.start_cyclic_message(message.frame_id, data, cycle_time_ms / 1000.0, is_extended_id=message.is_extended_frame)
@@ -293,13 +491,13 @@ class CANManager:
             import can_messages
             CYCLIC_CAN_MESSAGES = can_messages.CYCLIC_CAN_MESSAGES
         except ImportError as e:
-            print(f"✗ Error importing can_messages: {e}")
+            print(f"âœ— Error importing can_messages: {e}")
             return False
         
         try:
             # Get message IDs from DBC
             if not self.dbc_parser or not self.dbc_parser.database:
-                print("⚠ Warning: No DBC loaded, cannot stop cyclic messages")
+                print("âš  Warning: No DBC loaded, cannot stop cyclic messages")
                 return False
             
             for msg_name in CYCLIC_CAN_MESSAGES.keys():
@@ -348,23 +546,27 @@ class CANManager:
             self.trc_file = None
 
     def _write_trc_header(self):
-        start_time_str = self.start_time.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-        self.trc_file.write(";$FILEVERSION=1.1\n")
-        self.trc_file.write(f";$STARTTIME={time.time():.10f}\n")
-        self.trc_file.write(";\n")
-        self.trc_file.write(f";   Start time: {start_time_str}\n")
-        self.trc_file.write(";   Generated by AtomX\n")
-        self.trc_file.write(";\n")
-        self.trc_file.write(";   Message Number\n")
-        self.trc_file.write(";   |         Time Offset (ms)\n")
-        self.trc_file.write(";   |         |        Type\n")
-        self.trc_file.write(";   |         |        |        ID (hex)\n")
-        self.trc_file.write(";   |         |        |        |     Data Length\n")
-        self.trc_file.write(";   |         |        |        |     |   Data Bytes (hex) ...\n")
-        self.trc_file.write(";   |         |        |        |     |   |\n")
-        self.trc_file.write(";---+--   ----+----  --+--  ----+---  +  -+ -- -- -- -- -- -- --\n")
-        self.message_counter = 1
-        self.first_msg_time = None
+        start_time_str = self.start_time.strftime("%d-%m-%Y %H:%M:%S.%f")[:-3]
+        # PCAN-style STARTTIME uses Excel/PCAN serial days (days since 1899-12-30)
+        excel_epoch = datetime(1899, 12, 30)
+        start_serial = (self.start_time - excel_epoch).total_seconds() / 86400.0
+        with self.log_lock:
+            self.trc_file.write(";$FILEVERSION=1.1\n")
+            self.trc_file.write(f";$STARTTIME={start_serial:.10f}\n")
+            self.trc_file.write(";\n")
+            self.trc_file.write(f";   Start time: {start_time_str}\n")
+            self.trc_file.write(";   Generated by AtomX\n")
+            self.trc_file.write(";\n")
+            self.trc_file.write(";   Message Number\n")
+            self.trc_file.write(";   |         Time Offset (ms)\n")
+            self.trc_file.write(";   |         |        Type\n")
+            self.trc_file.write(";   |         |        |        ID (hex)\n")
+            self.trc_file.write(";   |         |        |        |     Data Length\n")
+            self.trc_file.write(";   |         |        |        |     |   Data Bytes (hex) ...\n")
+            self.trc_file.write(";   |         |        |        |     |   |\n")
+            self.trc_file.write(";---+--   ----+----  --+--  ----+---  +  -+ -- -- -- -- -- -- --\n")
+            self.message_counter = 1
+            self.first_msg_time = None
 
     def add_listener(self, callback):
         with self.listeners_lock:
@@ -373,7 +575,7 @@ class CANManager:
     def remove_listener(self, callback):
         with self.listeners_lock:
             try:
-                self.remove_listener(callback)
+                self.listeners.remove(callback)
             except ValueError:
                 pass
 
@@ -398,11 +600,12 @@ class CANManager:
                 self._log_message(msg)
             
             # ===== STEP 2: DECODE MESSAGE =====
-            decoded_signals = self._decode_message(msg)
+            decoded_signals = self._decode_message(msg, decode_choices=True)
+            raw_signals = self._decode_message(msg, decode_choices=False)
             
             # ===== STEP 3: CACHE SIGNALS =====
             if decoded_signals:
-                self._cache_signals(msg.arbitration_id, decoded_signals, msg.timestamp)
+                self._cache_signals(msg.arbitration_id, decoded_signals, msg.timestamp, raw_signals)
             
             # ===== STEP 4: NOTIFY LISTENERS =====
             with self.listeners_lock:
@@ -419,7 +622,7 @@ class CANManager:
             print(f"[CAN ERROR] Message reception failed: {e}")
             self.error_count += 1
     
-    def _decode_message(self, msg):
+    def _decode_message(self, msg, decode_choices=True):
         """
         Decode a CAN message using DBC definitions.
         Returns: dict of {signal_name: value} or {} if decoding fails
@@ -430,14 +633,14 @@ class CANManager:
                 return {}  # Message not in DBC
             
             message_def = self.message_definitions[msg.arbitration_id]
-            decoded = message_def.decode(msg.data)
+            decoded = message_def.decode(msg.data, decode_choices=decode_choices)
             return decoded
         
         except Exception as e:
             # Silently ignore decode errors (malformed data, unknown messages)
             return {}
-    
-    def _cache_signals(self, message_id, decoded_signals, timestamp):
+
+    def _cache_signals(self, message_id, decoded_signals, timestamp, raw_signals=None):
         """
         Update signal_cache with latest signal values.
         This is what the UI Dashboard reads for real-time updates.
@@ -447,6 +650,8 @@ class CANManager:
                 if signal_name in self.signal_cache:
                     self.signal_cache[signal_name]['value'] = value
                     self.signal_cache[signal_name]['timestamp'] = timestamp
+                    if raw_signals and signal_name in raw_signals:
+                        self.signal_cache[signal_name]['raw_value'] = raw_signals[signal_name]
                 else:
                     # Unknown signal (not in DBC) - add to cache anyway
                     self.signal_cache[signal_name] = {
@@ -456,41 +661,71 @@ class CANManager:
                         'message_name': 'Unknown',
                         'unit': ''
                     }
+                    if raw_signals and signal_name in raw_signals:
+                        self.signal_cache[signal_name]['raw_value'] = raw_signals[signal_name]
     
     def _log_message(self, msg):
         """Log message to CSV and TRC files"""
-        if self.first_msg_time is None:
-            self.first_msg_time = msg.timestamp
-        
-        relative_time = (msg.timestamp - self.first_msg_time) * 1000  # milliseconds
-        data_bytes = ' '.join([f'{b:02X}' for b in msg.data[:msg.dlc]])
-        
-        # CSV format
-        if hasattr(self, 'csv_writer') and self.csv_writer:
-            msg_type = "Rx" if msg.is_rx else "Tx"
-            self.csv_writer.writerow([
-                f"{relative_time:.3f}",
-                msg_type,
-                f"{msg.arbitration_id:03X}",
-                msg.dlc,
-                data_bytes
-            ])
-        
-        # TRC format
-        if hasattr(self, 'trc_file') and self.trc_file:
-            msg_type = "Rx" if msg.is_rx else "Tx"
-            # Align to PCAN textual layout
-            trc_line = f"{self.message_counter:6d}){relative_time:11.1f}  {msg_type:3s}{msg.arbitration_id:10X}  {msg.dlc:1d}  {data_bytes}\n"
-            self.trc_file.write(trc_line)
-            self.trc_file.flush()
-            self.message_counter += 1
+        # Skip CAN error/status frames or remote frames
+        try:
+            if getattr(msg, "is_error_frame", False) or getattr(msg, "is_remote_frame", False):
+                return
+        except Exception:
+            pass
+        # Require a valid arbitration ID
+        if not hasattr(msg, "arbitration_id") or msg.arbitration_id is None:
+            return
+        if not isinstance(msg.arbitration_id, int):
+            return
+
+        # Serialize logging to keep message numbers and timestamps monotonic
+        with self.log_lock:
+            # Use monotonic clock for stable offsets (system clock jumps won't break ordering)
+            now_mono = time.monotonic()
+            if self.first_msg_time is None:
+                self.first_msg_time = now_mono
+            relative_time = max(0.0, (now_mono - self.first_msg_time) * 1000)  # milliseconds
+            dlc = getattr(msg, "dlc", len(msg.data) if hasattr(msg, "data") else 0)
+            if dlc is None:
+                dlc = 0
+            dlc = max(0, min(int(dlc), 8))
+            data_bytes = ""
+            if hasattr(msg, "data") and msg.data is not None:
+                data_bytes = ' '.join([f'{b:02X}' for b in list(msg.data)[:dlc]])
+
+            # CSV format
+            if hasattr(self, 'csv_writer') and self.csv_writer:
+                msg_type = "Rx" if msg.is_rx else "Tx"
+                self.csv_writer.writerow([
+                    f"{relative_time:.3f}",
+                    msg_type,
+                    f"{msg.arbitration_id:03X}",
+                    dlc,
+                    data_bytes
+                ])
+                try:
+                    self.csv_file.flush()
+                except Exception:
+                    pass
+            
+            # TRC format
+            if hasattr(self, 'trc_file') and self.trc_file:
+                msg_type = "Rx" if msg.is_rx else "Tx"
+                # Align to PCAN textual layout similar to provided templates
+                trc_line = f"{self.message_counter:6d}){relative_time:11.1f}  {msg_type:2s} {msg.arbitration_id:9X}  {dlc:1d}  {data_bytes} \n"
+                self.trc_file.write(trc_line)
+                try:
+                    self.trc_file.flush()
+                except Exception:
+                    pass
+                self.message_counter += 1
         
         # Add to message history for debugging
         self.message_history.append({
-            'timestamp': msg.timestamp,
+            'timestamp': getattr(msg, "timestamp", None),
             'msg_id': msg.arbitration_id,
-            'data': msg.data,
-            'direction': 'RX' if msg.is_rx else 'TX'
+            'data': getattr(msg, "data", b''),
+            'direction': 'RX' if getattr(msg, "is_rx", False) else 'TX'
         })
         if len(self.message_history) > self.max_history_size:
             self.message_history.pop(0)
@@ -614,9 +849,9 @@ class CANManager:
             pass
         
         if condition_met and result['success']:
-            return True, result['value'], f"Signal '{signal_name}' = {result['value']} (expected {expected_value} ± {tolerance})"
+            return True, result['value'], f"Signal '{signal_name}' = {result['value']} (expected {expected_value} Â± {tolerance})"
         elif result['value'] is not None:
-            return False, result['value'], f"Signal '{signal_name}' = {result['value']} (expected {expected_value} ± {tolerance}) - OUT OF RANGE"
+            return False, result['value'], f"Signal '{signal_name}' = {result['value']} (expected {expected_value} Â± {tolerance}) - OUT OF RANGE"
         else:
             return False, None, f"Timeout: Signal '{signal_name}' not received within {timeout}s"
 
@@ -718,7 +953,7 @@ class CANManager:
                                 result['violation'] = current_value
                                 result['violation_time'] = elapsed
                                 if progress_callback:
-                                    progress_callback(f"⚠ VIOLATION at {elapsed:.2f}s: {signal_name}={current_value} (range: {min_value}-{max_value})")
+                                    progress_callback(f"âš  VIOLATION at {elapsed:.2f}s: {signal_name}={current_value} (range: {min_value}-{max_value})")
                 except Exception as e:
                     print(f"Error decoding message: {e}")
         

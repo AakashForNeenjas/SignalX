@@ -1,0 +1,25 @@
+{
+  "name": "Power Supply Test",
+  "meta": {
+    "author": "Aakash",
+    "description": "demo",
+    "last_modified": "2025-12-13T18:05:10.179277",
+    "name": "Power Supply Test",
+    "tags": [
+      "demo"
+    ],
+    "version": 1
+  },
+  "start_time": "2025-12-13 18:06:16.696846",
+  "steps": [
+    {
+      "index": 1,
+      "action": "GS / Ramp Set & Measure",
+      "params": "{\"target\": {\"type\": \"PS_VOLT\", \"message\": \"\", \"signal\": \"\"}, \"start\": 85.0, \"step\": 1.0, \"end\": 115.0, \"dwell\": 2.0, \"tolerance\": 0.5, \"retries\": 3, \"verify\": true, \"measure\": {\"gs\": true, \"ps\": true}}",
+      "status": "Fail",
+      "messages": [
+        "Ramp aborted at 85.0: PS not initialized"
+      ]
+    }
+  ]
+}

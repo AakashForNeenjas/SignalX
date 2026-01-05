@@ -1,0 +1,696 @@
+{
+  "name": "Unsaved Test",
+  "meta": {
+    "name": "Unsaved Sequence",
+    "author": "",
+    "description": "",
+    "tags": [],
+    "version": 1
+  },
+  "start_time": "2025-12-13 18:24:52.649975",
+  "steps": [
+    {
+      "index": 1,
+      "action": "GS / Power: ON",
+      "params": "",
+      "status": "Pass",
+      "messages": [
+        "GS Power ON"
+      ]
+    },
+    {
+      "index": 2,
+      "action": "GS / Ramp Set & Measure",
+      "params": "{\"target\": {\"type\": \"GS_VOLT\", \"message\": \"\", \"signal\": \"\"}, \"start\": 100.0, \"step\": 1.0, \"end\": 150.0, \"dwell\": 0.5, \"tolerance\": 0.5, \"retries\": 3, \"verify\": false, \"measure\": {\"gs\": true, \"ps\": true}}",
+      "status": "Pass",
+      "messages": [
+        "Ramp completed (51 points)"
+      ],
+      "ramp_logs": [
+        {
+          "value": 100.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 99.9873,
+            "gs_current": 10.7309,
+            "gs_power": 304.304,
+            "gs_pf": 0.9672421464027428,
+            "gs_ithd": 4.081413,
+            "gs_vthd": 0.230612,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 101.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 101.0,
+            "gs_current": 3.52584,
+            "gs_power": 354.547,
+            "gs_pf": 1.0048990722791076,
+            "gs_ithd": 4.090746,
+            "gs_vthd": 0.206251,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 102.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 101.999,
+            "gs_current": 3.42769,
+            "gs_power": 349.521,
+            "gs_pf": 0.996583418913806,
+            "gs_ithd": 3.961823,
+            "gs_vthd": 0.221913,
+            "gs_freq": 49.997
+          }
+        },
+        {
+          "value": 103.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 102.998,
+            "gs_current": 3.4334,
+            "gs_power": 353.565,
+            "gs_pf": 0.9970141181507814,
+            "gs_ithd": 3.980823,
+            "gs_vthd": 0.231796,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 104.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 103.998,
+            "gs_current": 3.43032,
+            "gs_power": 356.946,
+            "gs_pf": 0.9962796353261734,
+            "gs_ithd": 4.005228,
+            "gs_vthd": 0.228635,
+            "gs_freq": 49.997
+          }
+        },
+        {
+          "value": 105.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 104.997,
+            "gs_current": 3.4338,
+            "gs_power": 360.365,
+            "gs_pf": 0.9971012009705035,
+            "gs_ithd": 4.176617,
+            "gs_vthd": 0.249522,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 106.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 106.0,
+            "gs_current": 3.43272,
+            "gs_power": 363.69,
+            "gs_pf": 0.9972225186693263,
+            "gs_ithd": 3.686161,
+            "gs_vthd": 0.204029,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 107.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 106.999,
+            "gs_current": 3.43439,
+            "gs_power": 367.017,
+            "gs_pf": 0.9953377111710716,
+            "gs_ithd": 4.015954,
+            "gs_vthd": 0.228565,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 108.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 107.999,
+            "gs_current": 3.43521,
+            "gs_power": 370.482,
+            "gs_pf": 0.9968641761005612,
+            "gs_ithd": 3.814553,
+            "gs_vthd": 0.222468,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 109.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 109.0,
+            "gs_current": 3.43567,
+            "gs_power": 373.568,
+            "gs_pf": 0.9967113584619276,
+            "gs_ithd": 4.068678,
+            "gs_vthd": 0.221772,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 110.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 109.997,
+            "gs_current": 3.43466,
+            "gs_power": 377.119,
+            "gs_pf": 0.9968902616087221,
+            "gs_ithd": 4.183256,
+            "gs_vthd": 0.25175,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 111.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 110.997,
+            "gs_current": 3.43387,
+            "gs_power": 380.905,
+            "gs_pf": 0.9957082891180822,
+            "gs_ithd": 4.066391,
+            "gs_vthd": 0.235527,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 112.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 111.998,
+            "gs_current": 3.43194,
+            "gs_power": 384.426,
+            "gs_pf": 0.9967406962163059,
+            "gs_ithd": 4.221171,
+            "gs_vthd": 0.207631,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 113.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 112.999,
+            "gs_current": 3.4343,
+            "gs_power": 387.959,
+            "gs_pf": 0.9971591128006884,
+            "gs_ithd": 4.222225,
+            "gs_vthd": 0.216549,
+            "gs_freq": 49.997
+          }
+        },
+        {
+          "value": 114.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 113.998,
+            "gs_current": 3.43419,
+            "gs_power": 390.965,
+            "gs_pf": 0.9978812480264028,
+            "gs_ithd": 4.008995,
+            "gs_vthd": 0.232172,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 115.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 115.0,
+            "gs_current": 3.43485,
+            "gs_power": 394.888,
+            "gs_pf": 0.9966746226781651,
+            "gs_ithd": 4.327374,
+            "gs_vthd": 0.219212,
+            "gs_freq": 49.997
+          }
+        },
+        {
+          "value": 116.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 115.999,
+            "gs_current": 3.43548,
+            "gs_power": 398.57,
+            "gs_pf": 0.9971767518392374,
+            "gs_ithd": 4.42092,
+            "gs_vthd": 0.210734,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 117.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 117.0,
+            "gs_current": 3.43634,
+            "gs_power": 401.838,
+            "gs_pf": 0.9969940028869477,
+            "gs_ithd": 4.425623,
+            "gs_vthd": 0.211219,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 118.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 118.0,
+            "gs_current": 3.43666,
+            "gs_power": 404.907,
+            "gs_pf": 0.9965938462976216,
+            "gs_ithd": 4.439729,
+            "gs_vthd": 0.223238,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 119.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 118.998,
+            "gs_current": 3.43398,
+            "gs_power": 408.077,
+            "gs_pf": 0.9963797882480856,
+            "gs_ithd": 4.289194,
+            "gs_vthd": 0.221932,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 120.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 119.997,
+            "gs_current": 3.43454,
+            "gs_power": 411.392,
+            "gs_pf": 0.9967893581861689,
+            "gs_ithd": 4.469046,
+            "gs_vthd": 0.209686,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 121.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 120.997,
+            "gs_current": 3.42984,
+            "gs_power": 414.925,
+            "gs_pf": 0.9966377882838561,
+            "gs_ithd": 4.364596,
+            "gs_vthd": 0.198512,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 122.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 121.997,
+            "gs_current": 3.43315,
+            "gs_power": 418.812,
+            "gs_pf": 0.9967864091988144,
+            "gs_ithd": 4.596436,
+            "gs_vthd": 0.190179,
+            "gs_freq": 49.997
+          }
+        },
+        {
+          "value": 123.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 122.998,
+            "gs_current": 3.43372,
+            "gs_power": 422.225,
+            "gs_pf": 0.9971897253906304,
+            "gs_ithd": 4.429294,
+            "gs_vthd": 0.203395,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 124.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 123.999,
+            "gs_current": 3.43577,
+            "gs_power": 425.453,
+            "gs_pf": 0.9977158252313458,
+            "gs_ithd": 4.279887,
+            "gs_vthd": 0.218195,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 125.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 124.999,
+            "gs_current": 3.43385,
+            "gs_power": 429.136,
+            "gs_pf": 0.9967457029119228,
+            "gs_ithd": 4.565147,
+            "gs_vthd": 0.236478,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 126.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 125.999,
+            "gs_current": 3.43498,
+            "gs_power": 432.24,
+            "gs_pf": 0.9976369802221009,
+            "gs_ithd": 4.218231,
+            "gs_vthd": 0.215595,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 127.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 126.999,
+            "gs_current": 3.43239,
+            "gs_power": 435.402,
+            "gs_pf": 0.9968119581300785,
+            "gs_ithd": 4.291058,
+            "gs_vthd": 0.229248,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 128.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 127.997,
+            "gs_current": 3.43355,
+            "gs_power": 438.741,
+            "gs_pf": 0.9968216779724122,
+            "gs_ithd": 4.511376,
+            "gs_vthd": 0.225735,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 129.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 128.998,
+            "gs_current": 3.43339,
+            "gs_power": 442.743,
+            "gs_pf": 0.9967343723625726,
+            "gs_ithd": 4.17245,
+            "gs_vthd": 0.225293,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 130.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 129.997,
+            "gs_current": 3.4341,
+            "gs_power": 446.441,
+            "gs_pf": 0.9968276293170808,
+            "gs_ithd": 4.440759,
+            "gs_vthd": 0.204133,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 131.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 130.998,
+            "gs_current": 3.43821,
+            "gs_power": 449.371,
+            "gs_pf": 0.9962287298592473,
+            "gs_ithd": 4.608216,
+            "gs_vthd": 0.249681,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 132.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 131.997,
+            "gs_current": 3.43422,
+            "gs_power": 452.642,
+            "gs_pf": 0.9982860135182708,
+            "gs_ithd": 4.273686,
+            "gs_vthd": 0.235206,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 133.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 133.0,
+            "gs_current": 3.43453,
+            "gs_power": 456.632,
+            "gs_pf": 0.9974363453727563,
+            "gs_ithd": 4.343894,
+            "gs_vthd": 0.225346,
+            "gs_freq": 49.997
+          }
+        },
+        {
+          "value": 134.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 134.0,
+            "gs_current": 3.4345,
+            "gs_power": 459.762,
+            "gs_pf": 0.9970488445457754,
+            "gs_ithd": 4.365454,
+            "gs_vthd": 0.221651,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 135.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 134.999,
+            "gs_current": 3.43258,
+            "gs_power": 463.405,
+            "gs_pf": 0.9973060020468365,
+            "gs_ithd": 4.460811,
+            "gs_vthd": 0.196434,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 136.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 136.0,
+            "gs_current": 3.43338,
+            "gs_power": 466.725,
+            "gs_pf": 0.9969999317196409,
+            "gs_ithd": 4.294722,
+            "gs_vthd": 0.239668,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 137.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 136.997,
+            "gs_current": 3.43627,
+            "gs_power": 470.253,
+            "gs_pf": 0.9966376335041707,
+            "gs_ithd": 4.372361,
+            "gs_vthd": 0.240415,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 138.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 137.997,
+            "gs_current": 3.43458,
+            "gs_power": 473.32,
+            "gs_pf": 0.9976317073581128,
+            "gs_ithd": 4.681224,
+            "gs_vthd": 0.209747,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 139.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 138.997,
+            "gs_current": 3.43641,
+            "gs_power": 477.232,
+            "gs_pf": 0.9967738165791604,
+            "gs_ithd": 4.510629,
+            "gs_vthd": 0.233024,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 140.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 139.998,
+            "gs_current": 3.43645,
+            "gs_power": 480.297,
+            "gs_pf": 0.9971216994415517,
+            "gs_ithd": 4.437812,
+            "gs_vthd": 0.213235,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 141.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 140.997,
+            "gs_current": 3.43758,
+            "gs_power": 484.143,
+            "gs_pf": 0.9973062518006338,
+            "gs_ithd": 4.695243,
+            "gs_vthd": 0.232013,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 142.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 141.999,
+            "gs_current": 3.43707,
+            "gs_power": 487.47,
+            "gs_pf": 0.9956497242035383,
+            "gs_ithd": 4.903626,
+            "gs_vthd": 0.230283,
+            "gs_freq": 49.997
+          }
+        },
+        {
+          "value": 143.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 142.999,
+            "gs_current": 3.43532,
+            "gs_power": 491.193,
+            "gs_pf": 0.9958286946065042,
+            "gs_ithd": 4.462074,
+            "gs_vthd": 0.208632,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 144.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 144.0,
+            "gs_current": 3.43729,
+            "gs_power": 494.977,
+            "gs_pf": 0.9969512993223991,
+            "gs_ithd": 4.851689,
+            "gs_vthd": 0.242283,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 145.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 144.999,
+            "gs_current": 3.44055,
+            "gs_power": 497.991,
+            "gs_pf": 0.996828839355204,
+            "gs_ithd": 4.691154,
+            "gs_vthd": 0.236939,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 146.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 145.997,
+            "gs_current": 3.4408,
+            "gs_power": 501.575,
+            "gs_pf": 0.9967174528704426,
+            "gs_ithd": 4.54962,
+            "gs_vthd": 0.206307,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 147.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 146.997,
+            "gs_current": 3.44034,
+            "gs_power": 505.161,
+            "gs_pf": 0.9971392890048079,
+            "gs_ithd": 4.752775,
+            "gs_vthd": 0.231577,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 148.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 147.997,
+            "gs_current": 3.4417,
+            "gs_power": 508.794,
+            "gs_pf": 0.9973012935381844,
+            "gs_ithd": 4.796434,
+            "gs_vthd": 0.240512,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 149.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 148.997,
+            "gs_current": 3.43987,
+            "gs_power": 511.506,
+            "gs_pf": 0.9958354233986213,
+            "gs_ithd": 4.842264,
+            "gs_vthd": 0.214542,
+            "gs_freq": 49.9974
+          }
+        },
+        {
+          "value": 150.0,
+          "status": "ok",
+          "readings": {
+            "gs_voltage": 149.996,
+            "gs_current": 3.43928,
+            "gs_power": 515.488,
+            "gs_pf": 0.9960138038706486,
+            "gs_ithd": 5.005143,
+            "gs_vthd": 0.233247,
+            "gs_freq": 49.9974
+          }
+        }
+      ]
+    }
+  ]
+}

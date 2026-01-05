@@ -1,16 +1,28 @@
 import logging
 import os
-from PyQt6.QtWidgets import QMainWindow, QTabWidget, QWidget, QVBoxLayout, QLabel, QHBoxLayout, QComboBox, QPushButton, QTextEdit, QMessageBox
+import json
+from pathlib import Path
+from datetime import datetime
+from PyQt6.QtWidgets import (
+    QMainWindow, QTabWidget, QWidget, QVBoxLayout, QLabel, QHBoxLayout,
+    QComboBox, QPushButton, QTextEdit, QMessageBox, QScrollArea, QFormLayout,
+    QLineEdit, QSpinBox, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem
+)
 from config_loader import load_profiles, get_profile
-from PyQt6.QtCore import QTimer
+import config
+from core import updater
+from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtGui import QTextCursor
 from ui.resources import create_app_icon
 
 class MainWindow(QMainWindow):
     def __init__(self, logger=None, log_path=None):
         super().__init__()
         self.setWindowTitle("AtomX - Instrument Control & CAN Analysis")
-        self.resize(1400, 900)
+        # Start maximized while keeping window controls visible
+        self.setWindowState(Qt.WindowState.WindowMaximized)
         self.setWindowIcon(create_app_icon())
+        self.current_version = updater.read_local_version()
         # Load profiles (simulation/dev/hw)
         self.profiles = load_profiles()
         if 'hw' in self.profiles:
@@ -30,9 +42,15 @@ class MainWindow(QMainWindow):
         self.layout = QVBoxLayout(self.central_widget)
         self.layout.setContentsMargins(0, 0, 0, 0)
         # Header branding
+        header_row = QHBoxLayout()
         header = QLabel("AtomX")
         header.setStyleSheet("font-size: 34px; font-weight: bold; color: #00ff88; padding: 1px;")
-        self.layout.addWidget(header)
+        header_row.addWidget(header)
+        header_row.addStretch()
+        self.btn_check_updates = QPushButton("Check for Updates")
+        self.btn_check_updates.clicked.connect(self.on_check_updates)
+        header_row.addWidget(self.btn_check_updates)
+        self.layout.addLayout(header_row)
         
         self.tabs = QTabWidget()
         self.layout.addWidget(self.tabs)
@@ -44,26 +62,45 @@ class MainWindow(QMainWindow):
         self.error_tab = QWidget()
         self.tools_tab = QWidget()
         self.logconv_tab = QWidget()
+        self.signalplot_tab = QWidget()
+        self.canmatrix_tab = QWidget()
+        self.standards_tab = QWidget()
         
         self.tabs.addTab(self.config_tab, "Configuration")
         self.tabs.addTab(self.instrument_tab, "Instrument")
         self.tabs.addTab(self.data_tab, "Data")
         self.tabs.addTab(self.error_tab, "Error and Warnings")
-        self.tabs.addTab(self.tools_tab, "Tools")
+        self.tabs.addTab(self.tools_tab, "System Log")
         self.tabs.addTab(self.logconv_tab, "Log Converter")
+        self.tabs.addTab(self.signalplot_tab, "Signal Plot")
+        self.tabs.addTab(self.canmatrix_tab, "CAN Matrix")
+        self.tabs.addTab(self.standards_tab, "Standards")
         self.tools_tab_index = self.tabs.indexOf(self.tools_tab)
         self.logconv_tab_index = self.tabs.indexOf(self.logconv_tab)
+        self.signalplot_tab_index = self.tabs.indexOf(self.signalplot_tab)
+        self.canmatrix_tab_index = self.tabs.indexOf(self.canmatrix_tab)
+        self.error_tab_index = self.tabs.indexOf(self.error_tab)
+        self.standards_tab_index = self.tabs.indexOf(self.standards_tab)
         self.tabs.currentChanged.connect(self.on_tab_changed)
         # Lazy-load flags must be set before building tabs
         self.tools_built = False
         self.instrument_built = False
         self.data_built = False
         self.logconv_built = False
+        self.error_built = False
+        self.signalplot_built = False
+        self.canmatrix_built = False
+        self.standards_built = False
+        self.err_state_cache = None
+        self.sequence_run_report = None
         
         # Placeholder content
         self.setup_config_tab()
         self.setup_tools_tab()
         # Log Converter tab lazy
+        # Error tab lazy
+        # Signal Plot tab lazy
+        # CAN Matrix tab lazy
 
     def ensure_data_tab_built(self):
         """Build data tab UI if not already built."""
@@ -79,6 +116,27 @@ class MainWindow(QMainWindow):
         """Build Log Converter tab UI if not already built."""
         if not self.logconv_built:
             self.setup_logconv_tab()
+    
+    def ensure_signalplot_tab_built(self):
+        """Build Signal Plot tab UI if not already built."""
+        if not self.signalplot_built:
+            self.setup_signalplot_tab()
+    
+    def ensure_canmatrix_tab_built(self):
+        """Build CAN Matrix tab UI if not already built."""
+        if not self.canmatrix_built:
+            self.setup_canmatrix_tab()
+    
+    def ensure_standards_tab_built(self):
+        """Build Standards tab UI if not already built."""
+        if not self.standards_built:
+            self.setup_standards_tab()
+    
+    def ensure_error_tab_built(self):
+        """Build Error and Warnings tab UI if not already built."""
+        if not self.error_built:
+            self.setup_error_tab()
+    
         
     def setup_instrument_tab(self):
         layout = QVBoxLayout(self.instrument_tab)
@@ -103,6 +161,7 @@ class MainWindow(QMainWindow):
         
         self.log_view = QTextEdit()
         self.log_view.setReadOnly(True)
+        self.log_view.setLineWrapMode(QTextEdit.LineWrapMode.NoWrap)
         layout.addWidget(self.log_view)
         # Timer to auto-refresh when tab is active
         self.log_timer = QTimer()
@@ -110,6 +169,43 @@ class MainWindow(QMainWindow):
         self.log_timer.timeout.connect(self.load_log_tail)
         self.load_log_tail()
         self.tools_built = True
+
+    def on_check_updates(self):
+        manifest_url = getattr(config, "UPDATE_MANIFEST_URL", "") or ""
+        if not manifest_url:
+            QMessageBox.information(self, "Update Check", "Update manifest URL is not configured in config.py.")
+            return
+        result = updater.check_for_update(manifest_url, self.current_version)
+        status = result.get("status")
+        if status == "error":
+            QMessageBox.warning(self, "Update Check", f"Failed to check updates: {result.get('error')}")
+            return
+        if status == "no_update":
+            latest = result.get("latest_version", "n/a")
+            QMessageBox.information(self, "Update Check", f"You are up to date.\nCurrent: {self.current_version}\nLatest: {latest}")
+            return
+        if status == "update_available":
+            latest = result.get("latest_version", "n/a")
+            manifest = result.get("manifest", {})
+            notes = manifest.get("notes", "A newer version is available.")
+            reply = QMessageBox.question(
+                self,
+                "Update Available",
+                f"Current version: {self.current_version}\nLatest version: {latest}\n\n{notes}\n\nDownload now?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            )
+            if reply != QMessageBox.StandardButton.Yes:
+                return
+            dl = updater.download_update(manifest, dest_dir="updates")
+            if dl.get("status") == "downloaded":
+                path = dl.get("path")
+                QMessageBox.information(
+                    self,
+                    "Update Downloaded",
+                    f"Downloaded to:\n{path}\n\nPlease run the installer to complete the update.",
+                )
+            else:
+                QMessageBox.warning(self, "Update Download", f"Download failed: {dl.get('error')}")
 
     def setup_logconv_tab(self):
         """Initialize the Log Converter tab UI."""
@@ -123,7 +219,164 @@ class MainWindow(QMainWindow):
             fallback = QLabel(f"Log Converter unavailable: {e}")
             layout.addWidget(fallback)
             self.logconv_built = True
-        
+
+    def setup_signalplot_tab(self):
+        """Initialize the Signal Plot tab UI."""
+        layout = QVBoxLayout(self.signalplot_tab)
+        try:
+            from ui.SignalPlotTab import SignalPlotTab
+            self.signalplot_widget = SignalPlotTab(signal_manager=self.signal_manager, dbc_parser=self.dbc_parser, can_mgr=self.can_mgr)
+            layout.addWidget(self.signalplot_widget)
+            self.signalplot_built = True
+        except Exception as e:
+            fallback = QLabel(f"Signal Plot unavailable: {e}")
+            layout.addWidget(fallback)
+            self.signalplot_built = True
+    
+
+    def setup_canmatrix_tab(self):
+        """Initialize the CAN Matrix tab UI."""
+        layout = QVBoxLayout(self.canmatrix_tab)
+        try:
+            from ui.CANMatrixTab import CANMatrixTab
+            self.canmatrix_widget = CANMatrixTab(can_mgr=self.can_mgr, dbc_parser=self.dbc_parser, logger=self.logger)
+            layout.addWidget(self.canmatrix_widget)
+            self.canmatrix_built = True
+        except Exception as e:
+            fallback = QLabel(f"CAN Matrix unavailable: {e}")
+            layout.addWidget(fallback)
+            self.canmatrix_built = True
+
+    def setup_standards_tab(self):
+        """Initialize the Standards tab UI to view Charger_Standard JSON."""
+        layout = QVBoxLayout(self.standards_tab)
+        header = QLabel("Charger Standards")
+        header.setStyleSheet("font-size: 18px; font-weight: bold; color: #00ff88;")
+        layout.addWidget(header)
+
+        from pathlib import Path
+        self.standards_path = Path(getattr(config, "STANDARDS_JSON", "docs/Charger_Standard.json"))
+        self.standards_label = QLabel(f"File: {self.standards_path}")
+        layout.addWidget(self.standards_label)
+
+        # Filter row (one QLineEdit per column, built after JSON load)
+        self.standards_filter_row = QHBoxLayout()
+        layout.addLayout(self.standards_filter_row)
+        self.standards_filter_edits = []
+
+        self.standards_table = QTableWidget()
+        self.standards_table.setColumnCount(0)
+        self.standards_table.setRowCount(0)
+        layout.addWidget(self.standards_table)
+
+        self.standards_text = QTextEdit()
+        self.standards_text.setReadOnly(True)
+        self.standards_text.setVisible(False)
+        layout.addWidget(self.standards_text)
+
+        try:
+            self.load_standards_json()
+        except Exception as e:
+            self.standards_table.setVisible(False)
+            self.standards_text.setVisible(True)
+            self.standards_text.setText(f"Failed to load standards: {e}")
+        self.standards_built = True
+
+    def _build_standards_filters(self, cols):
+        """Create filter line-edits for each column to allow per-column filtering."""
+        # Clear existing widgets in filter row
+        while self.standards_filter_row.count():
+            item = self.standards_filter_row.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        self.standards_filter_edits = []
+        self.standards_filter_row.addWidget(QLabel("Filters:"))
+        for col in cols:
+            edit = QLineEdit()
+            edit.setPlaceholderText(str(col))
+            edit.setClearButtonEnabled(True)
+            edit.textChanged.connect(self.apply_standards_filters)
+            self.standards_filter_row.addWidget(edit)
+            self.standards_filter_edits.append(edit)
+        self.standards_filter_row.addStretch()
+
+    def apply_standards_filters(self):
+        """Apply substring filters per column on the standards table."""
+        filters = [e.text().strip().lower() for e in self.standards_filter_edits]
+        rows = self.standards_table.rowCount()
+        cols = self.standards_table.columnCount()
+        for r in range(rows):
+            visible = True
+            for c in range(min(cols, len(filters))):
+                ftxt = filters[c]
+                if not ftxt:
+                    continue
+                item = self.standards_table.item(r, c)
+                cell = (item.text() if item else "").lower()
+                if ftxt not in cell:
+                    visible = False
+                    break
+            self.standards_table.setRowHidden(r, not visible)
+
+    def load_standards_json(self):
+        """Load Charger_Standard JSON and render in table if possible."""
+        path = self.standards_path
+        self.standards_label.setText(f"File: {path}")
+        if not path.exists():
+            self.standards_table.setVisible(False)
+            self.standards_text.setVisible(True)
+            self.standards_text.setText(f"Standards file not found: {path}")
+            return
+        import json
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+
+        # Normalize common structures:
+        # - If the JSON is a dict whose values are lists of dicts (e.g., {"ALL": [...]})
+        #   take the first non-empty list.
+        if isinstance(data, dict):
+            list_candidate = None
+            for v in data.values():
+                if isinstance(v, list) and v:
+                    list_candidate = v
+                    break
+            if list_candidate is not None:
+                data = list_candidate
+
+        # If data is a list of dicts, render as doc-style (knowledge base)
+        if isinstance(data, list) and data and all(isinstance(item, dict) for item in data):
+            self.standards_table.setVisible(False)
+            # Clear filters row
+            while self.standards_filter_row.count():
+                item = self.standards_filter_row.takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
+            self.standards_filter_edits = []
+            # Build an HTML knowledge-base style view
+            html_parts = ["<h2>Charger Standards</h2>"]
+            for idx, row in enumerate(data, start=1):
+                title = row.get("Standard") or row.get("Name") or f"Entry {idx}"
+                html_parts.append(f"<h3>{title}</h3><ul>")
+                for key, val in row.items():
+                    if key in ("Standard", "Name"):
+                        continue
+                    html_parts.append(f"<li><b>{key}:</b> {val}</li>")
+                html_parts.append("</ul>")
+            html = "\n".join(html_parts)
+            self.standards_text.setVisible(True)
+            self.standards_text.setHtml(html)
+        else:
+            # Fallback: pretty print JSON
+            self.standards_table.setVisible(False)
+            # No filters in text-only mode
+            while self.standards_filter_row.count():
+                item = self.standards_filter_row.takeAt(0)
+                if item.widget():
+                    item.widget().deleteLater()
+            self.standards_filter_edits = []
+            self.standards_text.setVisible(True)
+            self.standards_text.setText(json.dumps(data, indent=2))
+
     def setup_data_tab(self):
         """Setup the futuristic data dashboard with signal_cache reference"""
         if not hasattr(self, 'data_tab_layout'):
@@ -140,6 +393,82 @@ class MainWindow(QMainWindow):
         self.data_dashboard = DataDashboard(self.signal_manager, can_mgr=self.can_mgr)
         self.data_tab_layout.addWidget(self.data_dashboard)
         self.data_built = True
+    
+    def setup_error_tab(self):
+        """Setup CAN transmit builder in Error and Warnings tab."""
+        layout = QVBoxLayout(self.error_tab)
+
+        # Top controls row
+        controls = QHBoxLayout()
+        controls.addWidget(QLabel("Period (ms):"))
+        self.err_period_spin = QSpinBox()
+        self.err_period_spin.setRange(1, 100000)
+        self.err_period_spin.setValue(100)
+        controls.addWidget(self.err_period_spin)
+
+        self.btn_err_build = QPushButton("Load Signals")
+        self.btn_err_build.clicked.connect(self.on_err_build_form)
+        controls.addWidget(self.btn_err_build)
+
+        self.btn_err_send = QPushButton("Send Once")
+        self.btn_err_send.clicked.connect(self.on_err_send_once)
+        controls.addWidget(self.btn_err_send)
+
+        self.btn_err_start = QPushButton("Start Periodic")
+        self.btn_err_start.clicked.connect(self.on_err_start_periodic)
+        controls.addWidget(self.btn_err_start)
+
+        self.btn_err_stop = QPushButton("Stop Periodic")
+        self.btn_err_stop.clicked.connect(self.on_err_stop_periodic)
+        controls.addWidget(self.btn_err_stop)
+
+        controls.addStretch()
+        layout.addLayout(controls)
+
+        # Main split: message list (left) and signal form (right)
+        split = QHBoxLayout()
+
+        self.err_msg_list = QListWidget()
+        self.err_msg_list.setSelectionMode(QListWidget.SelectionMode.MultiSelection)
+        # Populate from DBC if available
+        try:
+            messages = self.dbc_parser.database.messages if self.dbc_parser and self.dbc_parser.database else []
+            for m in messages:
+                item = QListWidgetItem(m.name)
+                item.setData(Qt.ItemDataRole.UserRole, m)
+                self.err_msg_list.addItem(item)
+        except Exception:
+            pass
+        self.err_msg_list.setMinimumWidth(220)
+        split.addWidget(self.err_msg_list, 1)
+
+        # Scrollable signal form on the right
+        self.err_scroll = QScrollArea()
+        self.err_scroll.setWidgetResizable(True)
+        self.err_form_container = QWidget()
+        self.err_form_layout = QFormLayout(self.err_form_container)
+        self.err_scroll.setWidget(self.err_form_container)
+        split.addWidget(self.err_scroll, 2)
+
+        layout.addLayout(split)
+
+        self.err_signal_editors = {}
+        self.err_timer = None
+        # Load persisted state if available
+        try:
+            self._err_load_state()
+        except Exception:
+            pass
+        self.error_built = True
+
+    # Legacy helper (kept for compatibility, not used in Error tab after rollback)
+    def _err_apply_override_and_send(self, msg_name, signals_dict, verify=True):
+        try:
+            for sig, val in signals_dict.items():
+                self.can_mgr.set_signal_override(msg_name, sig, val)
+            self.can_mgr.send_message_with_overrides(msg_name, signals_dict)
+        except Exception:
+            pass
         
     def setup_config_tab(self):
         layout = QVBoxLayout(self.config_tab)
@@ -229,10 +558,10 @@ class MainWindow(QMainWindow):
         # Load DBC and mappings
         success, msg = self.dbc_parser.load_dbc_file("RE")
         if success:
-            self.dashboard.output_log.append(f"�o\" {msg}")
+            self.dashboard.output_log.append(f"{msg}")
             success, msg = self.signal_manager.load_signal_mapping()
             if success:
-                self.dashboard.output_log.append(f"�o\" {msg}")
+                self.dashboard.output_log.append(f"{msg}")
                 
                 # Setup UI updates with timer (100ms)
                 self.dashboard.setup_ui_updates(self.signal_manager, self.can_mgr)
@@ -244,9 +573,9 @@ class MainWindow(QMainWindow):
                 self.ensure_data_tab_built()
                 self.refresh_data_dashboard()
             else:
-                self.dashboard.output_log.append(f"�s� {msg}")
+                self.dashboard.output_log.append(f"Mapping load failed: {msg}")
         else:
-            self.dashboard.output_log.append(f"�s� {msg}")
+            self.dashboard.output_log.append(f"DBC load failed: {msg}")
 
     def refresh_data_dashboard(self):
         """Recreate the Data dashboard to point at the current CAN manager."""
@@ -307,12 +636,227 @@ class MainWindow(QMainWindow):
                 self.dashboard.output_log.append("No instruments initialized.")
                 return
             for name, status in report.items():
-                prefix = "✓" if getattr(status, "ok", False) else "✗"
+                ok = getattr(status, "ok", False)
+                prefix = "[OK]" if ok else "[ERR]"
                 self.dashboard.output_log.append(f"{prefix} {name}: {status.message}")
-                self._log(logging.INFO if getattr(status, "ok", False) else logging.ERROR, f"{name}: {status.message}")
+                self._log(logging.INFO if ok else logging.ERROR, f"{name}: {status.message}")
         except Exception as e:
             self.dashboard.output_log.append(f"Health check failed: {e}")
             self._log(logging.ERROR, f"Health check failed: {e}")
+
+    # ------------------ Error & Warnings tab helpers (CAN TX builder) ------------------
+    def _err_state_file(self):
+        return Path("error_tab_state.json")
+
+    def _err_save_state(self):
+        """Persist selected messages, period, and signal values."""
+        selected_items = self.err_msg_list.selectedItems() if hasattr(self, 'err_msg_list') else []
+        msg_names = [i.text() for i in selected_items]
+        signals = {}
+        for key, editor in self.err_signal_editors.items():
+            msg_name, sig_name = key
+            if msg_name not in msg_names:
+                continue
+            if isinstance(editor, QComboBox):
+                val = editor.currentData()
+            elif isinstance(editor, QLineEdit):
+                val = editor.text()
+            else:
+                val = None
+            signals.setdefault(msg_name, {})[sig_name] = val
+        state = {
+            "period_ms": self.err_period_spin.value() if hasattr(self, 'err_period_spin') else 100,
+            "messages": msg_names,
+            "signals": signals,
+        }
+        try:
+            self._err_state_file().write_text(json.dumps(state, indent=2), encoding="utf-8")
+        except Exception:
+            pass
+
+    def _err_load_state(self):
+        """Load persisted state and apply selections/values."""
+        path = self._err_state_file()
+        if not path.exists():
+            return
+        try:
+            state = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            return
+        self.err_state_cache = state
+        # Apply selection
+        msg_names = state.get("messages", [])
+        for i in range(self.err_msg_list.count()):
+            item = self.err_msg_list.item(i)
+            if item.text() in msg_names:
+                item.setSelected(True)
+        # Apply period
+        try:
+            self.err_period_spin.setValue(int(state.get("period_ms", 100)))
+        except Exception:
+            pass
+        # Build form and apply values
+        self.on_err_build_form(apply_state=True)
+
+    def _err_apply_values(self, state):
+        signals = state.get("signals", {}) if state else {}
+        for (msg_name, sig_name), editor in self.err_signal_editors.items():
+            if msg_name in signals and sig_name in signals[msg_name]:
+                val = signals[msg_name][sig_name]
+                if isinstance(editor, QComboBox):
+                    # try match data
+                    for idx in range(editor.count()):
+                        if editor.itemData(idx) == val:
+                            editor.setCurrentIndex(idx)
+                            break
+                elif isinstance(editor, QLineEdit):
+                    editor.setText("" if val is None else str(val))
+
+    def on_err_build_form(self):
+        """Build signal form for selected message."""
+        if not self.dbc_parser or not self.dbc_parser.database:
+            self.dashboard.output_log.append("No DBC loaded; cannot build message form.")
+            return
+        selected_items = self.err_msg_list.selectedItems()
+        if not selected_items:
+            self.dashboard.output_log.append("No message selected.")
+            return
+        # Clear existing
+        while self.err_form_layout.count():
+            item = self.err_form_layout.takeAt(0)
+            w = item.widget()
+            if w:
+                w.deleteLater()
+        self.err_signal_editors = {}
+        for item in selected_items:
+            msg_obj = item.data(Qt.ItemDataRole.UserRole)
+            if not msg_obj:
+                continue
+            # Message header
+            self.err_form_layout.addRow(QLabel(f"<b>{msg_obj.name}</b>"), QLabel(""))
+            for sig in msg_obj.signals:
+                if sig.choices:
+                    editor = QComboBox()
+                    for val, text in sig.choices.items():
+                        editor.addItem(f"{text} ({val})", val)
+                else:
+                    editor = QLineEdit()
+                    editor.setPlaceholderText("Enter value")
+                self.err_signal_editors[(msg_obj.name, sig.name)] = editor
+                self.err_form_layout.addRow(QLabel(sig.name), editor)
+        self.dashboard.output_log.append(f"Loaded signals for {len(selected_items)} messages")
+        # Apply persisted values if available
+        if self.err_state_cache:
+            self._err_apply_values(self.err_state_cache)
+
+    def _err_collect_payload(self):
+        selected_items = self.err_msg_list.selectedItems()
+        if not selected_items:
+            return None, "No message selected"
+        payloads = []
+        for item in selected_items:
+            msg_obj = item.data(Qt.ItemDataRole.UserRole)
+            if not msg_obj:
+                continue
+            values = {}
+            for sig in msg_obj.signals:
+                editor = self.err_signal_editors.get((msg_obj.name, sig.name))
+                if isinstance(editor, QComboBox):
+                    values[sig.name] = editor.currentData()
+                elif isinstance(editor, QLineEdit):
+                    text = editor.text().strip()
+                    if text == "":
+                        return None, f"Signal {sig.name} missing value"
+                    try:
+                        if "." in text:
+                            values[sig.name] = float(text)
+                        else:
+                            values[sig.name] = int(text, 0) if text.lower().startswith("0x") else float(text)
+                    except Exception:
+                        return None, f"Invalid value for {sig.name}"
+            try:
+                data = msg_obj.encode(values)
+                payloads.append((msg_obj, data))
+            except Exception as e:
+                return None, f"Encode failed for {msg_obj.name}: {e}"
+        return payloads, None
+
+    def on_err_send_once(self):
+        if not getattr(self.can_mgr, "is_connected", False) or getattr(self.can_mgr, "bus", None) is None:
+            msg = "CAN not connected; cannot send."
+            self.dashboard.output_log.append(msg)
+            self._log(logging.WARNING, msg)
+            return
+        result, err = self._err_collect_payload()
+        if err:
+            self.dashboard.output_log.append(err)
+            self._log(logging.ERROR, err)
+            return
+        for msg_obj, data in result:
+            try:
+                self.can_mgr.send_message(msg_obj.frame_id, list(data), msg_obj.is_extended_frame)
+                log_msg = f"Sent {msg_obj.name} ID=0x{msg_obj.frame_id:X} Data={list(data)}"
+                self.dashboard.output_log.append(log_msg)
+                self._log(logging.INFO, log_msg)
+            except Exception as e:
+                err_msg = f"Send failed: {e}"
+                self.dashboard.output_log.append(err_msg)
+                self._log(logging.ERROR, err_msg)
+        self._err_save_state()
+
+    def on_err_start_periodic(self):
+        """
+        Start periodic transmission using CANManager's driver-level cyclic support
+        instead of a UI-thread QTimer. This reduces jitter and CPU load.
+        """
+        # Stop any existing periodic sends from this tab
+        self.on_err_stop_periodic()
+        if not getattr(self.can_mgr, "is_connected", False) or getattr(self.can_mgr, "bus", None) is None:
+            msg = "CAN not connected; cannot start periodic send."
+            self.dashboard.output_log.append(msg)
+            self._log(logging.WARNING, msg)
+            return
+        # Build payloads once up-front
+        payloads, err = self._err_collect_payload()
+        if err:
+            self.dashboard.output_log.append(err)
+            self._log(logging.ERROR, err)
+            return
+        period_ms = self.err_period_spin.value()
+        self.err_periodic_tasks = []
+        started_names = []
+        for msg_obj, data in payloads:
+            try:
+                # Use start_cyclic_message_by_name so it preserves other signals and caches values
+                ok = self.can_mgr.start_cyclic_message_by_name(msg_obj.name, {}, period_ms)
+                if ok:
+                    self.err_periodic_tasks.append(msg_obj.frame_id)
+                    started_names.append(msg_obj.name)
+                else:
+                    self.dashboard.output_log.append(f"Failed to start periodic {msg_obj.name}")
+            except Exception as e:
+                self.dashboard.output_log.append(f"Periodic send failed for {msg_obj.name}: {e}")
+                self._log(logging.ERROR, f"Periodic send failed for {msg_obj.name}: {e}")
+        if started_names:
+            log_msg = f"Started periodic send: {', '.join(started_names)} every {period_ms} ms"
+            self.dashboard.output_log.append(log_msg)
+            self._log(logging.INFO, log_msg)
+        self._err_save_state()
+
+    def on_err_stop_periodic(self):
+        # Stop driver-level cyclic tasks started from the Error/Warnings tab
+        if hasattr(self, "err_periodic_tasks") and self.err_periodic_tasks:
+            for arb_id in list(self.err_periodic_tasks):
+                try:
+                    self.can_mgr.stop_cyclic_message(arb_id)
+                except Exception:
+                    pass
+            self.err_periodic_tasks = []
+        if hasattr(self, 'err_timer') and self.err_timer:
+            self.err_timer.stop()
+            self.err_timer = None
+        self.dashboard.output_log.append("Stopped periodic send.")
+        self._log(logging.INFO, "Stopped periodic send.")
 
     def on_start_cyclic(self):
         """Start all configured cyclic CAN messages"""
@@ -455,6 +999,23 @@ class MainWindow(QMainWindow):
             test_name = self.dashboard.loaded_sequence_name
             self.dashboard.output_log.append(f'Running saved sequence: {test_name}')
         
+        # Build run report context
+        test_meta = getattr(self.dashboard, "sequence_meta", {}) or {}
+        self.sequence_run_report = {
+            "name": test_name,
+            "meta": test_meta,
+            "start_time": datetime.now(),
+            "steps": []
+        }
+        for idx, step in enumerate(steps):
+            self.sequence_run_report["steps"].append({
+                "index": idx + 1,
+                "action": step.get("action"),
+                "params": step.get("params"),
+                "status": "Pending",
+                "messages": []
+            })
+
         self._log(logging.INFO, f'Sequence start requested: {test_name}')
         for row in range(self.dashboard.sequence_table.rowCount()):
             self.dashboard.update_step_status(row, 'Pending')
@@ -470,18 +1031,208 @@ class MainWindow(QMainWindow):
         level = logging.INFO if status == 'Pass' else logging.WARNING if status == 'Running' else logging.ERROR
         self._log(level, f'Step {index + 1} status: {status}')
         self.dashboard.update_step_status(index, status)
+        try:
+            if self.sequence_run_report and 0 <= index < len(self.sequence_run_report["steps"]):
+                self.sequence_run_report["steps"][index]["status"] = status
+        except Exception:
+            pass
 
     def on_sequence_finished(self):
         self.dashboard.output_log.append('Sequence Finished')
         self.dashboard.clear_running_test_name()
         self.data_dashboard.set_test_name(None)
         self._log(logging.INFO, 'Sequence finished')
+        try:
+            self._generate_sequence_report()
+        except Exception as e:
+            self.dashboard.output_log.append(f"Report generation failed: {e}")
+            self._log(logging.ERROR, f"Report generation failed: {e}")
 
     def on_action_info(self, index, message):
         # Append action result/diagnostic message to the Output Diagnosis log
         if message:
+            # Structured ramp data (JSON) is tagged to avoid polluting the log text
+            if message.startswith("[RAMP_LOG]"):
+                try:
+                    import json
+                    logs = json.loads(message[len("[RAMP_LOG]"):])
+                    if self.sequence_run_report and 0 <= index < len(self.sequence_run_report["steps"]):
+                        self.sequence_run_report["steps"][index]["ramp_logs"] = logs
+                except Exception:
+                    pass
+                return
+
             self.dashboard.output_log.append(f'Step {index + 1}: {message}')
             self._log(logging.INFO, f'Step {index + 1} info: {message}')
+            # Highlight warnings inline (message text only; does not change Pass/Fail status)
+            if "failed" in message.lower() or "error" in message.lower():
+                self.dashboard.show_warning(message)
+            # Attach tooltip to row with last message for quick hover detail
+            try:
+                if index < self.dashboard.sequence_table.rowCount():
+                    for col in range(self.dashboard.sequence_table.columnCount()):
+                        item = self.dashboard.sequence_table.item(index, col)
+                        if item:
+                            item.setToolTip(message)
+            except Exception:
+                pass
+            try:
+                if self.sequence_run_report and 0 <= index < len(self.sequence_run_report["steps"]):
+                    self.sequence_run_report["steps"][index]["messages"].append(message)
+            except Exception:
+                pass
+
+    def _generate_sequence_report(self):
+        """Generate an HTML report for the last sequence run."""
+        if not self.sequence_run_report:
+            return
+        report = self.sequence_run_report
+        end_time = datetime.now()
+        start_time = report.get("start_time", end_time)
+        steps = report.get("steps", [])
+        overall_pass = all(s.get("status") == "Pass" for s in steps) if steps else True
+        status_text = "PASS" if overall_pass else "FAIL"
+        total_seconds = max(0, (end_time - start_time).total_seconds())
+        total_hms = f"{int(total_seconds // 3600):02d}:{int((total_seconds % 3600)//60):02d}:{int(total_seconds % 60):02d}"
+        ts_str = end_time.strftime("%Y%m%d_%H%M%S")
+        seq_name = report.get("name", "Sequence").replace(" ", "_")
+        filename = f"{seq_name}_{status_text}_{ts_str}.html"
+        json_filename = f"{seq_name}_{status_text}_{ts_str}.json"
+        out_dir = Path("Test Results")
+        out_dir.mkdir(parents=True, exist_ok=True)
+        out_path = out_dir / filename
+        json_path = out_dir / json_filename
+
+        # Persist structured report (including ramp logs) as JSON
+        try:
+            import json
+            json_path.write_text(json.dumps(report, default=str, indent=2), encoding="utf-8")
+        except Exception:
+            pass
+
+        # Build HTML
+        rows = []
+        for s in steps:
+            msgs = "<br>".join(s.get("messages", [])) or "&nbsp;"
+            params = s.get("params", "")
+            rows.append(
+                f"<tr><td>{s.get('index')}</td><td>{s.get('action','')}</td>"
+                f"<td>{params}</td><td>{s.get('status','')}</td><td>{msgs}</td></tr>"
+            )
+
+        # Build ramp sections when present
+        def fmt(val):
+            if val is None:
+                return ""
+            try:
+                if isinstance(val, (float, int)):
+                    return f"{val:.3f}"
+            except Exception:
+                pass
+            return str(val)
+
+        ramp_sections = []
+        for s in steps:
+            logs = s.get("ramp_logs")
+            if not logs:
+                continue
+            header = (
+                "<table><thead><tr>"
+                "<th>Set Value</th><th>Status</th><th>Message</th>"
+                "<th>GS V</th><th>GS I</th><th>GS P</th><th>PF</th><th>ITHD</th><th>VTHD</th><th>Freq</th>"
+                "<th>PS V</th><th>PS I</th><th>PS P</th><th>Efficiency (%)</th><th>Errors</th>"
+                "</tr></thead><tbody>"
+            )
+            body_rows = []
+            for entry in logs:
+                rd = entry.get("readings", {}) or {}
+                errs = []
+                for k in ("gs_error", "ps_error"):
+                    if rd.get(k):
+                        errs.append(rd[k])
+                try:
+                    gs_p = rd.get("gs_power")
+                    ps_p = rd.get("ps_power")
+                    eff = (ps_p / gs_p * 100.0) if gs_p not in (None, 0) and ps_p is not None else None
+                except Exception:
+                    eff = None
+                body_rows.append(
+                    "<tr>"
+                    f"<td>{fmt(entry.get('value'))}</td>"
+                    f"<td>{entry.get('status','')}</td>"
+                    f"<td>{entry.get('message','')}</td>"
+                    f"<td>{fmt(rd.get('gs_voltage'))}</td>"
+                    f"<td>{fmt(rd.get('gs_current'))}</td>"
+                    f"<td>{fmt(rd.get('gs_power'))}</td>"
+                    f"<td>{fmt(rd.get('gs_pf'))}</td>"
+                    f"<td>{fmt(rd.get('gs_ithd'))}</td>"
+                    f"<td>{fmt(rd.get('gs_vthd'))}</td>"
+                    f"<td>{fmt(rd.get('gs_freq'))}</td>"
+                    f"<td>{fmt(rd.get('ps_voltage'))}</td>"
+                    f"<td>{fmt(rd.get('ps_current'))}</td>"
+                    f"<td>{fmt(rd.get('ps_power'))}</td>"
+                    f"<td>{fmt(eff)}</td>"
+                    f"<td>{' | '.join(errs) if errs else ''}</td>"
+                    "</tr>"
+                )
+            section = (
+                f"<div class='section'><h3>Step {s.get('index')} - {s.get('action','')}</h3>"
+                f"{header}{''.join(body_rows)}</tbody></table></div>"
+            )
+            ramp_sections.append(section)
+
+        meta = report.get("meta", {})
+        meta_html = "".join([f"<li><b>{k.title()}:</b> {v}</li>" for k, v in meta.items() if v])
+        html = f"""<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{seq_name} {status_text}</title>
+<style>
+body {{ font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; background: #0b111a; color: #e7f1ff; margin: 0; padding: 0; }}
+.container {{ max-width: 1080px; margin: 0 auto; padding: 32px 24px 48px 24px; }}
+.header {{ display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #233044; padding-bottom: 12px; margin-bottom: 16px; }}
+.title {{ font-size: 28px; font-weight: 700; letter-spacing: 0.5px; color: #5ce1e6; }}
+.badge {{ padding: 8px 14px; border-radius: 16px; font-weight: 700; text-transform: uppercase; }}
+.status-pass {{ background: #0f3c2a; color: #5df0a1; border: 1px solid #1f6c46; }}
+.status-fail {{ background: #3c1f1f; color: #ff9b9b; border: 1px solid #7a2f2f; }}
+.meta {{ list-style: none; padding: 0; margin: 0 0 12px 0; display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 13px; color: #9db4d4; }}
+.meta li b {{ color: #e7f1ff; }}
+.dates {{ font-size: 13px; color: #9db4d4; margin-bottom: 8px; }}
+table {{ width: 100%; border-collapse: collapse; margin-top: 16px; border: 1px solid #1f2b3d; }}
+th, td {{ border: 1px solid #1f2b3d; padding: 10px; vertical-align: top; font-size: 13px; }}
+th {{ background: #162133; color: #c8ddf5; text-align: left; }}
+tr:nth-child(even) {{ background: #0f1726; }}
+tr:nth-child(odd) {{ background: #0c141f; }}
+.step-pass {{ color: #6dffb3; font-weight: 600; }}
+.step-fail {{ color: #ff8f8f; font-weight: 600; }}
+.step-running {{ color: #f6c343; font-weight: 600; }}
+.section {{ margin-top: 18px; }}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="title">{report.get("name","Test Sequence")}</div>
+    <div class="badge status-{status_text.lower()}">{status_text}</div>
+  </div>
+  <div class="dates"><b>Started:</b> {start_time} &nbsp; <b>Ended:</b> {end_time} &nbsp; <b>Total:</b> {total_hms}</div>
+  <ul class="meta">{meta_html}</ul>
+  <table>
+    <thead><tr><th>#</th><th>Action</th><th>Parameters</th><th>Status</th><th>Messages</th></tr></thead>
+    <tbody>
+    {''.join(rows)}
+    </tbody>
+  </table>
+  {'<h2>Ramp Set &amp; Measure Results</h2>' + ''.join(ramp_sections) if ramp_sections else ''}
+</div>
+</body>
+</html>"""
+        out_path.write_text(html, encoding="utf-8")
+        self.dashboard.output_log.append(f"Report saved: {out_path}")
+        self._log(logging.INFO, f"Sequence report saved: {out_path}")
+        # clear report context
+        self.sequence_run_report = None
 
     def on_can_message_received(self, msg):
         """
@@ -500,6 +1251,14 @@ class MainWindow(QMainWindow):
             self.setup_tools_tab()
         if index == self.logconv_tab_index:
             self.ensure_logconv_tab_built()
+        if index == self.signalplot_tab_index:
+            self.ensure_signalplot_tab_built()
+        if index == self.canmatrix_tab_index:
+            self.ensure_canmatrix_tab_built()
+        if index == self.error_tab_index:
+            self.ensure_error_tab_built()
+        if index == self.standards_tab_index:
+            self.ensure_standards_tab_built()
         if index == self.tools_tab_index:
             self.load_log_tail()
             self.log_timer.start()
@@ -513,7 +1272,9 @@ class MainWindow(QMainWindow):
         try:
             with open(path, "r", encoding="utf-8") as f:
                 lines = f.readlines()
-            tail = "".join(lines[-max_lines:])
+            tail_lines = lines[-max_lines:]
+            # Show most recent entries first without erasing history
+            tail = "".join(reversed(tail_lines))
             self.log_view.setPlainText(tail)
         except FileNotFoundError:
             self.log_view.setPlainText(f"No log file yet at {path}")
