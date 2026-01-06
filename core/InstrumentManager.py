@@ -531,14 +531,64 @@ class InstrumentManager:
             return True, "DC Load already connected"
         try:
             module = self._load_dc_driver()
-            addr = port or self.addresses.get("DC Load", "COM3")
-            self.dc_load = module.MaynuoM97(port=addr, slave_addr=slave_addr, baudrate=baudrate, timeout=timeout, parity=parity)
-            self.dc_load.open()
+            if self.simulation_mode:
+                class _SimLoad:
+                    def __init__(self):
+                        self.v = 0.0
+                        self.i = 0.0
+                    def open(self): pass
+                    def close(self): pass
+                    def set_remote_control(self, *_): pass
+                    def enable_input(self): pass
+                    def disable_input(self): pass
+                    def set_cc_current(self, a): self.i = a
+                    def set_cv_voltage(self, v): self.v = v
+                    def set_cw_power(self, p): 
+                        # assume R=1 for simple sim to derive V/I
+                        self.v = (p ** 0.5)
+                        self.i = (p ** 0.5)
+                    def set_cr_resistance(self, r): 
+                        # keep last V, adjust I based on R
+                        self.i = self.v / r if r else 0
+                    def read_voltage_current(self): return self.v, self.i
+                self.dc_load = _SimLoad()
+                return True, "DC Load connected (simulation)"
+            # Build a list of candidate ports: explicit > config > auto-scan
+            candidates = []
+            if port:
+                candidates.append(port)
+            cfg_port = self.addresses.get("DC Load", "COM3")
+            if cfg_port not in candidates:
+                candidates.append(cfg_port)
             try:
-                self.dc_load.set_remote_control(True)
+                import serial.tools.list_ports as lp
+                for p in lp.comports():
+                    if p.device not in candidates:
+                        candidates.append(p.device)
             except Exception:
+                # If serial.tools.list_ports not available, continue with known candidates
                 pass
-            return True, f"DC Load connected on {addr}"
+
+            errors = []
+            for addr in candidates:
+                try:
+                    inst = module.MaynuoM97(port=addr, slave_addr=slave_addr, baudrate=baudrate, timeout=timeout, parity=parity)
+                    inst.open()
+                    try:
+                        inst.set_remote_control(True)
+                    except Exception:
+                        pass
+                    self.dc_load = inst
+                    return True, f"DC Load connected on {addr}"
+                except Exception as e:
+                    errors.append(f"{addr}: {e}")
+                    # Ensure any half-open handle is closed
+                    try:
+                        if 'inst' in locals():
+                            inst.close()
+                    except Exception:
+                        pass
+            return False, f"DC Load connect failed; tried {candidates}. Errors: {errors}"
         except Exception as e:
             return False, f"DC Load connect failed: {e}"
 

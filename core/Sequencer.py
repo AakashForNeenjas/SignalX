@@ -1514,6 +1514,7 @@ class Sequencer(QObject):
         verify = bool(cfg.get("verify", False))
         measure_gs = bool(cfg.get("measure", {}).get("gs", True))
         measure_ps = bool(cfg.get("measure", {}).get("ps", True))
+        measure_load = bool(cfg.get("measure", {}).get("load", True))
 
         if step == 0:
             return False, "Step cannot be zero"
@@ -1533,6 +1534,7 @@ class Sequencer(QObject):
         gs = getattr(self.inst_mgr, "itech7900", None)
         # Some builds name the PS driver itech6000; fall back if itech6006 is absent
         ps = getattr(self.inst_mgr, "itech6006", None) or getattr(self.inst_mgr, "itech6000", None)
+        load = getattr(self.inst_mgr, "dc_load", None)
 
         def set_target(val):
             tt = target.get("type", "").upper()
@@ -1587,6 +1589,14 @@ class Sequencer(QObject):
                         readings["ps_power"] = v * c if v is not None and c is not None else None
                 except Exception:
                     readings["ps_error"] = "PS measure failed"
+            if measure_load and load:
+                try:
+                    lv, li = load.read_voltage_current()
+                    readings["load_voltage"] = lv
+                    readings["load_current"] = li
+                    readings["load_power"] = lv * li
+                except Exception:
+                    readings["load_error"] = "Load measure failed"
             return readings
 
         logs = []

@@ -6211,3 +6211,764 @@
 {"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_FAIL_20260105_172805.html", "time": "2026-01-05 17:28:05,054"}
 {"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-05 17:58:17,732"}
 {"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-05 17:58:17,738"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2026-01-06 13:13:09,180"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply Error: Error connecting to TCPIP::192.168.4.53::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.. Install NI-VISA Runtime or pyvisa-py and set PYVISA_LIBRARY if needed.\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.. Install NI-VISA Runtime or pyvisa-py and set PYVISA_LIBRARY if needed.\nGrid Emulator Error: Error connecting to TCPIP::192.168.4.52::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.. Install NI-VISA Runtime or pyvisa-py and set PYVISA_LIBRARY if needed.", "time": "2026-01-06 13:13:16,031"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected\npower_supply not healthy: PS not connected\ngrid_emulator not healthy: Grid not connected\noscilloscope not healthy: Scope not connected", "time": "2026-01-06 13:13:33,022"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:13:39,609"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 13:13:41,375"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:13:41,380"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:13:41,380"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 13:13:41,386"}
+{"level": "WARNING", "name": "root", "message": "Step 1: DC Load connect failed: Cannot load DC_load driver file", "time": "2026-01-06 13:13:41,388"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:13:41,389"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connect failed: Cannot load DC_load driver file", "time": "2026-01-06 13:13:41,391"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:13:41,393"}
+{"level": "ERROR", "name": "root", "message": "Step 1 status: Fail", "time": "2026-01-06 13:13:41,403"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:13:41,408"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_FAIL_20260106_131341.html", "time": "2026-01-06 13:13:41,414"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 13:14:36,926"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 13:14:36,928"}
+{"level": "INFO", "name": "root", "message": "Profile changed to sim", "time": "2026-01-06 13:14:37,021"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:14:40,013"}
+{"level": "INFO", "name": "root", "message": "Sequence start canceled by user after preflight warnings", "time": "2026-01-06 13:14:45,124"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2026-01-06 13:14:46,387"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2026-01-06 13:14:46,388"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2026-01-06 13:14:46,396"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2026-01-06 13:14:47,808"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2026-01-06 13:14:47,811"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 13:14:52,425"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:14:52,430"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:14:52,432"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 13:14:52,435"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:14:52,447"}
+{"level": "WARNING", "name": "root", "message": "Step 1: DC Load connect failed; tried ['COM3']. Errors: [\"COM3: could not open port 'COM3': FileNotFoundError(2, 'The system cannot find the file specified.', None, 2)\"]", "time": "2026-01-06 13:14:52,508"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connect failed; tried ['COM3']. Errors: [\"COM3: could not open port 'COM3': FileNotFoundError(2, 'The system cannot find the file specified.', None, 2)\"]", "time": "2026-01-06 13:14:52,509"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:14:52,514"}
+{"level": "ERROR", "name": "root", "message": "Step 1 status: Fail", "time": "2026-01-06 13:14:52,522"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:14:52,526"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_FAIL_20260106_131452.html", "time": "2026-01-06 13:14:52,530"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 13:17:37,643"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 13:17:37,729"}
+{"level": "INFO", "name": "root", "message": "Profile changed to hw", "time": "2026-01-06 13:17:37,802"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:17:43,475"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:17:46,426"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 13:17:47,900"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:17:47,902"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:17:47,902"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 13:17:47,902"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:17:47,903"}
+{"level": "WARNING", "name": "root", "message": "Step 1: DC Load connect failed; tried ['COM3']. Errors: [\"COM3: could not open port 'COM3': FileNotFoundError(2, 'The system cannot find the file specified.', None, 2)\"]", "time": "2026-01-06 13:17:47,908"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connect failed; tried ['COM3']. Errors: [\"COM3: could not open port 'COM3': FileNotFoundError(2, 'The system cannot find the file specified.', None, 2)\"]", "time": "2026-01-06 13:17:47,908"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:17:47,911"}
+{"level": "ERROR", "name": "root", "message": "Step 1 status: Fail", "time": "2026-01-06 13:17:47,911"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:17:47,913"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_FAIL_20260106_131747.html", "time": "2026-01-06 13:17:47,914"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2026-01-06 13:22:02,000"}
+{"level": "ERROR", "name": "root", "message": "Initialize instruments failed: Bi-Directional Power Supply Error: Error connecting to TCPIP::192.168.4.53::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.. Install NI-VISA Runtime or pyvisa-py and set PYVISA_LIBRARY if needed.\nOscilloscope Error: Error connecting to TCPIP::192.168.4.51::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.. Install NI-VISA Runtime or pyvisa-py and set PYVISA_LIBRARY if needed.\nGrid Emulator Error: Error connecting to TCPIP::192.168.4.52::INSTR: VI_ERROR_RSRC_NFOUND (-1073807343): Insufficient location information or the requested device or resource is not present in the system.. Install NI-VISA Runtime or pyvisa-py and set PYVISA_LIBRARY if needed.", "time": "2026-01-06 13:22:08,062"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 13:22:08,497"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 13:22:08,498"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:22:39,805"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:22:42,698"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 13:22:45,825"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:22:45,828"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:22:45,828"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 13:22:45,830"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:22:45,832"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load connected on COM4", "time": "2026-01-06 13:22:46,016"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connected on COM4", "time": "2026-01-06 13:22:46,017"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:22:46,019"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:22:46,576"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:22:46,576"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_PASS_20260106_132246.html", "time": "2026-01-06 13:22:46,581"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:24:46,232"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:24:48,380"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 13:24:50,302"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:24:50,305"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:24:50,305"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 13:24:50,306"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load already connected", "time": "2026-01-06 13:24:50,307"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:24:50,309"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load already connected", "time": "2026-01-06 13:24:50,311"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:24:50,321"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 8.5", "time": "2026-01-06 13:24:50,867"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:24:50,868"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CC set to 8.5 A", "time": "2026-01-06 13:24:50,921"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CC set to 8.5 A", "time": "2026-01-06 13:24:50,922"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:24:50,924"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:24:51,478"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:24:51,479"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CV set to 13.5 V", "time": "2026-01-06 13:24:51,531"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:24:51,531"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:24:51,532"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:24:52,091"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:24:52,114"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:24:52,115"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:24:52,116"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:24:52,672"}
+{"level": "INFO", "name": "root", "message": "Step 5: DC Load Meas V=13.499 V, I=0.397 A", "time": "2026-01-06 13:24:52,716"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: DC Load Meas V=13.499 V, I=0.397 A", "time": "2026-01-06 13:24:52,717"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:24:52,718"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:24:53,274"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Power: 5.386 W (V=13.499 V, I=0.399 A)", "time": "2026-01-06 13:24:53,318"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Power: 5.386 W (V=13.499 V, I=0.399 A)", "time": "2026-01-06 13:24:53,342"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:24:53,343"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:24:53,876"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:24:53,881"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_PASS_20260106_132453.html", "time": "2026-01-06 13:24:53,886"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:25:33,354"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:25:36,020"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 13:25:41,704"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:25:41,706"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:25:41,706"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 13:25:41,706"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load already connected", "time": "2026-01-06 13:25:41,707"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:25:41,709"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load already connected", "time": "2026-01-06 13:25:41,709"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:25:41,718"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 8.5", "time": "2026-01-06 13:25:42,266"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:25:42,268"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CC set to 8.5 A", "time": "2026-01-06 13:25:42,320"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CC set to 8.5 A", "time": "2026-01-06 13:25:42,320"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:25:42,322"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:25:42,877"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:25:42,877"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CV set to 13.5 V", "time": "2026-01-06 13:25:42,929"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:25:42,930"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:25:42,931"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:25:43,487"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:25:43,511"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:25:43,512"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:25:43,514"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:25:44,070"}
+{"level": "INFO", "name": "root", "message": "Step 5: DC Load Meas V=13.501 V, I=0.400 A", "time": "2026-01-06 13:25:44,114"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: DC Load Meas V=13.501 V, I=0.400 A", "time": "2026-01-06 13:25:44,115"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:25:44,116"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:25:44,672"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Power: 5.413 W (V=13.500 V, I=0.401 A)", "time": "2026-01-06 13:25:44,715"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Power: 5.413 W (V=13.500 V, I=0.401 A)", "time": "2026-01-06 13:25:44,722"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:25:44,723"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:25:45,273"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:25:45,273"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_PASS_20260106_132545.html", "time": "2026-01-06 13:25:45,285"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:26:01,891"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:26:03,582"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: load", "time": "2026-01-06 13:26:21,814"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:26:21,816"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:26:21,816"}
+{"level": "INFO", "name": "root", "message": "Sequence started: load", "time": "2026-01-06 13:26:21,817"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load already connected", "time": "2026-01-06 13:26:21,817"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:26:21,818"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load already connected", "time": "2026-01-06 13:26:21,819"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:26:21,827"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 8.5", "time": "2026-01-06 13:26:22,373"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:26:22,373"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CC set to 8.5 A", "time": "2026-01-06 13:26:22,425"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CC set to 8.5 A", "time": "2026-01-06 13:26:22,425"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:26:22,427"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:26:22,982"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:26:22,982"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CV set to 13.5 V", "time": "2026-01-06 13:26:23,034"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:26:23,034"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:26:23,037"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:26:23,206"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:26:23,594"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:26:23,619"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:26:23,620"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:26:23,622"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:26:24,177"}
+{"level": "INFO", "name": "root", "message": "Step 5: DC Load Meas V=13.500 V, I=0.401 A", "time": "2026-01-06 13:26:24,222"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: DC Load Meas V=13.500 V, I=0.401 A", "time": "2026-01-06 13:26:24,223"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:26:24,224"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:26:24,782"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Power: 5.413 W (V=13.499 V, I=0.401 A)", "time": "2026-01-06 13:26:24,826"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Power: 5.413 W (V=13.499 V, I=0.401 A)", "time": "2026-01-06 13:26:24,837"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:26:24,839"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:26:25,199"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: load", "time": "2026-01-06 13:26:25,200"}
+{"level": "INFO", "name": "root", "message": "Sequence started: load", "time": "2026-01-06 13:26:25,201"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2026-01-06 13:26:25,384"}
+{"level": "INFO", "name": "root", "message": "Step 7: DC Load input OFF", "time": "2026-01-06 13:26:25,408"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: DC Load input OFF", "time": "2026-01-06 13:26:25,408"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2026-01-06 13:26:25,410"}
+{"level": "WARNING", "name": "root", "message": "Step 8 status: Running", "time": "2026-01-06 13:26:25,965"}
+{"level": "INFO", "name": "root", "message": "Step 8: DC Load disconnected", "time": "2026-01-06 13:26:26,018"}
+{"level": "INFO", "name": "root", "message": "Step 8 info: DC Load disconnected", "time": "2026-01-06 13:26:26,019"}
+{"level": "INFO", "name": "root", "message": "Step 8 status: Pass", "time": "2026-01-06 13:26:26,020"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:26:26,576"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:26:26,576"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\load_FAIL_20260106_132626.html", "time": "2026-01-06 13:26:26,580"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:26:30,215"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:26:31,985"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: load", "time": "2026-01-06 13:26:31,986"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:26:31,988"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:26:31,988"}
+{"level": "INFO", "name": "root", "message": "Sequence started: load", "time": "2026-01-06 13:26:31,989"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:26:31,994"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load connected on COM4", "time": "2026-01-06 13:26:32,129"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connected on COM4", "time": "2026-01-06 13:26:32,130"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:26:32,131"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 8.5", "time": "2026-01-06 13:26:32,685"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:26:32,686"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CC set to 8.5 A", "time": "2026-01-06 13:26:32,738"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CC set to 8.5 A", "time": "2026-01-06 13:26:32,739"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:26:32,741"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:26:33,297"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:26:33,298"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CV set to 13.5 V", "time": "2026-01-06 13:26:33,352"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:26:33,352"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:26:33,354"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:26:33,910"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:26:33,935"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:26:33,935"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:26:33,936"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:26:34,492"}
+{"level": "INFO", "name": "root", "message": "Step 5: DC Load Meas V=13.499 V, I=0.400 A", "time": "2026-01-06 13:26:34,536"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: DC Load Meas V=13.499 V, I=0.400 A", "time": "2026-01-06 13:26:34,537"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:26:34,539"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:26:35,095"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Power: 5.400 W (V=13.499 V, I=0.400 A)", "time": "2026-01-06 13:26:35,139"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Power: 5.400 W (V=13.499 V, I=0.400 A)", "time": "2026-01-06 13:26:35,139"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:26:35,142"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2026-01-06 13:26:35,696"}
+{"level": "INFO", "name": "root", "message": "Step 7: DC Load input OFF", "time": "2026-01-06 13:26:35,721"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: DC Load input OFF", "time": "2026-01-06 13:26:35,722"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2026-01-06 13:26:35,723"}
+{"level": "WARNING", "name": "root", "message": "Step 8 status: Running", "time": "2026-01-06 13:26:36,279"}
+{"level": "INFO", "name": "root", "message": "Step 8: DC Load disconnected", "time": "2026-01-06 13:26:36,330"}
+{"level": "INFO", "name": "root", "message": "Step 8 info: DC Load disconnected", "time": "2026-01-06 13:26:36,330"}
+{"level": "INFO", "name": "root", "message": "Step 8 status: Pass", "time": "2026-01-06 13:26:36,331"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:26:36,888"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:26:36,889"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\load_PASS_20260106_132636.html", "time": "2026-01-06 13:26:36,894"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:26:41,918"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:26:44,515"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: load", "time": "2026-01-06 13:26:44,516"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:26:44,518"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:26:44,519"}
+{"level": "INFO", "name": "root", "message": "Sequence started: load", "time": "2026-01-06 13:26:44,519"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:26:44,522"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load connected on COM4", "time": "2026-01-06 13:26:44,665"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connected on COM4", "time": "2026-01-06 13:26:44,665"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:26:44,667"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 8.5", "time": "2026-01-06 13:26:45,221"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:26:45,222"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CC set to 8.5 A", "time": "2026-01-06 13:26:45,274"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CC set to 8.5 A", "time": "2026-01-06 13:26:45,275"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:26:45,276"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:26:45,831"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:26:45,832"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CV set to 13.5 V", "time": "2026-01-06 13:26:45,884"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:26:45,884"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:26:45,887"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:26:46,445"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:26:46,470"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:26:46,470"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:26:46,472"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:26:47,029"}
+{"level": "INFO", "name": "root", "message": "Step 5: DC Load Meas V=13.498 V, I=0.403 A", "time": "2026-01-06 13:26:47,072"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: DC Load Meas V=13.498 V, I=0.403 A", "time": "2026-01-06 13:26:47,073"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:26:47,075"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:26:47,633"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Power: 5.426 W (V=13.498 V, I=0.402 A)", "time": "2026-01-06 13:26:47,677"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Power: 5.426 W (V=13.498 V, I=0.402 A)", "time": "2026-01-06 13:26:47,677"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:26:47,679"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2026-01-06 13:26:48,236"}
+{"level": "INFO", "name": "root", "message": "Step 7: DC Load input OFF", "time": "2026-01-06 13:26:48,259"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: DC Load input OFF", "time": "2026-01-06 13:26:48,260"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2026-01-06 13:26:48,262"}
+{"level": "WARNING", "name": "root", "message": "Step 8 status: Running", "time": "2026-01-06 13:26:48,819"}
+{"level": "INFO", "name": "root", "message": "Step 8: DC Load disconnected", "time": "2026-01-06 13:26:48,870"}
+{"level": "INFO", "name": "root", "message": "Step 8 info: DC Load disconnected", "time": "2026-01-06 13:26:48,871"}
+{"level": "INFO", "name": "root", "message": "Step 8 status: Pass", "time": "2026-01-06 13:26:48,872"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:26:49,427"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:26:49,427"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\load_PASS_20260106_132649.html", "time": "2026-01-06 13:26:49,432"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:27:14,282"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:27:15,870"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: load", "time": "2026-01-06 13:27:27,187"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:27:27,188"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:27:27,189"}
+{"level": "INFO", "name": "root", "message": "Sequence started: load", "time": "2026-01-06 13:27:27,189"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:27:27,191"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load connected on COM4", "time": "2026-01-06 13:27:27,327"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connected on COM4", "time": "2026-01-06 13:27:27,327"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:27:27,328"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 8.5", "time": "2026-01-06 13:27:27,883"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:27:27,883"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CC set to 8.5 A", "time": "2026-01-06 13:27:27,936"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CC set to 8.5 A", "time": "2026-01-06 13:27:27,937"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:27:27,939"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:27:28,493"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:27:28,495"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CV set to 13.5 V", "time": "2026-01-06 13:27:28,547"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:27:28,548"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:27:28,550"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:27:29,107"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:27:29,130"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:27:29,131"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:27:29,133"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:27:29,688"}
+{"level": "INFO", "name": "root", "message": "Step 5: Wait: 10.0s (completed)", "time": "2026-01-06 13:27:39,737"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: Wait: 10.0s (completed)", "time": "2026-01-06 13:27:39,738"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:27:39,740"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:27:40,295"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Meas V=13.498 V, I=0.400 A", "time": "2026-01-06 13:27:40,339"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Meas V=13.498 V, I=0.400 A", "time": "2026-01-06 13:27:40,340"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:27:40,341"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2026-01-06 13:27:40,896"}
+{"level": "INFO", "name": "root", "message": "Step 7: DC Load Power: 5.400 W (V=13.499 V, I=0.400 A)", "time": "2026-01-06 13:27:40,941"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: DC Load Power: 5.400 W (V=13.499 V, I=0.400 A)", "time": "2026-01-06 13:27:40,941"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2026-01-06 13:27:40,943"}
+{"level": "WARNING", "name": "root", "message": "Step 8 status: Running", "time": "2026-01-06 13:27:41,499"}
+{"level": "INFO", "name": "root", "message": "Step 8: DC Load input OFF", "time": "2026-01-06 13:27:41,522"}
+{"level": "INFO", "name": "root", "message": "Step 8 info: DC Load input OFF", "time": "2026-01-06 13:27:41,524"}
+{"level": "INFO", "name": "root", "message": "Step 8 status: Pass", "time": "2026-01-06 13:27:41,528"}
+{"level": "WARNING", "name": "root", "message": "Step 9 status: Running", "time": "2026-01-06 13:27:42,080"}
+{"level": "INFO", "name": "root", "message": "Step 9: DC Load disconnected", "time": "2026-01-06 13:27:42,131"}
+{"level": "INFO", "name": "root", "message": "Step 9 info: DC Load disconnected", "time": "2026-01-06 13:27:42,132"}
+{"level": "INFO", "name": "root", "message": "Step 9 status: Pass", "time": "2026-01-06 13:27:42,133"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:27:42,687"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:27:42,688"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\load_PASS_20260106_132742.html", "time": "2026-01-06 13:27:42,699"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:28:03,246"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:28:07,375"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: load", "time": "2026-01-06 13:28:07,376"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:28:07,378"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:28:07,378"}
+{"level": "INFO", "name": "root", "message": "Sequence started: load", "time": "2026-01-06 13:28:07,379"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:28:07,381"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load connected on COM4", "time": "2026-01-06 13:28:07,522"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connected on COM4", "time": "2026-01-06 13:28:07,523"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:28:07,524"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 8.5", "time": "2026-01-06 13:28:08,080"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:28:08,081"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CC set to 8.5 A", "time": "2026-01-06 13:28:08,133"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CC set to 8.5 A", "time": "2026-01-06 13:28:08,134"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:28:08,135"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:28:08,691"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:28:08,692"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CV set to 13.5 V", "time": "2026-01-06 13:28:08,744"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:28:08,744"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:28:08,746"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:28:09,302"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:28:09,326"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:28:09,327"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:28:09,328"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:28:09,884"}
+{"level": "INFO", "name": "root", "message": "Step 5: Wait: 10.0s (completed)", "time": "2026-01-06 13:28:19,926"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: Wait: 10.0s (completed)", "time": "2026-01-06 13:28:19,927"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:28:19,929"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:28:20,486"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Meas V=13.499 V, I=9.418 A", "time": "2026-01-06 13:28:20,531"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Meas V=13.499 V, I=9.418 A", "time": "2026-01-06 13:28:20,532"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:28:20,534"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2026-01-06 13:28:21,089"}
+{"level": "INFO", "name": "root", "message": "Step 7: DC Load Power: 127.134 W (V=13.499 V, I=9.418 A)", "time": "2026-01-06 13:28:21,134"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: DC Load Power: 127.134 W (V=13.499 V, I=9.418 A)", "time": "2026-01-06 13:28:21,135"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2026-01-06 13:28:21,136"}
+{"level": "WARNING", "name": "root", "message": "Step 8 status: Running", "time": "2026-01-06 13:28:21,691"}
+{"level": "INFO", "name": "root", "message": "Step 8: DC Load input OFF", "time": "2026-01-06 13:28:21,715"}
+{"level": "INFO", "name": "root", "message": "Step 8 info: DC Load input OFF", "time": "2026-01-06 13:28:21,716"}
+{"level": "INFO", "name": "root", "message": "Step 8 status: Pass", "time": "2026-01-06 13:28:21,717"}
+{"level": "WARNING", "name": "root", "message": "Step 9 status: Running", "time": "2026-01-06 13:28:22,273"}
+{"level": "INFO", "name": "root", "message": "Step 9: DC Load disconnected", "time": "2026-01-06 13:28:22,324"}
+{"level": "INFO", "name": "root", "message": "Step 9 info: DC Load disconnected", "time": "2026-01-06 13:28:22,325"}
+{"level": "INFO", "name": "root", "message": "Step 9 status: Pass", "time": "2026-01-06 13:28:22,326"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:28:22,882"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:28:22,882"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\load_PASS_20260106_132822.html", "time": "2026-01-06 13:28:22,887"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:28:28,047"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:28:29,934"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: load", "time": "2026-01-06 13:28:29,935"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:28:29,937"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:28:29,938"}
+{"level": "INFO", "name": "root", "message": "Sequence started: load", "time": "2026-01-06 13:28:29,938"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:28:29,942"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load connected on COM4", "time": "2026-01-06 13:28:30,080"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connected on COM4", "time": "2026-01-06 13:28:30,081"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:28:30,083"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 8.5", "time": "2026-01-06 13:28:30,637"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:28:30,638"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CC set to 8.5 A", "time": "2026-01-06 13:28:30,690"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CC set to 8.5 A", "time": "2026-01-06 13:28:30,690"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:28:30,691"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:28:31,247"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:28:31,248"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CV set to 13.5 V", "time": "2026-01-06 13:28:31,300"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:28:31,301"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:28:31,303"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:28:31,859"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:28:31,884"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:28:31,884"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:28:31,890"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:28:32,445"}
+{"level": "INFO", "name": "root", "message": "Step 5: Wait: 10.0s (completed)", "time": "2026-01-06 13:28:42,489"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: Wait: 10.0s (completed)", "time": "2026-01-06 13:28:42,490"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:28:42,490"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:28:43,045"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Meas V=13.499 V, I=9.418 A", "time": "2026-01-06 13:28:43,089"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Meas V=13.499 V, I=9.418 A", "time": "2026-01-06 13:28:43,090"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:28:43,091"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2026-01-06 13:28:43,647"}
+{"level": "INFO", "name": "root", "message": "Step 7: DC Load Power: 127.134 W (V=13.499 V, I=9.418 A)", "time": "2026-01-06 13:28:43,691"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: DC Load Power: 127.134 W (V=13.499 V, I=9.418 A)", "time": "2026-01-06 13:28:43,692"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2026-01-06 13:28:43,693"}
+{"level": "WARNING", "name": "root", "message": "Step 8 status: Running", "time": "2026-01-06 13:28:44,249"}
+{"level": "INFO", "name": "root", "message": "Step 8: DC Load input OFF", "time": "2026-01-06 13:28:44,274"}
+{"level": "INFO", "name": "root", "message": "Step 8 info: DC Load input OFF", "time": "2026-01-06 13:28:44,275"}
+{"level": "INFO", "name": "root", "message": "Step 8 status: Pass", "time": "2026-01-06 13:28:44,277"}
+{"level": "WARNING", "name": "root", "message": "Step 9 status: Running", "time": "2026-01-06 13:28:44,832"}
+{"level": "INFO", "name": "root", "message": "Step 9: DC Load disconnected", "time": "2026-01-06 13:28:44,882"}
+{"level": "INFO", "name": "root", "message": "Step 9 info: DC Load disconnected", "time": "2026-01-06 13:28:44,883"}
+{"level": "INFO", "name": "root", "message": "Step 9 status: Pass", "time": "2026-01-06 13:28:44,884"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:28:45,440"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:28:45,440"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\load_PASS_20260106_132845.html", "time": "2026-01-06 13:28:45,444"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:28:53,316"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:28:55,287"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: load", "time": "2026-01-06 13:28:55,289"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:28:55,291"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:28:55,291"}
+{"level": "INFO", "name": "root", "message": "Sequence started: load", "time": "2026-01-06 13:28:55,291"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:28:55,293"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load connected on COM4", "time": "2026-01-06 13:28:55,433"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connected on COM4", "time": "2026-01-06 13:28:55,433"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:28:55,435"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 8.5", "time": "2026-01-06 13:28:55,989"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:28:55,990"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CC set to 8.5 A", "time": "2026-01-06 13:28:56,042"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CC set to 8.5 A", "time": "2026-01-06 13:28:56,042"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:28:56,044"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:28:56,599"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:28:56,600"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CV set to 13.5 V", "time": "2026-01-06 13:28:56,654"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:28:56,655"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:28:56,658"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:28:57,214"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:28:57,239"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:28:57,239"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:28:57,243"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:28:57,801"}
+{"level": "INFO", "name": "root", "message": "Step 5: Wait: 10.0s (completed)", "time": "2026-01-06 13:29:07,849"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: Wait: 10.0s (completed)", "time": "2026-01-06 13:29:07,850"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:29:07,853"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:29:08,408"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Meas V=13.499 V, I=9.418 A", "time": "2026-01-06 13:29:08,451"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Meas V=13.499 V, I=9.418 A", "time": "2026-01-06 13:29:08,451"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:29:08,453"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2026-01-06 13:29:09,009"}
+{"level": "INFO", "name": "root", "message": "Step 7: DC Load Power: 127.120 W (V=13.499 V, I=9.417 A)", "time": "2026-01-06 13:29:09,053"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: DC Load Power: 127.120 W (V=13.499 V, I=9.417 A)", "time": "2026-01-06 13:29:09,054"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2026-01-06 13:29:09,056"}
+{"level": "WARNING", "name": "root", "message": "Step 8 status: Running", "time": "2026-01-06 13:29:09,612"}
+{"level": "INFO", "name": "root", "message": "Step 8: DC Load input OFF", "time": "2026-01-06 13:29:09,636"}
+{"level": "INFO", "name": "root", "message": "Step 8 info: DC Load input OFF", "time": "2026-01-06 13:29:09,637"}
+{"level": "INFO", "name": "root", "message": "Step 8 status: Pass", "time": "2026-01-06 13:29:09,638"}
+{"level": "WARNING", "name": "root", "message": "Step 9 status: Running", "time": "2026-01-06 13:29:10,194"}
+{"level": "INFO", "name": "root", "message": "Step 9: DC Load disconnected", "time": "2026-01-06 13:29:10,244"}
+{"level": "INFO", "name": "root", "message": "Step 9 info: DC Load disconnected", "time": "2026-01-06 13:29:10,245"}
+{"level": "INFO", "name": "root", "message": "Step 9 status: Pass", "time": "2026-01-06 13:29:10,246"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:29:10,803"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:29:10,803"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\load_PASS_20260106_132910.html", "time": "2026-01-06 13:29:10,808"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:30:09,637"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:30:11,360"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: load", "time": "2026-01-06 13:30:21,357"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:30:21,359"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:30:21,360"}
+{"level": "INFO", "name": "root", "message": "Sequence started: load", "time": "2026-01-06 13:30:21,361"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:30:21,373"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load connected on COM4", "time": "2026-01-06 13:30:21,505"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connected on COM4", "time": "2026-01-06 13:30:21,506"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:30:21,507"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:30:22,065"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:30:22,066"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CV set to 13.5 V", "time": "2026-01-06 13:30:22,118"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:30:22,119"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:30:22,121"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 5.0", "time": "2026-01-06 13:30:22,675"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:30:22,677"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CC set to 5.0 A", "time": "2026-01-06 13:30:22,726"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CC set to 5.0 A", "time": "2026-01-06 13:30:22,727"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:30:22,729"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:30:23,286"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:30:23,310"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:30:23,311"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:30:23,312"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:30:23,867"}
+{"level": "INFO", "name": "root", "message": "Step 5: Wait: 10.0s (completed)", "time": "2026-01-06 13:30:33,918"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: Wait: 10.0s (completed)", "time": "2026-01-06 13:30:33,919"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:30:33,920"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:30:34,475"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Meas V=84.849 V, I=5.000 A", "time": "2026-01-06 13:30:34,519"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Meas V=84.849 V, I=5.000 A", "time": "2026-01-06 13:30:34,520"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:30:34,521"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2026-01-06 13:30:35,075"}
+{"level": "INFO", "name": "root", "message": "Step 7: DC Load Power: 424.245 W (V=84.849 V, I=5.000 A)", "time": "2026-01-06 13:30:35,119"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: DC Load Power: 424.245 W (V=84.849 V, I=5.000 A)", "time": "2026-01-06 13:30:35,120"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2026-01-06 13:30:35,121"}
+{"level": "WARNING", "name": "root", "message": "Step 8 status: Running", "time": "2026-01-06 13:30:35,676"}
+{"level": "INFO", "name": "root", "message": "Step 8: DC Load input OFF", "time": "2026-01-06 13:30:35,700"}
+{"level": "INFO", "name": "root", "message": "Step 8 info: DC Load input OFF", "time": "2026-01-06 13:30:35,701"}
+{"level": "INFO", "name": "root", "message": "Step 8 status: Pass", "time": "2026-01-06 13:30:35,702"}
+{"level": "WARNING", "name": "root", "message": "Step 9 status: Running", "time": "2026-01-06 13:30:36,256"}
+{"level": "INFO", "name": "root", "message": "Step 9: DC Load disconnected", "time": "2026-01-06 13:30:36,308"}
+{"level": "INFO", "name": "root", "message": "Step 9 info: DC Load disconnected", "time": "2026-01-06 13:30:36,309"}
+{"level": "INFO", "name": "root", "message": "Step 9 status: Pass", "time": "2026-01-06 13:30:36,310"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:30:36,866"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:30:36,866"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\load_PASS_20260106_133036.html", "time": "2026-01-06 13:30:36,870"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:30:44,650"}
+{"level": "INFO", "name": "root", "message": "Sequence start canceled by user after preflight warnings", "time": "2026-01-06 13:30:46,711"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:30:52,554"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:30:54,441"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: load", "time": "2026-01-06 13:30:54,442"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:30:54,444"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:30:54,445"}
+{"level": "INFO", "name": "root", "message": "Sequence started: load", "time": "2026-01-06 13:30:54,452"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:30:54,455"}
+{"level": "INFO", "name": "root", "message": "Step 1: DC Load connected on COM4", "time": "2026-01-06 13:30:54,597"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: DC Load connected on COM4", "time": "2026-01-06 13:30:54,598"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:30:54,599"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CV 13.5", "time": "2026-01-06 13:30:55,153"}
+{"level": "WARNING", "name": "root", "message": "Step 2 status: Running", "time": "2026-01-06 13:30:55,155"}
+{"level": "INFO", "name": "root", "message": "Step 2: DC Load CV set to 13.5 V", "time": "2026-01-06 13:30:55,207"}
+{"level": "INFO", "name": "root", "message": "Step 2 info: DC Load CV set to 13.5 V", "time": "2026-01-06 13:30:55,208"}
+{"level": "INFO", "name": "root", "message": "Step 2 status: Pass", "time": "2026-01-06 13:30:55,209"}
+{"level": "INFO", "name": "root", "message": "CMD: LOAD CC 5.0", "time": "2026-01-06 13:30:55,764"}
+{"level": "WARNING", "name": "root", "message": "Step 3 status: Running", "time": "2026-01-06 13:30:55,766"}
+{"level": "INFO", "name": "root", "message": "Step 3: DC Load CC set to 5.0 A", "time": "2026-01-06 13:30:55,817"}
+{"level": "INFO", "name": "root", "message": "Step 3 info: DC Load CC set to 5.0 A", "time": "2026-01-06 13:30:55,819"}
+{"level": "INFO", "name": "root", "message": "Step 3 status: Pass", "time": "2026-01-06 13:30:55,820"}
+{"level": "WARNING", "name": "root", "message": "Step 4 status: Running", "time": "2026-01-06 13:30:56,375"}
+{"level": "INFO", "name": "root", "message": "Step 4: DC Load input ON", "time": "2026-01-06 13:30:56,399"}
+{"level": "INFO", "name": "root", "message": "Step 4 info: DC Load input ON", "time": "2026-01-06 13:30:56,400"}
+{"level": "INFO", "name": "root", "message": "Step 4 status: Pass", "time": "2026-01-06 13:30:56,401"}
+{"level": "WARNING", "name": "root", "message": "Step 5 status: Running", "time": "2026-01-06 13:30:56,959"}
+{"level": "INFO", "name": "root", "message": "Step 5: Wait: 10.0s (completed)", "time": "2026-01-06 13:31:06,973"}
+{"level": "INFO", "name": "root", "message": "Step 5 info: Wait: 10.0s (completed)", "time": "2026-01-06 13:31:06,974"}
+{"level": "INFO", "name": "root", "message": "Step 5 status: Pass", "time": "2026-01-06 13:31:06,977"}
+{"level": "WARNING", "name": "root", "message": "Step 6 status: Running", "time": "2026-01-06 13:31:07,537"}
+{"level": "INFO", "name": "root", "message": "Step 6: DC Load Meas V=84.850 V, I=5.000 A", "time": "2026-01-06 13:31:07,580"}
+{"level": "INFO", "name": "root", "message": "Step 6 info: DC Load Meas V=84.850 V, I=5.000 A", "time": "2026-01-06 13:31:07,581"}
+{"level": "INFO", "name": "root", "message": "Step 6 status: Pass", "time": "2026-01-06 13:31:07,587"}
+{"level": "WARNING", "name": "root", "message": "Step 7 status: Running", "time": "2026-01-06 13:31:08,144"}
+{"level": "INFO", "name": "root", "message": "Step 7: DC Load Power: 424.245 W (V=84.849 V, I=5.000 A)", "time": "2026-01-06 13:31:08,188"}
+{"level": "INFO", "name": "root", "message": "Step 7 info: DC Load Power: 424.245 W (V=84.849 V, I=5.000 A)", "time": "2026-01-06 13:31:08,189"}
+{"level": "INFO", "name": "root", "message": "Step 7 status: Pass", "time": "2026-01-06 13:31:08,192"}
+{"level": "WARNING", "name": "root", "message": "Step 8 status: Running", "time": "2026-01-06 13:31:08,748"}
+{"level": "INFO", "name": "root", "message": "Step 8: DC Load input OFF", "time": "2026-01-06 13:31:08,771"}
+{"level": "INFO", "name": "root", "message": "Step 8 info: DC Load input OFF", "time": "2026-01-06 13:31:08,772"}
+{"level": "INFO", "name": "root", "message": "Step 8 status: Pass", "time": "2026-01-06 13:31:08,783"}
+{"level": "WARNING", "name": "root", "message": "Step 9 status: Running", "time": "2026-01-06 13:31:09,336"}
+{"level": "INFO", "name": "root", "message": "Step 9: DC Load disconnected", "time": "2026-01-06 13:31:09,386"}
+{"level": "INFO", "name": "root", "message": "Step 9 info: DC Load disconnected", "time": "2026-01-06 13:31:09,387"}
+{"level": "INFO", "name": "root", "message": "Step 9 status: Pass", "time": "2026-01-06 13:31:09,394"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:31:09,950"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:31:09,951"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\load_PASS_20260106_133109.html", "time": "2026-01-06 13:31:09,956"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:39:17,111"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:39:18,759"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 13:39:19,927"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:39:19,930"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:39:19,930"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 13:39:19,931"}
+{"level": "WARNING", "name": "root", "message": "Step 1: Action returned invalid result shape: False", "time": "2026-01-06 13:39:19,932"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:39:19,933"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:39:19,934"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: Action returned invalid result shape: False", "time": "2026-01-06 13:39:19,940"}
+{"level": "ERROR", "name": "root", "message": "Step 1 status: Fail", "time": "2026-01-06 13:39:19,941"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:39:19,942"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_FAIL_20260106_133919.html", "time": "2026-01-06 13:39:19,953"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 13:40:36,411"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 13:40:36,412"}
+{"level": "INFO", "name": "root", "message": "Profile changed to sim", "time": "2026-01-06 13:40:36,519"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2026-01-06 13:40:37,895"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2026-01-06 13:40:37,898"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:40:40,599"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:40:42,589"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 13:40:44,470"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:40:44,474"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:40:44,474"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 13:40:44,475"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 100.0", "time": "2026-01-06 13:40:44,476"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:40:44,477"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 101.0", "time": "2026-01-06 13:40:44,985"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 102.0", "time": "2026-01-06 13:40:45,488"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 103.0", "time": "2026-01-06 13:40:45,992"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 104.0", "time": "2026-01-06 13:40:46,496"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 105.0", "time": "2026-01-06 13:40:47,000"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 106.0", "time": "2026-01-06 13:40:47,503"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 107.0", "time": "2026-01-06 13:40:48,007"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 108.0", "time": "2026-01-06 13:40:48,511"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 109.0", "time": "2026-01-06 13:40:49,014"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 110.0", "time": "2026-01-06 13:40:49,516"}
+{"level": "INFO", "name": "root", "message": "Ramp completed with 11 points", "time": "2026-01-06 13:40:50,019"}
+{"level": "INFO", "name": "root", "message": "Step 1: Ramp completed (11 points)", "time": "2026-01-06 13:40:50,021"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: Ramp completed (11 points)", "time": "2026-01-06 13:40:50,021"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:40:50,023"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:40:50,579"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:40:50,580"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_PASS_20260106_134050.html", "time": "2026-01-06 13:40:50,583"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 13:45:10,166"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 13:45:10,167"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 13:46:03,278"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 13:46:03,278"}
+{"level": "INFO", "name": "root", "message": "Profile changed to sim", "time": "2026-01-06 13:46:03,379"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2026-01-06 13:46:04,439"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2026-01-06 13:46:04,443"}
+{"level": "INFO", "name": "root", "message": "Trace toggle requested", "time": "2026-01-06 13:46:06,209"}
+{"level": "INFO", "name": "root", "message": "Trace started: Test Results\\trace_20260106_134606", "time": "2026-01-06 13:46:06,213"}
+{"level": "WARNING", "name": "root", "message": "Preflight warnings:\nCAN not connected", "time": "2026-01-06 13:46:08,133"}
+{"level": "INFO", "name": "root", "message": "User acknowledged preflight warnings and chose to proceed", "time": "2026-01-06 13:46:09,769"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 13:46:12,576"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:46:12,579"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:46:12,579"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 13:46:12,580"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 100.0", "time": "2026-01-06 13:46:12,585"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:46:12,590"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 101.0", "time": "2026-01-06 13:46:13,088"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 102.0", "time": "2026-01-06 13:46:13,591"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 103.0", "time": "2026-01-06 13:46:14,093"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 104.0", "time": "2026-01-06 13:46:14,596"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 105.0", "time": "2026-01-06 13:46:15,101"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 106.0", "time": "2026-01-06 13:46:15,605"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 107.0", "time": "2026-01-06 13:46:16,108"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 108.0", "time": "2026-01-06 13:46:16,610"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 109.0", "time": "2026-01-06 13:46:17,112"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 110.0", "time": "2026-01-06 13:46:17,614"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 111.0", "time": "2026-01-06 13:46:18,117"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 112.0", "time": "2026-01-06 13:46:18,621"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 113.0", "time": "2026-01-06 13:46:19,125"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 114.0", "time": "2026-01-06 13:46:19,629"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 115.0", "time": "2026-01-06 13:46:20,132"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 116.0", "time": "2026-01-06 13:46:20,636"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 117.0", "time": "2026-01-06 13:46:21,139"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 118.0", "time": "2026-01-06 13:46:21,642"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 119.0", "time": "2026-01-06 13:46:22,145"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 120.0", "time": "2026-01-06 13:46:22,649"}
+{"level": "INFO", "name": "root", "message": "Ramp completed with 21 points", "time": "2026-01-06 13:46:23,154"}
+{"level": "INFO", "name": "root", "message": "Step 1: Ramp completed (21 points)", "time": "2026-01-06 13:46:23,156"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: Ramp completed (21 points)", "time": "2026-01-06 13:46:23,157"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:46:23,159"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:46:23,714"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:46:23,714"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_PASS_20260106_134623.html", "time": "2026-01-06 13:46:23,719"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 13:53:26,345"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 13:53:26,347"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 13:53:34,352"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 13:53:34,353"}
+{"level": "INFO", "name": "root", "message": "Profile changed to sim", "time": "2026-01-06 13:53:34,468"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2026-01-06 13:53:36,774"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2026-01-06 13:53:36,775"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2026-01-06 13:53:46,087"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2026-01-06 13:53:46,088"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2026-01-06 13:53:46,094"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 13:54:10,006"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 13:54:10,008"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 13:54:10,008"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 13:54:10,009"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 100.0", "time": "2026-01-06 13:54:10,010"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 13:54:10,017"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 101.0", "time": "2026-01-06 13:54:10,513"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 102.0", "time": "2026-01-06 13:54:11,016"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 103.0", "time": "2026-01-06 13:54:11,519"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 104.0", "time": "2026-01-06 13:54:12,022"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 105.0", "time": "2026-01-06 13:54:12,525"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 106.0", "time": "2026-01-06 13:54:13,028"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 107.0", "time": "2026-01-06 13:54:13,531"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 108.0", "time": "2026-01-06 13:54:14,035"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 109.0", "time": "2026-01-06 13:54:14,538"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 110.0", "time": "2026-01-06 13:54:15,041"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 111.0", "time": "2026-01-06 13:54:15,547"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 112.0", "time": "2026-01-06 13:54:16,052"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 113.0", "time": "2026-01-06 13:54:16,555"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 114.0", "time": "2026-01-06 13:54:17,059"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 115.0", "time": "2026-01-06 13:54:17,563"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 116.0", "time": "2026-01-06 13:54:18,068"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 117.0", "time": "2026-01-06 13:54:18,571"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 118.0", "time": "2026-01-06 13:54:19,075"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 119.0", "time": "2026-01-06 13:54:19,578"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 120.0", "time": "2026-01-06 13:54:20,081"}
+{"level": "INFO", "name": "root", "message": "Ramp completed with 21 points", "time": "2026-01-06 13:54:20,586"}
+{"level": "INFO", "name": "root", "message": "Step 1: Ramp completed (21 points)", "time": "2026-01-06 13:54:20,587"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: Ramp completed (21 points)", "time": "2026-01-06 13:54:20,588"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 13:54:20,590"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:54:21,144"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 13:54:21,156"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_PASS_20260106_135421.html", "time": "2026-01-06 13:54:21,160"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 14:45:52,971"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 14:45:53,047"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 14:46:28,379"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 14:46:28,382"}
+{"level": "INFO", "name": "root", "message": "Profile changed to sim", "time": "2026-01-06 14:46:28,454"}
+{"level": "INFO", "name": "root", "message": "Initialize instruments requested", "time": "2026-01-06 14:46:29,948"}
+{"level": "INFO", "name": "root", "message": "Instruments initialized: Bi-Directional Power Supply: Connected (Simulation)\nOscilloscope: Connected (Simulation)\nGrid Emulator: Connected (Simulation)", "time": "2026-01-06 14:46:29,950"}
+{"level": "INFO", "name": "root", "message": "Connect CAN requested", "time": "2026-01-06 14:46:41,539"}
+{"level": "INFO", "name": "root", "message": "CAN connect (sim) pcan:PCAN_USBBUS1", "time": "2026-01-06 14:46:41,541"}
+{"level": "INFO", "name": "root", "message": "CAN connected: [CAN SIMULATION] Connected (Simulation Mode)", "time": "2026-01-06 14:46:41,554"}
+{"level": "INFO", "name": "root", "message": "Sequence start requested: Unsaved Test", "time": "2026-01-06 14:46:46,707"}
+{"level": "INFO", "name": "root", "message": "Sequence started", "time": "2026-01-06 14:46:46,709"}
+{"level": "INFO", "name": "root", "message": "Sequence thread running", "time": "2026-01-06 14:46:46,710"}
+{"level": "INFO", "name": "root", "message": "Sequence started: Unsaved Test", "time": "2026-01-06 14:46:46,711"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 100.0", "time": "2026-01-06 14:46:46,711"}
+{"level": "WARNING", "name": "root", "message": "Step 1 status: Running", "time": "2026-01-06 14:46:46,712"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 101.0", "time": "2026-01-06 14:46:47,221"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 102.0", "time": "2026-01-06 14:46:47,731"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 103.0", "time": "2026-01-06 14:46:48,237"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 104.0", "time": "2026-01-06 14:46:48,749"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 105.0", "time": "2026-01-06 14:46:49,252"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 106.0", "time": "2026-01-06 14:46:49,761"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 107.0", "time": "2026-01-06 14:46:50,265"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 108.0", "time": "2026-01-06 14:46:50,769"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 109.0", "time": "2026-01-06 14:46:51,273"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 110.0", "time": "2026-01-06 14:46:51,776"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 111.0", "time": "2026-01-06 14:46:52,280"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 112.0", "time": "2026-01-06 14:46:52,784"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 113.0", "time": "2026-01-06 14:46:53,288"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 114.0", "time": "2026-01-06 14:46:53,789"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 115.0", "time": "2026-01-06 14:46:54,293"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 116.0", "time": "2026-01-06 14:46:54,797"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 117.0", "time": "2026-01-06 14:46:55,303"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 118.0", "time": "2026-01-06 14:46:55,812"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 119.0", "time": "2026-01-06 14:46:56,317"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 120.0", "time": "2026-01-06 14:46:56,821"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 121.0", "time": "2026-01-06 14:46:57,326"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 122.0", "time": "2026-01-06 14:46:57,829"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 123.0", "time": "2026-01-06 14:46:58,331"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 124.0", "time": "2026-01-06 14:46:58,833"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 125.0", "time": "2026-01-06 14:46:59,336"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 126.0", "time": "2026-01-06 14:46:59,839"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 127.0", "time": "2026-01-06 14:47:00,342"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 128.0", "time": "2026-01-06 14:47:00,844"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 129.0", "time": "2026-01-06 14:47:01,349"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 130.0", "time": "2026-01-06 14:47:01,855"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 131.0", "time": "2026-01-06 14:47:02,358"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 132.0", "time": "2026-01-06 14:47:02,864"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 133.0", "time": "2026-01-06 14:47:03,375"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 134.0", "time": "2026-01-06 14:47:03,879"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 135.0", "time": "2026-01-06 14:47:04,382"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 136.0", "time": "2026-01-06 14:47:04,887"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 137.0", "time": "2026-01-06 14:47:05,389"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 138.0", "time": "2026-01-06 14:47:05,893"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 139.0", "time": "2026-01-06 14:47:06,398"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 140.0", "time": "2026-01-06 14:47:06,905"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 141.0", "time": "2026-01-06 14:47:07,410"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 142.0", "time": "2026-01-06 14:47:07,914"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 143.0", "time": "2026-01-06 14:47:08,417"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 144.0", "time": "2026-01-06 14:47:08,922"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 145.0", "time": "2026-01-06 14:47:09,426"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 146.0", "time": "2026-01-06 14:47:09,929"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 147.0", "time": "2026-01-06 14:47:10,432"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 148.0", "time": "2026-01-06 14:47:10,940"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 149.0", "time": "2026-01-06 14:47:11,446"}
+{"level": "INFO", "name": "root", "message": "CMD: GS VOLT 150.0", "time": "2026-01-06 14:47:11,950"}
+{"level": "INFO", "name": "root", "message": "Ramp completed with 51 points", "time": "2026-01-06 14:47:12,467"}
+{"level": "INFO", "name": "root", "message": "Step 1: Ramp completed (51 points)", "time": "2026-01-06 14:47:12,469"}
+{"level": "INFO", "name": "root", "message": "Step 1 info: Ramp completed (51 points)", "time": "2026-01-06 14:47:12,469"}
+{"level": "INFO", "name": "root", "message": "Step 1 status: Pass", "time": "2026-01-06 14:47:12,474"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 14:47:13,031"}
+{"level": "INFO", "name": "root", "message": "Sequence finished", "time": "2026-01-06 14:47:13,034"}
+{"level": "INFO", "name": "root", "message": "Sequence report saved: Test Results\\Unsaved_Test_PASS_20260106_144713.html", "time": "2026-01-06 14:47:13,037"}
+{"level": "INFO", "name": "root", "message": "Sequence stop requested", "time": "2026-01-06 15:00:28,095"}
+{"level": "INFO", "name": "root", "message": "CAN disconnected", "time": "2026-01-06 15:00:28,164"}
