@@ -129,6 +129,9 @@ class RampDialog(QDialog):
         self.check_measure_ps = QPushButton("Measure PS")
         self.check_measure_ps.setCheckable(True)
         self.check_measure_ps.setChecked(bool(initial.get("measure", {}).get("ps", True)) if initial else True)
+        self.check_measure_load = QPushButton("Measure Load")
+        self.check_measure_load.setCheckable(True)
+        self.check_measure_load.setChecked(bool(initial.get("measure", {}).get("load", True)) if initial else True)
 
         form.addRow("Start", self.spin_start)
         form.addRow("Step", self.spin_step)
@@ -145,7 +148,7 @@ class RampDialog(QDialog):
         self.buttons.accepted.connect(self.accept)
         self.buttons.rejected.connect(self.reject)
         self.layout.addWidget(self.buttons)
-        hint = QLabel("JSON: {target:{type,msg,signal}, start, step, end, dwell, tolerance, retries, verify, measure:{gs,ps}}")
+        hint = QLabel("JSON: {target:{type,msg,signal}, start, step, end, dwell, tolerance, retries, verify, measure:{gs,ps,load}}")
         hint.setStyleSheet("color: #888; font-size: 10px;")
         self.layout.addWidget(hint)
 
@@ -157,6 +160,7 @@ class RampDialog(QDialog):
         row = QHBoxLayout()
         row.addWidget(self.check_measure_gs)
         row.addWidget(self.check_measure_ps)
+        row.addWidget(self.check_measure_load)
         w = QWidget()
         w.setLayout(row)
         return w
@@ -182,7 +186,8 @@ class RampDialog(QDialog):
             'verify': self.check_verify.isChecked(),
             'measure': {
                 'gs': self.check_measure_gs.isChecked(),
-                'ps': self.check_measure_ps.isChecked()
+                'ps': self.check_measure_ps.isChecked(),
+                'load': self.check_measure_load.isChecked()
             }
         }
 

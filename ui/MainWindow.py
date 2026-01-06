@@ -1140,20 +1140,28 @@ class MainWindow(QMainWindow):
                 "<table><thead><tr>"
                 "<th>Set Value</th><th>Status</th><th>Message</th>"
                 "<th>GS V</th><th>GS I</th><th>GS P</th><th>PF</th><th>ITHD</th><th>VTHD</th><th>Freq</th>"
-                "<th>PS V</th><th>PS I</th><th>PS P</th><th>Efficiency (%)</th><th>Errors</th>"
+                "<th>PS V</th><th>PS I</th><th>PS P</th>"
+                "<th>Load V</th><th>Load I</th><th>Load P</th>"
+                "<th>Efficiency (%)</th><th>Errors</th>"
                 "</tr></thead><tbody>"
             )
             body_rows = []
             for entry in logs:
                 rd = entry.get("readings", {}) or {}
                 errs = []
-                for k in ("gs_error", "ps_error"):
+                for k in ("gs_error", "ps_error", "load_error"):
                     if rd.get(k):
                         errs.append(rd[k])
                 try:
                     gs_p = rd.get("gs_power")
                     ps_p = rd.get("ps_power")
-                    eff = (ps_p / gs_p * 100.0) if gs_p not in (None, 0) and ps_p is not None else None
+                    load_p = rd.get("load_power")
+                    total_out = 0.0
+                    if ps_p is not None:
+                        total_out += ps_p
+                    if load_p is not None:
+                        total_out += load_p
+                    eff = (total_out / gs_p * 100.0) if gs_p not in (None, 0) and total_out is not None else None
                 except Exception:
                     eff = None
                 body_rows.append(
@@ -1171,6 +1179,9 @@ class MainWindow(QMainWindow):
                     f"<td>{fmt(rd.get('ps_voltage'))}</td>"
                     f"<td>{fmt(rd.get('ps_current'))}</td>"
                     f"<td>{fmt(rd.get('ps_power'))}</td>"
+                    f"<td>{fmt(rd.get('load_voltage'))}</td>"
+                    f"<td>{fmt(rd.get('load_current'))}</td>"
+                    f"<td>{fmt(rd.get('load_power'))}</td>"
                     f"<td>{fmt(eff)}</td>"
                     f"<td>{' | '.join(errs) if errs else ''}</td>"
                     "</tr>"

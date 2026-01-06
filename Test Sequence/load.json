@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "author": "Aakash",
+    "description": "",
+    "last_modified": "2026-01-06T13:30:21.355292",
+    "name": "load",
+    "tags": [],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "LOAD / Connect",
+      "params": ""
+    },
+    {
+      "action": "LOAD / Set CV (V)",
+      "params": "13.5"
+    },
+    {
+      "action": "LOAD / Set CC (A)",
+      "params": "5.0"
+    },
+    {
+      "action": "LOAD / Input ON",
+      "params": ""
+    },
+    {
+      "action": "Wait",
+      "params": "10"
+    },
+    {
+      "action": "LOAD / Measure VI",
+      "params": ""
+    },
+    {
+      "action": "LOAD / Measure Power",
+      "params": ""
+    },
+    {
+      "action": "LOAD / Input OFF",
+      "params": ""
+    },
+    {
+      "action": "LOAD / Disconnect",
+      "params": ""
+    }
+  ]
+}
