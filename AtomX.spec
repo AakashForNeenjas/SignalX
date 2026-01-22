@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('DBC', 'DBC'), ('CAN Configuration', 'CAN Configuration'), ('Test Sequence', 'Test Sequence'), ('docs', 'docs'), ('ui\\\\app_logo.ico', 'ui')],
+    datas=[('DBC', 'DBC'), ('CAN Configuration', 'CAN Configuration'), ('Test Sequence', 'Test Sequence'), ('docs', 'docs'), ('config_profiles', 'config_profiles'), ('ui\\\\app_logo.ico', 'ui')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

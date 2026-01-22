@@ -31,7 +31,7 @@ INSTRUMENT_ADDRESSES = {
 # Optional GitHub Releases updater (public repo, no API key required)
 # Example: UPDATE_GITHUB_REPO = "AakashForNeenjas/SignalX"
 # Example: UPDATE_GITHUB_ASSET = "AtomX.zip"
-UPDATE_GITHUB_REPO = ""
+UPDATE_GITHUB_REPO = "AakashForNeenjas/SignalX"
 UPDATE_GITHUB_ASSET = "AtomX.zip"
 # Set True if you want to allow prerelease builds.
 UPDATE_GITHUB_INCLUDE_PRERELEASE = False
