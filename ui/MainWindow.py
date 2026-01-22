@@ -6,12 +6,13 @@ from datetime import datetime
 from PyQt6.QtWidgets import (
     QMainWindow, QTabWidget, QWidget, QVBoxLayout, QLabel, QHBoxLayout,
     QComboBox, QPushButton, QTextEdit, QMessageBox, QScrollArea, QFormLayout,
-    QLineEdit, QSpinBox, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem
+    QLineEdit, QSpinBox, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem,
+    QDialog, QDialogButtonBox, QProgressDialog
 )
 from config_loader import load_profiles, get_profile
 import config
 from core import updater
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from PyQt6.QtGui import QTextCursor
 from ui.resources import create_app_icon
 from ui.widgets import (
@@ -198,18 +199,50 @@ class MainWindow(QMainWindow):
             latest = result.get("latest_version", "n/a")
             manifest = result.get("manifest", {})
             notes = manifest.get("notes", "A newer version is available.")
-            reply = QMessageBox.question(
-                self,
-                "Update Available",
-                f"Current version: {self.current_version}\nLatest version: {latest}\n\n{notes}\n\nDownload now?",
-                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
-            )
-            if reply != QMessageBox.StandardButton.Yes:
+            if not self._show_update_dialog(latest, notes):
                 return
-            dl = updater.download_update(manifest, dest_dir="updates")
+            self._start_update_download(manifest)
+            return
         else:
             return
 
+    def _start_update_download(self, manifest):
+        self.update_progress_dialog = QProgressDialog("Downloading update...", "Cancel", 0, 100, self)
+        self.update_progress_dialog.setWindowTitle("Downloading Update")
+        self.update_progress_dialog.setWindowModality(Qt.WindowModality.ApplicationModal)
+        self.update_progress_dialog.setMinimumWidth(420)
+        self.update_progress_dialog.setAutoClose(False)
+        self.update_progress_dialog.setAutoReset(False)
+        self.update_progress_dialog.show()
+
+        self.update_worker = _UpdateDownloadWorker(manifest)
+        self.update_worker.progress.connect(self._on_update_progress)
+        self.update_worker.finished.connect(self._on_update_download_finished)
+        self.update_progress_dialog.canceled.connect(self.update_worker.cancel)
+        self.update_worker.start()
+
+    def _on_update_progress(self, downloaded, total):
+        if not hasattr(self, "update_progress_dialog"):
+            return
+        if total > 0:
+            percent = int((downloaded / total) * 100)
+            self.update_progress_dialog.setRange(0, 100)
+            self.update_progress_dialog.setValue(percent)
+            self.update_progress_dialog.setLabelText(
+                f"Downloading update... {downloaded / (1024 * 1024):.1f} / {total / (1024 * 1024):.1f} MB"
+            )
+        else:
+            self.update_progress_dialog.setRange(0, 0)
+            self.update_progress_dialog.setLabelText(
+                f"Downloading update... {downloaded / (1024 * 1024):.1f} MB"
+            )
+
+    def _on_update_download_finished(self, dl):
+        if hasattr(self, "update_progress_dialog"):
+            self.update_progress_dialog.close()
+        if dl.get("status") == "cancelled":
+            QMessageBox.information(self, "Update Download", "Download cancelled.")
+            return
         if dl.get("status") == "downloaded":
             path = dl.get("path")
             reply = QMessageBox.question(
@@ -233,6 +266,37 @@ class MainWindow(QMainWindow):
                 )
         else:
             QMessageBox.warning(self, "Update Download", f"Download failed: {dl.get('error')}")
+
+    def _show_update_dialog(self, latest_version, notes_text):
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Update Available")
+        dialog.setModal(True)
+        dialog.setSizeGripEnabled(True)
+        dialog.setMinimumSize(520, 360)
+        dialog.resize(720, 520)
+
+        layout = QVBoxLayout(dialog)
+        header = QLabel(
+            f"Current version: {self.current_version}\nLatest version: {latest_version}\n\nDownload now?"
+        )
+        header.setWordWrap(True)
+        layout.addWidget(header)
+
+        notes = QTextEdit()
+        notes.setReadOnly(True)
+        notes.setPlainText(str(notes_text or "Release notes unavailable."))
+        layout.addWidget(notes, 1)
+
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Yes | QDialogButtonBox.StandardButton.No
+        )
+        buttons.button(QDialogButtonBox.StandardButton.Yes).setText("Download")
+        buttons.button(QDialogButtonBox.StandardButton.No).setText("Cancel")
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+        layout.addWidget(buttons)
+
+        return dialog.exec() == QDialog.DialogCode.Accepted
 
     def setup_logconv_tab(self):
         """Initialize the Log Converter tab UI."""
@@ -1969,3 +2033,24 @@ tr:nth-child(odd) {{ background: #0c141f; }}
             }
         """
         self.setStyleSheet(dark_stylesheet)
+
+
+class _UpdateDownloadWorker(QThread):
+    progress = pyqtSignal(int, int)
+    finished = pyqtSignal(dict)
+
+    def __init__(self, manifest, parent=None):
+        super().__init__(parent)
+        self.manifest = manifest
+        self._cancel = False
+
+    def cancel(self):
+        self._cancel = True
+
+    def _progress_cb(self, downloaded, total):
+        self.progress.emit(downloaded, total)
+        return not self._cancel
+
+    def run(self):
+        result = updater.download_update(self.manifest, dest_dir="updates", progress_cb=self._progress_cb)
+        self.finished.emit(result)

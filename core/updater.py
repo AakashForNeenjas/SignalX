@@ -6,7 +6,7 @@ import sys
 import tempfile
 import zipfile
 from pathlib import Path
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Callable
 
 from packaging import version
 
@@ -45,25 +45,40 @@ def _verify_sha256(path: str, expected: Optional[str]) -> bool:
             h.update(chunk)
     return h.hexdigest().lower() == expected.lower()
 
+class DownloadCancelled(Exception):
+    def __init__(self, path: str):
+        super().__init__("Download cancelled")
+        self.path = path
 
-def _download(url: str, dest_dir: str) -> str:
+
+def _download(url: str, dest_dir: str, progress_cb: Optional[Callable[[int, int], bool]] = None) -> str:
     os.makedirs(dest_dir, exist_ok=True)
     fd, tmp_path = tempfile.mkstemp(dir=dest_dir, prefix="update_", suffix=os.path.basename(url))
     os.close(fd)
     if requests:
         with requests.get(url, stream=True, timeout=30) as r:
             r.raise_for_status()
+            total = int(r.headers.get("Content-Length", "0") or 0)
+            downloaded = 0
             with open(tmp_path, "wb") as f:
                 for chunk in r.iter_content(chunk_size=8192):
                     if chunk:
                         f.write(chunk)
+                        downloaded += len(chunk)
+                        if progress_cb and progress_cb(downloaded, total) is False:
+                            raise DownloadCancelled(tmp_path)
     else:
         with urllib.request.urlopen(url, timeout=30) as resp, open(tmp_path, "wb") as f:
+            total = int(getattr(resp, "length", 0) or 0)
+            downloaded = 0
             while True:
                 chunk = resp.read(8192)
                 if not chunk:
                     break
                 f.write(chunk)
+                downloaded += len(chunk)
+                if progress_cb and progress_cb(downloaded, total) is False:
+                    raise DownloadCancelled(tmp_path)
     return tmp_path
 
 
@@ -134,7 +149,11 @@ def check_for_update(repo: str, asset_name: str, current_version: str, include_p
         return {"status": "error", "error": str(e)}
 
 
-def download_update(manifest: Dict[str, Any], dest_dir: str = "updates") -> Dict[str, Any]:
+def download_update(
+    manifest: Dict[str, Any],
+    dest_dir: str = "updates",
+    progress_cb: Optional[Callable[[int, int], bool]] = None,
+) -> Dict[str, Any]:
     """
     Download the artifact described in manifest; verify sha256 if provided.
     Manifest keys expected: url (required), sha256 (optional).
@@ -144,10 +163,17 @@ def download_update(manifest: Dict[str, Any], dest_dir: str = "updates") -> Dict
     if not url:
         return {"status": "error", "error": "Manifest missing 'url'"}
     try:
-        path = _download(url, dest_dir)
+        path = _download(url, dest_dir, progress_cb=progress_cb)
         if not _verify_sha256(path, manifest.get("sha256")):
             return {"status": "error", "error": "SHA256 verification failed"}
         return {"status": "downloaded", "path": path}
+    except DownloadCancelled as e:
+        try:
+            if os.path.exists(e.path):
+                os.remove(e.path)
+        except Exception:
+            pass
+        return {"status": "cancelled", "error": "Download cancelled"}
     except Exception as e:
         return {"status": "error", "error": str(e)}
 
