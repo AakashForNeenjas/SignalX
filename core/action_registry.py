@@ -19,6 +19,7 @@ INSTRUMENT_ACTIONS: List[ActionDef] = [
     # Grid Simulator (GS)
     ActionDef("GS / Check Error", "GS", description="Read protection/fault status"),
     ActionDef("GS / Clear Protection", "GS", description="Clear any active protection"),
+    ActionDef("GS / Clear Errors", "GS", description="Clear instrument errors"),
     ActionDef("GS / Get IDN", "GS", description="Query instrument ID"),
     ActionDef("GS / Measure Current AC", "GS", description="Measure AC current"),
     ActionDef("GS / Measure Current DC", "GS", description="Measure DC current"),
@@ -93,6 +94,10 @@ INSTRUMENT_ACTIONS: List[ActionDef] = [
     ActionDef("LOAD / Disconnect", "LOAD", description="Disconnect DC load"),
     ActionDef("LOAD / Input ON", "LOAD", description="Enable load input"),
     ActionDef("LOAD / Input OFF", "LOAD", description="Disable load input"),
+    ActionDef("LOAD / Short Circuit ON", "LOAD", description="Enter short-circuit mode"),
+    ActionDef("LOAD / Short Circuit OFF", "LOAD", description="Exit short-circuit mode"),
+    ActionDef("LOAD / Short Circuit Pulse", "LOAD", param_type="float", description="Short-circuit pulse duration (s)"),
+    ActionDef("LOAD / Short Circuit Cycle", "LOAD", param_type="str", description="Cyclic short-circuit sequence (JSON params)"),
     ActionDef("LOAD / Set CC (A)", "LOAD", param_type="float", description="Set constant current (A)"),
     ActionDef("LOAD / Set CV (V)", "LOAD", param_type="float", description="Set constant voltage (V)"),
     ActionDef("LOAD / Set CP (W)", "LOAD", param_type="float", description="Set constant power (W)"),
@@ -102,6 +107,7 @@ INSTRUMENT_ACTIONS: List[ActionDef] = [
 
     # Generic ramp (cross-domain)
     ActionDef("RAMP / Ramp Set & Measure", "RAMP", param_type="str", description="Ramp target (CAN/GS/PS) and measure GS+PS per step (JSON params)"),
+    ActionDef("RAMP / Line and Load Regulation", "RAMP", param_type="str", description="Nested GS/PS/DL sweep with measurements (JSON params)"),
     # Instrument lifecycle
     ActionDef("INSTR / Initialize Instruments", "INSTR", description="Initialize all instruments"),
     ActionDef("INSTR / INIT GS", "INSTR", description="Init grid simulator only"),
@@ -115,4 +121,32 @@ INSTRUMENT_ACTIONS: List[ActionDef] = [
 
 # Convenience lookup: name -> ActionDef
 ACTION_LOOKUP = {a.name: a for a in INSTRUMENT_ACTIONS}
+
+# CAN actions used in the UI/Sequencer (kept centralized for catalog generation)
+CAN_ACTIONS = [
+    "CAN / Connect",
+    "CAN / Disconnect",
+    "CAN / Start Cyclic CAN",
+    "CAN / Stop Cyclic CAN",
+    "CAN / Start Trace",
+    "CAN / Stop Trace",
+    "CAN / Send Message",
+    "CAN / Start Cyclic By Name",
+    "CAN / Stop Cyclic By Name",
+    "CAN / Check Message",
+    "CAN / Listen For Message",
+    "CAN / Read Signal Value",
+    "CAN / Check Signal (Tolerance)",
+    "CAN / Conditional Jump",
+    "CAN / Wait For Signal Change",
+    "CAN / Monitor Signal Range",
+    "CAN / Compare Two Signals",
+    "CAN / Set Signal and Verify",
+    "CAN / Set Signal Value",
+]
+
+# Utility actions used in sequence builder
+UTILITY_ACTIONS = ["Wait"]
+
+from core.action_schemas import ACTION_PARAM_SCHEMAS
 

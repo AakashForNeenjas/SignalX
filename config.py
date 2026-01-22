@@ -28,9 +28,13 @@ INSTRUMENT_ADDRESSES = {
     'DC Load': 'COM3'
 }
 
-# Optional update manifest location (JSON with version/url/sha256)
-# Example: UPDATE_MANIFEST_URL = "https://example.com/atomx/latest.json"
-UPDATE_MANIFEST_URL = ""
+# Optional GitHub Releases updater (public repo, no API key required)
+# Example: UPDATE_GITHUB_REPO = "AakashForNeenjas/SignalX"
+# Example: UPDATE_GITHUB_ASSET = "AtomX.zip"
+UPDATE_GITHUB_REPO = ""
+UPDATE_GITHUB_ASSET = "AtomX.zip"
+# Set True if you want to allow prerelease builds.
+UPDATE_GITHUB_INCLUDE_PRERELEASE = False
 
 # Standards (JSON) file shown in the Standards tab
 STANDARDS_JSON = r"docs/Charger_Standard.json"

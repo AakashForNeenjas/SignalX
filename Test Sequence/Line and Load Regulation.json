@@ -1,36 +1,19 @@
 {
   "meta": {
     "author": "Aakash",
-    "description": "Line and Load Regulation",
-    "last_modified": "2025-12-10T17:43:46.550016",
+    "description": "",
+    "last_modified": "2026-01-08T22:01:19.723067",
     "name": "Line and Load Regulation",
-    "tags": [
-      "Line",
-      "Load",
-      "OBC",
-      "HPDC"
-    ],
+    "tags": [],
     "version": 1
   },
   "steps": [
     {
-      "action": "CAN / Connect",
-      "params": ""
+      "action": "GS / Set Voltage AC",
+      "params": "200.0"
     },
     {
-      "action": "CAN / Start Trace",
-      "params": ""
-    },
-    {
-      "action": "CAN / Start Cyclic CAN",
-      "params": ""
-    },
-    {
-      "action": "PS / HV: Battery Set Discharge (V,I)",
-      "params": "{\"voltage\": 84.0, \"current\": 30.0}"
-    },
-    {
-      "action": "PS / HV: Output ON",
+      "action": "GS / Power: ON",
       "params": ""
     },
     {
@@ -38,108 +21,16 @@
       "params": "10"
     },
     {
-      "action": "PS / HV: Measure Voltage, Current, Power",
-      "params": "0"
+      "action": "LOAD / Set CC (A)",
+      "params": "0.0"
     },
     {
-      "action": "GS / Set Voltage AC",
-      "params": "103"
-    },
-    {
-      "action": "GS / Check Error",
+      "action": "LOAD / Input ON",
       "params": ""
     },
     {
-      "action": "GS / Power: ON",
-      "params": ""
-    },
-    {
-      "action": "CAN / Set Signal Value",
-      "params": "{\"message_id\": \"0x12C\", \"signal_name\": \"Chrg_Curr_limit\", \"target_value\": 30.0, \"tolerance\": 0.0, \"verify_timeout\": 2.0}"
-    },
-    {
-      "action": "Wait",
-      "params": "5"
-    },
-    {
-      "action": "GS / Measure Current AC",
-      "params": ""
-    },
-    {
-      "action": "GS / Measure Voltage AC",
-      "params": ""
-    },
-    {
-      "action": "GS / Measure Power Real",
-      "params": ""
-    },
-    {
-      "action": "GS / Measure THD Current",
-      "params": ""
-    },
-    {
-      "action": "GS / Measure THD Voltage",
-      "params": ""
-    },
-    {
-      "action": "GS / Measure Power Factor",
-      "params": ""
-    },
-    {
-      "action": "PS / HV: Measure Voltage, Current, Power",
-      "params": "0"
-    },
-    {
-      "action": "CAN / Set Signal Value",
-      "params": "{\"message_id\": \"0x12C\", \"signal_name\": \"Chrg_Curr_limit\", \"target_value\": 8.0, \"tolerance\": 0.0, \"verify_timeout\": 2.0}"
-    },
-    {
-      "action": "Wait",
-      "params": "5"
-    },
-    {
-      "action": "PS / HV: Measure Voltage, Current, Power",
-      "params": "0"
-    },
-    {
-      "action": "CAN / Set Signal Value",
-      "params": "{\"message_id\": \"0x12C\", \"signal_name\": \"Chrg_Curr_limit\", \"target_value\": 7.0, \"tolerance\": 0.0, \"verify_timeout\": 2.0}"
-    },
-    {
-      "action": "Wait",
-      "params": "5"
-    },
-    {
-      "action": "PS / HV: Measure Voltage, Current, Power",
-      "params": "0"
-    },
-    {
-      "action": "CAN / Set Signal Value",
-      "params": "{\"message_id\": \"0x12C\", \"signal_name\": \"Chrg_Curr_limit\", \"target_value\": 6.0, \"tolerance\": 0.0, \"verify_timeout\": 2.0}"
-    },
-    {
-      "action": "Wait",
-      "params": "5"
-    },
-    {
-      "action": "PS / HV: Measure Voltage, Current, Power",
-      "params": "0"
-    },
-    {
-      "action": "GS / Power: OFF",
-      "params": ""
-    },
-    {
-      "action": "PS / HV: Output OFF",
-      "params": ""
-    },
-    {
-      "action": "CAN / Stop Trace",
-      "params": ""
-    },
-    {
-      "action": "CAN / Stop Cyclic CAN",
-      "params": ""
+      "action": "RAMP / Line and Load Regulation",
+      "params": "{\"gs\": {\"start\": 200.0, \"step\": 1.0, \"end\": 205.0, \"dwell\": 1.0, \"tolerance\": 0.5}, \"ps\": {\"start\": 90.0, \"step\": 1.0, \"end\": 93.0, \"dwell\": 1.0, \"tolerance\": 0.5}, \"dl\": {\"start\": 0.0, \"step\": 1.0, \"end\": 5.0, \"dwell\": 1.0, \"tolerance\": 0.1}, \"verify\": {\"gs\": true, \"ps\": true, \"dl\": true}, \"retries\": 2, \"dl_reset\": true, \"abort_on_fail\": true}"
     }
   ]
 }

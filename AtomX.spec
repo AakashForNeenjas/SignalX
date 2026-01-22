@@ -5,7 +5,7 @@ a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('DBC', 'DBC'), ('CAN Configuration', 'CAN Configuration'), ('Test Sequence', 'Test Sequence')],
+    datas=[('DBC', 'DBC'), ('CAN Configuration', 'CAN Configuration'), ('Test Sequence', 'Test Sequence'), ('docs', 'docs'), ('ui\\\\app_logo.ico', 'ui')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -32,6 +32,7 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['ui\\app_logo.ico'],
 )
 coll = COLLECT(
     exe,

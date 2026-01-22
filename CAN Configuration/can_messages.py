@@ -61,7 +61,7 @@ CYCLIC_CAN_MESSAGES = {
     'BMS_PARAMETER_1': {
         'signals': {
             'BMS_Mode': 2,
-            'BMS_Regen_Inhibit': 1,
+            'BMS_Regen_Inhibit': 0,
             'DisChrg_Contactor_state': 1,
             'Chrg_Contactor_state': 1,
             'PreChrg_Contactor_state': 0,
@@ -89,7 +89,7 @@ CYCLIC_CAN_MESSAGES = {
     # Battery Limits Message
     'BATTERY_LIMITS': {
         'signals': {
-            'Chrg_Curr_limit': 27,
+            'Chrg_Curr_limit': 30,
             'DisChrg_Curr_limit': -30,
             'Regen_Curr_Limit': 0,
             'Time_to_Chrg_Hrs': 0,  # Added required signal
@@ -103,7 +103,7 @@ CYCLIC_CAN_MESSAGES = {
         'signals': {
             'Chrg_Vlt_limit': 120,
             'Chrgr_Mode_Request': 1,
-            'Battery_Curr': 0,
+            'Battery_Curr': -300,
             'Battery_Pack_SoC': 0,  # Added required signal
             'Time_to_Chrg_Hrs': 0,  # Added required signal
             'Time_to_Chrg_Mins': 0

@@ -13,6 +13,16 @@ from PyQt6.QtCore import QPropertyAnimation, QEasingCurve, QPoint, QRect
 
 def main():
     logger, log_path = setup_logging()
+    try:
+        from core.action_catalog import write_action_catalog
+        catalog_path = write_action_catalog()
+        if catalog_path:
+            logger.info(f"Action catalog updated: {catalog_path}")
+    except Exception as e:
+        try:
+            logger.warning(f"Action catalog update skipped: {e}")
+        except Exception:
+            pass
     app = QApplication(sys.argv)
     # qdarktheme.setup_theme() # Not available in 0.1.7
     app.setStyleSheet(qdarktheme.load_stylesheet())

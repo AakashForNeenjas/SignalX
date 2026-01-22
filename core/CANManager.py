@@ -1,4 +1,8 @@
 ﻿import can
+try:
+    import can.interfaces.pcan  # noqa: F401
+except Exception:
+    pass
 import threading
 import time
 import csv
@@ -43,6 +47,8 @@ class CANManager:
         # Signal overrides: {(message_name, signal_name): value}
         self.signal_overrides = {}
         self.signal_overrides_lock = threading.RLock()
+        # Track cyclic periods (arbitration_id -> seconds) for updates
+        self.cyclic_periods = {}
         # Logging lock to serialize CSV/TRC writes and counters
         self.log_lock = threading.RLock()
         # Internal metrics tick threads for TX periodic visibility
@@ -227,6 +233,40 @@ class CANManager:
             self.signal_overrides[(message_name, signal_name)] = value
         self._log(20, f"Override set: {message_name}.{signal_name}={value}")
 
+    def _get_cycle_time_ms(self, message_name=None, arbitration_id=None):
+        """Resolve cycle time in ms for a cyclic message."""
+        if arbitration_id is not None:
+            try:
+                sec = self.cyclic_periods.get(arbitration_id)
+                if sec:
+                    return int(sec * 1000)
+            except Exception:
+                pass
+        if message_name:
+            try:
+                import can_messages
+                cfg = getattr(can_messages, "CYCLIC_CAN_MESSAGES", {})
+                if message_name in cfg:
+                    return int(cfg[message_name].get("cycle_time", 100))
+            except Exception:
+                pass
+        return 100
+
+    def apply_signal_override(self, message_name, signal_name, value, refresh_cyclic=True):
+        """
+        Apply a signal override, send a message immediately, and refresh cyclic
+        transmission if the message is running.
+        """
+        if not self.dbc_parser or not self.dbc_parser.database:
+            raise RuntimeError("DBC not loaded; cannot apply override")
+        msg_def = self.dbc_parser.database.get_message_by_name(message_name)
+        self.set_signal_override(message_name, signal_name, value)
+        full_values = self.send_message_with_overrides(message_name, {signal_name: value})
+        if refresh_cyclic and msg_def.frame_id in self.cyclic_tasks:
+            cycle_ms = self._get_cycle_time_ms(message_name, msg_def.frame_id)
+            self.start_cyclic_message_by_name(message_name, full_values, cycle_ms)
+        return full_values
+
     def clear_signal_override(self, message_name=None, signal_name=None):
         """Clear overrides; if both provided, clear specific, else clear all."""
         with self.signal_overrides_lock:
@@ -358,6 +398,7 @@ class CANManager:
             pass
         task = self.bus.send_periodic(msg, cycle_time)
         self.cyclic_tasks[arbitration_id] = task
+        self.cyclic_periods[arbitration_id] = cycle_time
         # Start an internal metrics tick thread to mirror TX for interval computation
         stop_event = threading.Event()
         self.metrics_threads[arbitration_id] = stop_event
@@ -384,6 +425,8 @@ class CANManager:
         if arbitration_id in self.cyclic_tasks:
             self.cyclic_tasks[arbitration_id].stop()
             del self.cyclic_tasks[arbitration_id]
+        if arbitration_id in self.cyclic_periods:
+            del self.cyclic_periods[arbitration_id]
         if arbitration_id in self.metrics_threads:
             try:
                 self.metrics_threads[arbitration_id].set()
