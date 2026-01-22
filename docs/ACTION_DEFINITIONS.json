@@ -1,0 +1,1744 @@
+{
+  "generated_at": "2026-01-22T12:09:05.174109Z",
+  "action_count": 110,
+  "actions": [
+    {
+      "name": "GS / Check Error",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Read protection/fault status",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Clear Protection",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Clear any active protection",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Clear Errors",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Clear instrument errors",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Get IDN",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Query instrument ID",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure Current AC",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure AC current",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure Current DC",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure DC current",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure Frequency",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure output frequency",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure Voltage AC",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure AC voltage",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure Voltage DC",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure DC voltage",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure Power Apparent",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure apparent power",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure Power Real",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure real power",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure Power Reactive",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure reactive power",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure Power Factor",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure power factor",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure THD Current",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure current THD",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Measure THD Voltage",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Measure voltage THD",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Power: OFF",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Turn output OFF",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Power: ON",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Turn output ON",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Ramp Down Voltage",
+      "group": "GS",
+      "param_type": "json",
+      "description": "Ramp down voltage (JSON params)",
+      "params": {
+        "type": "json",
+        "required": [
+          "start",
+          "end",
+          "step"
+        ],
+        "fields": {
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          },
+          "step": {
+            "type": "number"
+          },
+          "delay": {
+            "type": "number",
+            "default": 0.5
+          },
+          "tolerance": {
+            "type": "number",
+            "default": 0.5
+          },
+          "retries": {
+            "type": "integer",
+            "default": 3
+          }
+        }
+      }
+    },
+    {
+      "name": "GS / Ramp Up Voltage",
+      "group": "GS",
+      "param_type": "json",
+      "description": "Ramp up voltage (JSON params)",
+      "params": {
+        "type": "json",
+        "required": [
+          "start",
+          "end",
+          "step"
+        ],
+        "fields": {
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          },
+          "step": {
+            "type": "number"
+          },
+          "delay": {
+            "type": "number",
+            "default": 0.5
+          },
+          "tolerance": {
+            "type": "number",
+            "default": 0.5
+          },
+          "retries": {
+            "type": "integer",
+            "default": 3
+          }
+        }
+      }
+    },
+    {
+      "name": "GS / Ramp Set & Measure",
+      "group": "GS",
+      "param_type": "str",
+      "description": "Ramp target and measure GS+PS per step (JSON params)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "GS / Reset System",
+      "group": "GS",
+      "param_type": "none",
+      "description": "Reset instrument",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "GS / Set Current AC",
+      "group": "GS",
+      "param_type": "float",
+      "description": "Set AC current setpoint",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "GS / Set Current DC",
+      "group": "GS",
+      "param_type": "float",
+      "description": "Set DC current setpoint",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "GS / Set Frequency",
+      "group": "GS",
+      "param_type": "float",
+      "description": "Set output frequency",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "GS / Set Voltage AC",
+      "group": "GS",
+      "param_type": "float",
+      "description": "Set AC voltage",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "GS / Set Voltage DC",
+      "group": "GS",
+      "param_type": "float",
+      "description": "Set DC voltage",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "PS / HV: Connect",
+      "group": "PS",
+      "param_type": "none",
+      "description": "Connect power supply",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "PS / HV: Disconnect",
+      "group": "PS",
+      "param_type": "none",
+      "description": "Disconnect power supply",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "PS / HV: Output ON",
+      "group": "PS",
+      "param_type": "none",
+      "description": "Enable output",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "PS / HV: Output OFF",
+      "group": "PS",
+      "param_type": "none",
+      "description": "Disable output",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "PS / HV: Measure VI",
+      "group": "PS",
+      "param_type": "none",
+      "description": "Measure voltage/current",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "PS / HV: Measure Voltage, Current, Power",
+      "group": "PS",
+      "param_type": "none",
+      "description": "Measure VI and compute power",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "PS / HV: Set Voltage DC",
+      "group": "PS",
+      "param_type": "float",
+      "description": "Set DC voltage",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "PS / HV: Set Current (CC)",
+      "group": "PS",
+      "param_type": "float",
+      "description": "Set current limit (CC)",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "PS / HV: Set Current (CV)",
+      "group": "PS",
+      "param_type": "float",
+      "description": "Set current in CV mode",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "PS / HV: Ramp Up Voltage",
+      "group": "PS",
+      "param_type": "json",
+      "description": "Ramp up voltage (JSON params)",
+      "params": {
+        "type": "json",
+        "required": [
+          "start",
+          "end",
+          "step"
+        ],
+        "fields": {
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          },
+          "step": {
+            "type": "number"
+          },
+          "delay": {
+            "type": "number",
+            "default": 0.5
+          },
+          "tolerance": {
+            "type": "number",
+            "default": 0.5
+          },
+          "retries": {
+            "type": "integer",
+            "default": 3
+          }
+        }
+      }
+    },
+    {
+      "name": "PS / HV: Ramp Down Voltage",
+      "group": "PS",
+      "param_type": "json",
+      "description": "Ramp down voltage (JSON params)",
+      "params": {
+        "type": "json",
+        "required": [
+          "start",
+          "end",
+          "step"
+        ],
+        "fields": {
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          },
+          "step": {
+            "type": "number"
+          },
+          "delay": {
+            "type": "number",
+            "default": 0.5
+          },
+          "tolerance": {
+            "type": "number",
+            "default": 0.5
+          },
+          "retries": {
+            "type": "integer",
+            "default": 3
+          }
+        }
+      }
+    },
+    {
+      "name": "PS / HV: Battery Set Charge (V,I)",
+      "group": "PS",
+      "param_type": "json",
+      "description": "Set charge V/I",
+      "params": {
+        "type": "json",
+        "required": [
+          "voltage",
+          "current"
+        ],
+        "fields": {
+          "voltage": {
+            "type": "number"
+          },
+          "current": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    {
+      "name": "PS / HV: Battery Set Discharge (V,I)",
+      "group": "PS",
+      "param_type": "json",
+      "description": "Set discharge V/I",
+      "params": {
+        "type": "json",
+        "required": [
+          "voltage",
+          "current"
+        ],
+        "fields": {
+          "voltage": {
+            "type": "number"
+          },
+          "current": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    {
+      "name": "PS / HV: Read Errors",
+      "group": "PS",
+      "param_type": "none",
+      "description": "Read instrument errors",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "PS / HV: Clear Errors",
+      "group": "PS",
+      "param_type": "none",
+      "description": "Clear instrument errors",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "PS / HV: Sweep Voltage and Log",
+      "group": "PS",
+      "param_type": "json",
+      "description": "Sweep voltage and log",
+      "params": {
+        "type": "json",
+        "required": [
+          "start",
+          "end",
+          "step"
+        ],
+        "fields": {
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          },
+          "step": {
+            "type": "number"
+          },
+          "delay": {
+            "type": "number",
+            "default": 0.5
+          },
+          "log_file": {
+            "type": "string",
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "name": "PS / HV: Sweep Current and Log",
+      "group": "PS",
+      "param_type": "json",
+      "description": "Sweep current and log",
+      "params": {
+        "type": "json",
+        "required": [
+          "start",
+          "end",
+          "step"
+        ],
+        "fields": {
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          },
+          "step": {
+            "type": "number"
+          },
+          "delay": {
+            "type": "number",
+            "default": 0.5
+          },
+          "log_file": {
+            "type": "string",
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "name": "PS / Advanced: HV Sweep Voltage and Log",
+      "group": "PS",
+      "param_type": "json",
+      "description": "Advanced sweep",
+      "params": {
+        "type": "json",
+        "required": [
+          "start",
+          "end",
+          "step"
+        ],
+        "fields": {
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          },
+          "step": {
+            "type": "number"
+          },
+          "delay": {
+            "type": "number",
+            "default": 0.5
+          },
+          "log_file": {
+            "type": "string",
+            "optional": true
+          }
+        }
+      }
+    },
+    {
+      "name": "OS / Run",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Run acquisition",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Stop",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Stop acquisition",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Get Waveform",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Fetch waveform",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Set Timebase",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set timebase",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Channel Enable",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable/disable channel",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Channel Scale",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set vertical scale",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Channel Offset",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set offset",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Coupling",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set coupling mode",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Bandwidth Limit",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set bandwidth limit",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Probe Attenuation",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set probe attenuation",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Acquisition Mode",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set acquisition mode",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Memory Depth",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set memory depth",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Trigger Source",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Trigger source",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Trigger Type",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Trigger type",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Trigger Level",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Trigger level",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Trigger Slope",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Trigger slope/polarity",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Force Trigger",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Force a trigger",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Auto Setup",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Auto setup",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Measure (single)",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Single measurement",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Measure (all enabled)",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Measure all enabled",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Acquire Screenshot",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Save screenshot",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Save Setup",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Save setup",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Load Setup",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Load setup",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "LOAD / Connect",
+      "group": "LOAD",
+      "param_type": "none",
+      "description": "Connect DC load",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "LOAD / Disconnect",
+      "group": "LOAD",
+      "param_type": "none",
+      "description": "Disconnect DC load",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "LOAD / Input ON",
+      "group": "LOAD",
+      "param_type": "none",
+      "description": "Enable load input",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "LOAD / Input OFF",
+      "group": "LOAD",
+      "param_type": "none",
+      "description": "Disable load input",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "LOAD / Short Circuit ON",
+      "group": "LOAD",
+      "param_type": "none",
+      "description": "Enter short-circuit mode",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "LOAD / Short Circuit OFF",
+      "group": "LOAD",
+      "param_type": "none",
+      "description": "Exit short-circuit mode",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "LOAD / Short Circuit Pulse",
+      "group": "LOAD",
+      "param_type": "float",
+      "description": "Short-circuit pulse duration (s)",
+      "params": {
+        "type": "float",
+        "required": true,
+        "note": "Short-circuit pulse duration in seconds"
+      }
+    },
+    {
+      "name": "LOAD / Short Circuit Cycle",
+      "group": "LOAD",
+      "param_type": "json",
+      "description": "Cyclic short-circuit sequence (JSON params)",
+      "params": {
+        "type": "json",
+        "required": [
+          "cycles",
+          "pulse_s"
+        ],
+        "fields": {
+          "cycles": {
+            "type": "integer"
+          },
+          "pulse_s": {
+            "type": "number"
+          },
+          "input_on_delay_s": {
+            "type": "number",
+            "default": 0.0
+          },
+          "dwell_s": {
+            "type": "number",
+            "default": 0.0
+          },
+          "precharge_s": {
+            "type": "number",
+            "default": 0.0
+          },
+          "cc_a": {
+            "type": "number",
+            "optional": true
+          },
+          "ps_output": {
+            "type": "boolean",
+            "default": true
+          },
+          "ps_toggle_each_cycle": {
+            "type": "boolean",
+            "default": false
+          },
+          "gs_telemetry": {
+            "type": "boolean",
+            "default": false
+          },
+          "input_on_each_cycle": {
+            "type": "boolean",
+            "default": true
+          },
+          "stop_on_fail": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      }
+    },
+    {
+      "name": "LOAD / Set CC (A)",
+      "group": "LOAD",
+      "param_type": "float",
+      "description": "Set constant current (A)",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "LOAD / Set CV (V)",
+      "group": "LOAD",
+      "param_type": "float",
+      "description": "Set constant voltage (V)",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "LOAD / Set CP (W)",
+      "group": "LOAD",
+      "param_type": "float",
+      "description": "Set constant power (W)",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "LOAD / Set CR (Ohm)",
+      "group": "LOAD",
+      "param_type": "float",
+      "description": "Set constant resistance (Ohm)",
+      "params": {
+        "type": "float",
+        "required": true
+      }
+    },
+    {
+      "name": "LOAD / Measure VI",
+      "group": "LOAD",
+      "param_type": "none",
+      "description": "Measure voltage/current",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "LOAD / Measure Power",
+      "group": "LOAD",
+      "param_type": "none",
+      "description": "Measure power (derived)",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "RAMP / Ramp Set & Measure",
+      "group": "RAMP",
+      "param_type": "json",
+      "description": "Ramp target (CAN/GS/PS) and measure GS+PS per step (JSON params)",
+      "params": {
+        "type": "json",
+        "required": [
+          "target",
+          "start",
+          "end",
+          "step",
+          "dwell"
+        ],
+        "fields": {
+          "target": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "fields": {
+              "type": {
+                "enum": [
+                  "GS_VOLT",
+                  "GS_FREQUENCY",
+                  "PS_VOLT",
+                  "PS_CURRENT",
+                  "CAN_SIGNAL"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "optional": true
+              },
+              "signal": {
+                "type": "string",
+                "optional": true
+              }
+            }
+          },
+          "start": {
+            "type": "number"
+          },
+          "end": {
+            "type": "number"
+          },
+          "step": {
+            "type": "number"
+          },
+          "dwell": {
+            "type": "number"
+          },
+          "tolerance": {
+            "type": "number",
+            "default": 0.5
+          },
+          "retries": {
+            "type": "integer",
+            "default": 2
+          },
+          "verify": {
+            "type": "boolean",
+            "default": false
+          },
+          "gs_voltage": {
+            "type": "number",
+            "note": "Required when target.type is GS_FREQUENCY"
+          },
+          "ps_voltage": {
+            "type": "number",
+            "note": "Optional safe voltage limit for PS_CURRENT"
+          },
+          "measure": {
+            "type": "object",
+            "fields": {
+              "gs": {
+                "type": "boolean",
+                "default": true
+              },
+              "ps": {
+                "type": "boolean",
+                "default": true
+              },
+              "load": {
+                "type": "boolean",
+                "default": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "RAMP / Line and Load Regulation",
+      "group": "RAMP",
+      "param_type": "json",
+      "description": "Nested GS/PS/DL sweep with measurements (JSON params)",
+      "params": {
+        "type": "json",
+        "required": [
+          "gs",
+          "ps",
+          "dl"
+        ],
+        "fields": {
+          "gs": {
+            "type": "object",
+            "required": [
+              "start",
+              "end",
+              "step"
+            ],
+            "fields": {
+              "start": {
+                "type": "number"
+              },
+              "end": {
+                "type": "number"
+              },
+              "step": {
+                "type": "number"
+              },
+              "dwell": {
+                "type": "number",
+                "default": 0.5
+              },
+              "tolerance": {
+                "type": "number",
+                "default": 0.5
+              }
+            }
+          },
+          "ps": {
+            "type": "object",
+            "required": [
+              "start",
+              "end",
+              "step"
+            ],
+            "fields": {
+              "start": {
+                "type": "number"
+              },
+              "end": {
+                "type": "number"
+              },
+              "step": {
+                "type": "number"
+              },
+              "dwell": {
+                "type": "number",
+                "default": 0.5
+              },
+              "tolerance": {
+                "type": "number",
+                "default": 0.5
+              }
+            }
+          },
+          "dl": {
+            "type": "object",
+            "required": [
+              "start",
+              "end",
+              "step"
+            ],
+            "fields": {
+              "start": {
+                "type": "number"
+              },
+              "end": {
+                "type": "number"
+              },
+              "step": {
+                "type": "number"
+              },
+              "dwell": {
+                "type": "number",
+                "default": 0.5
+              },
+              "tolerance": {
+                "type": "number",
+                "default": 0.1
+              }
+            }
+          },
+          "verify": {
+            "type": "object",
+            "fields": {
+              "gs": {
+                "type": "boolean",
+                "default": true
+              },
+              "ps": {
+                "type": "boolean",
+                "default": true
+              },
+              "dl": {
+                "type": "boolean",
+                "default": true
+              }
+            }
+          },
+          "retries": {
+            "type": "integer",
+            "default": 2
+          },
+          "dl_reset": {
+            "type": "boolean",
+            "default": true
+          },
+          "abort_on_fail": {
+            "type": "boolean",
+            "default": true
+          },
+          "plot_efficiency": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    },
+    {
+      "name": "INSTR / Initialize Instruments",
+      "group": "INSTR",
+      "param_type": "none",
+      "description": "Initialize all instruments",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "INSTR / INIT GS",
+      "group": "INSTR",
+      "param_type": "none",
+      "description": "Init grid simulator only",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "INSTR / INIT PS",
+      "group": "INSTR",
+      "param_type": "none",
+      "description": "Init power supply only",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "INSTR / INIT OS",
+      "group": "INSTR",
+      "param_type": "none",
+      "description": "Init oscilloscope only",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "INSTR / END GS",
+      "group": "INSTR",
+      "param_type": "none",
+      "description": "Disconnect grid simulator",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "INSTR / END PS",
+      "group": "INSTR",
+      "param_type": "none",
+      "description": "Disconnect power supply",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "INSTR / END OS",
+      "group": "INSTR",
+      "param_type": "none",
+      "description": "Disconnect oscilloscope",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "CAN / Connect",
+      "group": "CAN",
+      "param_type": "none",
+      "description": "",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "CAN / Disconnect",
+      "group": "CAN",
+      "param_type": "none",
+      "description": "",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "CAN / Start Cyclic CAN",
+      "group": "CAN",
+      "param_type": "none",
+      "description": "",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "CAN / Stop Cyclic CAN",
+      "group": "CAN",
+      "param_type": "none",
+      "description": "",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "CAN / Start Trace",
+      "group": "CAN",
+      "param_type": "none",
+      "description": "",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "CAN / Stop Trace",
+      "group": "CAN",
+      "param_type": "none",
+      "description": "",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "CAN / Send Message",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "id",
+          "data"
+        ],
+        "fields": {
+          "id": {
+            "type": "integer",
+            "note": "Can be int or hex string (e.g. 0x123)"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "extended": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Start Cyclic By Name",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "message_name"
+        ],
+        "fields": {
+          "message_name": {
+            "type": "string"
+          },
+          "cycle_time": {
+            "type": "integer",
+            "default": 100
+          },
+          "signals": {
+            "type": "object",
+            "default": {}
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Stop Cyclic By Name",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "message_name"
+        ],
+        "fields": {
+          "message_name": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Check Message",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "id"
+        ],
+        "fields": {
+          "id": {
+            "type": "integer",
+            "note": "Can be int or hex string"
+          },
+          "timeout": {
+            "type": "number",
+            "default": 2.0
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Listen For Message",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "id"
+        ],
+        "fields": {
+          "id": {
+            "type": "integer",
+            "note": "Can be int or hex string"
+          },
+          "timeout": {
+            "type": "number",
+            "default": 2.0
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Read Signal Value",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "signal_name"
+        ],
+        "fields": {
+          "signal_name": {
+            "type": "string"
+          },
+          "timeout": {
+            "type": "number",
+            "default": 2.0
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Check Signal (Tolerance)",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "signal_name",
+          "expected_value"
+        ],
+        "fields": {
+          "signal_name": {
+            "type": "string"
+          },
+          "expected_value": {
+            "type": "number"
+          },
+          "tolerance": {
+            "type": "number",
+            "default": 0.1
+          },
+          "timeout": {
+            "type": "number",
+            "default": 2.0
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Conditional Jump",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "signal_name",
+          "expected_value",
+          "target_step"
+        ],
+        "fields": {
+          "signal_name": {
+            "type": "string"
+          },
+          "expected_value": {
+            "type": "number"
+          },
+          "tolerance": {
+            "type": "number",
+            "default": 0.1
+          },
+          "target_step": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Wait For Signal Change",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "signal_name",
+          "initial_value"
+        ],
+        "fields": {
+          "signal_name": {
+            "type": "string"
+          },
+          "initial_value": {
+            "type": "number"
+          },
+          "timeout": {
+            "type": "number",
+            "default": 5.0
+          },
+          "poll_interval": {
+            "type": "number",
+            "default": 0.1
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Monitor Signal Range",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "signal_name",
+          "min_val",
+          "max_val"
+        ],
+        "fields": {
+          "signal_name": {
+            "type": "string"
+          },
+          "min_val": {
+            "type": "number"
+          },
+          "max_val": {
+            "type": "number"
+          },
+          "duration": {
+            "type": "number",
+            "default": 5.0
+          },
+          "poll_interval": {
+            "type": "number",
+            "default": 0.1
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Compare Two Signals",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "signal1",
+          "signal2"
+        ],
+        "fields": {
+          "signal1": {
+            "type": "string"
+          },
+          "signal2": {
+            "type": "string"
+          },
+          "tolerance": {
+            "type": "number",
+            "default": 0.1
+          },
+          "timeout": {
+            "type": "number",
+            "default": 2.0
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Set Signal and Verify",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "message_id",
+          "signal_name",
+          "target_value"
+        ],
+        "fields": {
+          "message_id": {
+            "type": "integer",
+            "note": "Can be int or hex string"
+          },
+          "signal_name": {
+            "type": "string"
+          },
+          "target_value": {
+            "type": "number"
+          },
+          "tolerance": {
+            "type": "number",
+            "default": 0.1
+          },
+          "verify_timeout": {
+            "type": "number",
+            "default": 2.0
+          }
+        }
+      }
+    },
+    {
+      "name": "CAN / Set Signal Value",
+      "group": "CAN",
+      "param_type": "json",
+      "description": "",
+      "params": {
+        "type": "json",
+        "required": [
+          "message_id",
+          "signal_name",
+          "target_value"
+        ],
+        "fields": {
+          "message_id": {
+            "type": "integer",
+            "note": "Can be int or hex string"
+          },
+          "signal_name": {
+            "type": "string"
+          },
+          "target_value": {
+            "type": "number"
+          },
+          "tolerance": {
+            "type": "number",
+            "default": 0.1
+          },
+          "verify_timeout": {
+            "type": "number",
+            "default": 2.0
+          }
+        }
+      }
+    },
+    {
+      "name": "Wait",
+      "group": "UTILITY",
+      "param_type": "float",
+      "description": "",
+      "params": {
+        "type": "float",
+        "required": true,
+        "note": "Seconds to wait"
+      }
+    }
+  ]
+}

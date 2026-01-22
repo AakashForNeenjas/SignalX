@@ -724,6 +724,10 @@ class MaynuoM97:
         """Enter short-circuit mode (CMD=26)."""
         self._write_u16(self.REG_CMD, self.CMD_SHORT)
 
+    def stop_short_circuit(self) -> None:
+        """Exit short-circuit mode by disabling input."""
+        self.disable_input()
+
 
 # =============================================================================
 # Simple demo when run as a script

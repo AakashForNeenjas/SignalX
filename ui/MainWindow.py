@@ -11,9 +11,17 @@ from PyQt6.QtWidgets import (
 from config_loader import load_profiles, get_profile
 import config
 from core import updater
-from PyQt6.QtCore import QTimer, Qt
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QTextCursor
 from ui.resources import create_app_icon
+from ui.widgets import (
+    ConfigHeader,
+    ErrorMessageList,
+    ErrorSignalForm,
+    ErrorTabControls,
+    HeaderBar,
+    create_main_tabs,
+)
 
 class MainWindow(QMainWindow):
     def __init__(self, logger=None, log_path=None):
@@ -42,45 +50,33 @@ class MainWindow(QMainWindow):
         self.layout = QVBoxLayout(self.central_widget)
         self.layout.setContentsMargins(0, 0, 0, 0)
         # Header branding
-        header_row = QHBoxLayout()
-        header = QLabel("AtomX")
-        header.setStyleSheet("font-size: 34px; font-weight: bold; color: #00ff88; padding: 1px;")
-        header_row.addWidget(header)
-        header_row.addStretch()
-        self.btn_check_updates = QPushButton("Check for Updates")
-        self.btn_check_updates.clicked.connect(self.on_check_updates)
-        header_row.addWidget(self.btn_check_updates)
-        self.layout.addLayout(header_row)
-        
-        self.tabs = QTabWidget()
+        self.header_bar = HeaderBar(on_check_updates=self.on_check_updates)
+        self.layout.addWidget(self.header_bar)
+
+        self.tabs, tab_map, tab_indices = create_main_tabs()
         self.layout.addWidget(self.tabs)
-        
+
         # Initialize Tabs
-        self.config_tab = QWidget()
-        self.instrument_tab = QWidget()
-        self.data_tab = QWidget()
-        self.error_tab = QWidget()
-        self.tools_tab = QWidget()
-        self.logconv_tab = QWidget()
-        self.signalplot_tab = QWidget()
-        self.canmatrix_tab = QWidget()
-        self.standards_tab = QWidget()
-        
-        self.tabs.addTab(self.config_tab, "Configuration")
-        self.tabs.addTab(self.instrument_tab, "Instrument")
-        self.tabs.addTab(self.data_tab, "Data")
-        self.tabs.addTab(self.error_tab, "Error and Warnings")
-        self.tabs.addTab(self.tools_tab, "System Log")
-        self.tabs.addTab(self.logconv_tab, "Log Converter")
-        self.tabs.addTab(self.signalplot_tab, "Signal Plot")
-        self.tabs.addTab(self.canmatrix_tab, "CAN Matrix")
-        self.tabs.addTab(self.standards_tab, "Standards")
-        self.tools_tab_index = self.tabs.indexOf(self.tools_tab)
-        self.logconv_tab_index = self.tabs.indexOf(self.logconv_tab)
-        self.signalplot_tab_index = self.tabs.indexOf(self.signalplot_tab)
-        self.canmatrix_tab_index = self.tabs.indexOf(self.canmatrix_tab)
-        self.error_tab_index = self.tabs.indexOf(self.error_tab)
-        self.standards_tab_index = self.tabs.indexOf(self.standards_tab)
+        self.config_tab = tab_map["config"]
+        self.instrument_tab = tab_map["instrument"]
+        self.data_tab = tab_map["data"]
+        self.error_tab = tab_map["error"]
+        self.tools_tab = tab_map["tools"]
+        self.diagnostics_tab = tab_map["diagnostics"]
+        self.logconv_tab = tab_map["logconv"]
+        self.signalplot_tab = tab_map["signalplot"]
+        self.canmatrix_tab = tab_map["canmatrix"]
+        self.powerbank_tab = tab_map["powerbank"]
+        self.standards_tab = tab_map["standards"]
+
+        self.tools_tab_index = tab_indices["tools"]
+        self.logconv_tab_index = tab_indices["logconv"]
+        self.diagnostics_tab_index = tab_indices["diagnostics"]
+        self.signalplot_tab_index = tab_indices["signalplot"]
+        self.canmatrix_tab_index = tab_indices["canmatrix"]
+        self.powerbank_tab_index = tab_indices["powerbank"]
+        self.error_tab_index = tab_indices["error"]
+        self.standards_tab_index = tab_indices["standards"]
         self.tabs.currentChanged.connect(self.on_tab_changed)
         # Lazy-load flags must be set before building tabs
         self.tools_built = False
@@ -90,7 +86,9 @@ class MainWindow(QMainWindow):
         self.error_built = False
         self.signalplot_built = False
         self.canmatrix_built = False
+        self.powerbank_built = False
         self.standards_built = False
+        self.diagnostics_built = False
         self.err_state_cache = None
         self.sequence_run_report = None
         
@@ -116,6 +114,11 @@ class MainWindow(QMainWindow):
         """Build Log Converter tab UI if not already built."""
         if not self.logconv_built:
             self.setup_logconv_tab()
+
+    def ensure_diagnostics_tab_built(self):
+        """Build Diagnostics tab UI if not already built."""
+        if not self.diagnostics_built:
+            self.setup_diagnostics_tab()
     
     def ensure_signalplot_tab_built(self):
         """Build Signal Plot tab UI if not already built."""
@@ -126,6 +129,11 @@ class MainWindow(QMainWindow):
         """Build CAN Matrix tab UI if not already built."""
         if not self.canmatrix_built:
             self.setup_canmatrix_tab()
+
+    def ensure_powerbank_tab_built(self):
+        """Build Power Bank Tester tab UI if not already built."""
+        if not self.powerbank_built:
+            self.setup_powerbank_tab()
     
     def ensure_standards_tab_built(self):
         """Build Standards tab UI if not already built."""
@@ -147,42 +155,44 @@ class MainWindow(QMainWindow):
     
     def setup_tools_tab(self):
         layout = QVBoxLayout(self.tools_tab)
-        header = QHBoxLayout()
-        self.log_label = QLabel(f"Log file: {self.log_path or os.path.join('logs', 'app.log')}")
-        self.btn_refresh_log = QPushButton("Refresh Logs")
-        self.btn_health = QPushButton("Check Instrument Health")
-        self.btn_health.clicked.connect(self.on_check_health)
-        self.btn_refresh_log.clicked.connect(self.load_log_tail)
-        header.addWidget(self.log_label)
-        header.addStretch()
-        header.addWidget(self.btn_health)
-        header.addWidget(self.btn_refresh_log)
-        layout.addLayout(header)
-        
-        self.log_view = QTextEdit()
-        self.log_view.setReadOnly(True)
-        self.log_view.setLineWrapMode(QTextEdit.LineWrapMode.NoWrap)
-        layout.addWidget(self.log_view)
-        # Timer to auto-refresh when tab is active
-        self.log_timer = QTimer()
-        self.log_timer.setInterval(2000)
-        self.log_timer.timeout.connect(self.load_log_tail)
-        self.load_log_tail()
+        from ui.widgets import SystemLogTab
+        self.system_log_tab = SystemLogTab(log_path=self.log_path, on_check_health=self.on_check_health)
+        layout.addWidget(self.system_log_tab)
         self.tools_built = True
 
+    def setup_diagnostics_tab(self):
+        layout = QVBoxLayout(self.diagnostics_tab)
+        from ui.DiagnosticsTab import DiagnosticsTab
+        profile = get_profile(self.active_profile, self.profiles)
+        self.diagnostics_widget = DiagnosticsTab(self.active_profile, profile)
+        layout.addWidget(self.diagnostics_widget)
+        self.diagnostics_built = True
+
     def on_check_updates(self):
-        manifest_url = getattr(config, "UPDATE_MANIFEST_URL", "") or ""
-        if not manifest_url:
-            QMessageBox.information(self, "Update Check", "Update manifest URL is not configured in config.py.")
+        repo = getattr(config, "UPDATE_GITHUB_REPO", "") or ""
+        asset_name = getattr(config, "UPDATE_GITHUB_ASSET", "") or ""
+        include_prerelease = bool(getattr(config, "UPDATE_GITHUB_INCLUDE_PRERELEASE", False))
+
+        if not repo:
+            QMessageBox.information(
+                self,
+                "Update Check",
+                "GitHub repo is not configured. Set UPDATE_GITHUB_REPO in config.py.",
+            )
             return
-        result = updater.check_for_update(manifest_url, self.current_version)
+
+        result = updater.check_for_update(repo, asset_name, self.current_version, include_prerelease)
         status = result.get("status")
         if status == "error":
             QMessageBox.warning(self, "Update Check", f"Failed to check updates: {result.get('error')}")
             return
         if status == "no_update":
             latest = result.get("latest_version", "n/a")
-            QMessageBox.information(self, "Update Check", f"You are up to date.\nCurrent: {self.current_version}\nLatest: {latest}")
+            QMessageBox.information(
+                self,
+                "Update Check",
+                f"You are up to date.\nCurrent: {self.current_version}\nLatest: {latest}",
+            )
             return
         if status == "update_available":
             latest = result.get("latest_version", "n/a")
@@ -197,15 +207,32 @@ class MainWindow(QMainWindow):
             if reply != QMessageBox.StandardButton.Yes:
                 return
             dl = updater.download_update(manifest, dest_dir="updates")
-            if dl.get("status") == "downloaded":
-                path = dl.get("path")
+        else:
+            return
+
+        if dl.get("status") == "downloaded":
+            path = dl.get("path")
+            reply = QMessageBox.question(
+                self,
+                "Update Ready",
+                f"Downloaded to:\n{path}\n\nInstall now?",
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+            )
+            if reply == QMessageBox.StandardButton.Yes:
+                result = updater.install_update(path, relaunch=True)
+                if result.get("status") == "started":
+                    QMessageBox.information(self, "Updating", "Update started. The app will now close.")
+                    self.close()
+                else:
+                    QMessageBox.warning(self, "Update Install", f"Install failed: {result.get('error')}")
+            else:
                 QMessageBox.information(
                     self,
                     "Update Downloaded",
-                    f"Downloaded to:\n{path}\n\nPlease run the installer to complete the update.",
+                    f"Downloaded to:\n{path}\n\nRun it manually to complete the update.",
                 )
-            else:
-                QMessageBox.warning(self, "Update Download", f"Download failed: {dl.get('error')}")
+        else:
+            QMessageBox.warning(self, "Update Download", f"Download failed: {dl.get('error')}")
 
     def setup_logconv_tab(self):
         """Initialize the Log Converter tab UI."""
@@ -246,6 +273,19 @@ class MainWindow(QMainWindow):
             fallback = QLabel(f"CAN Matrix unavailable: {e}")
             layout.addWidget(fallback)
             self.canmatrix_built = True
+
+    def setup_powerbank_tab(self):
+        """Initialize the Power Bank Tester tab UI."""
+        layout = QVBoxLayout(self.powerbank_tab)
+        try:
+            from ui.PowerBankTesterTab import PowerBankTesterTab
+            self.powerbank_widget = PowerBankTesterTab(logger=self.logger)
+            layout.addWidget(self.powerbank_widget)
+            self.powerbank_built = True
+        except Exception as e:
+            fallback = QLabel(f"Power Bank Tester unavailable: {e}")
+            layout.addWidget(fallback)
+            self.powerbank_built = True
 
     def setup_standards_tab(self):
         """Initialize the Standards tab UI to view Charger_Standard JSON."""
@@ -398,37 +438,23 @@ class MainWindow(QMainWindow):
         """Setup CAN transmit builder in Error and Warnings tab."""
         layout = QVBoxLayout(self.error_tab)
 
-        # Top controls row
-        controls = QHBoxLayout()
-        controls.addWidget(QLabel("Period (ms):"))
-        self.err_period_spin = QSpinBox()
-        self.err_period_spin.setRange(1, 100000)
-        self.err_period_spin.setValue(100)
-        controls.addWidget(self.err_period_spin)
-
-        self.btn_err_build = QPushButton("Load Signals")
+        self.err_controls = ErrorTabControls()
+        self.err_period_spin = self.err_controls.err_period_spin
+        self.btn_err_build = self.err_controls.btn_err_build
+        self.btn_err_send = self.err_controls.btn_err_send
+        self.btn_err_start = self.err_controls.btn_err_start
+        self.btn_err_stop = self.err_controls.btn_err_stop
         self.btn_err_build.clicked.connect(self.on_err_build_form)
-        controls.addWidget(self.btn_err_build)
-
-        self.btn_err_send = QPushButton("Send Once")
         self.btn_err_send.clicked.connect(self.on_err_send_once)
-        controls.addWidget(self.btn_err_send)
-
-        self.btn_err_start = QPushButton("Start Periodic")
         self.btn_err_start.clicked.connect(self.on_err_start_periodic)
-        controls.addWidget(self.btn_err_start)
-
-        self.btn_err_stop = QPushButton("Stop Periodic")
         self.btn_err_stop.clicked.connect(self.on_err_stop_periodic)
-        controls.addWidget(self.btn_err_stop)
-
-        controls.addStretch()
-        layout.addLayout(controls)
+        layout.addWidget(self.err_controls)
 
         # Main split: message list (left) and signal form (right)
         split = QHBoxLayout()
 
-        self.err_msg_list = QListWidget()
+        self.err_msg_panel = ErrorMessageList()
+        self.err_msg_list = self.err_msg_panel.list
         self.err_msg_list.setSelectionMode(QListWidget.SelectionMode.MultiSelection)
         # Populate from DBC if available
         try:
@@ -440,15 +466,14 @@ class MainWindow(QMainWindow):
         except Exception:
             pass
         self.err_msg_list.setMinimumWidth(220)
-        split.addWidget(self.err_msg_list, 1)
+        split.addWidget(self.err_msg_panel, 1)
 
         # Scrollable signal form on the right
-        self.err_scroll = QScrollArea()
-        self.err_scroll.setWidgetResizable(True)
-        self.err_form_container = QWidget()
-        self.err_form_layout = QFormLayout(self.err_form_container)
-        self.err_scroll.setWidget(self.err_form_container)
-        split.addWidget(self.err_scroll, 2)
+        self.err_form_panel = ErrorSignalForm()
+        self.err_scroll = self.err_form_panel.err_scroll
+        self.err_form_container = self.err_form_panel.err_form_container
+        self.err_form_layout = self.err_form_panel.err_form_layout
+        split.addWidget(self.err_form_panel, 2)
 
         layout.addLayout(split)
 
@@ -472,19 +497,11 @@ class MainWindow(QMainWindow):
         
     def setup_config_tab(self):
         layout = QVBoxLayout(self.config_tab)
-        
-        # Profile selector
-        profile_row = QHBoxLayout()
-        profile_label = QLabel("Profile:")
-        self.profile_combo = QComboBox()
-        for name in self.profiles.keys():
-            self.profile_combo.addItem(name)
-        self.profile_combo.setCurrentText(self.active_profile)
-        self.profile_combo.currentTextChanged.connect(self.on_profile_change)
-        profile_row.addWidget(profile_label)
-        profile_row.addWidget(self.profile_combo)
-        profile_row.addStretch()
-        layout.addLayout(profile_row)
+        self.config_header = ConfigHeader(
+            self.profiles, self.active_profile, on_profile_change=self.on_profile_change
+        )
+        self.profile_combo = self.config_header.profile_combo
+        layout.addWidget(self.config_header)
         
         from ui.Dashboard import Dashboard
         self.dashboard = Dashboard()
@@ -590,12 +607,20 @@ class MainWindow(QMainWindow):
         """Handle UI profile change and reinitialize core components."""
         self.initialize_core_components(profile_name)
         self.dashboard.output_log.append(f'Active profile: {profile_name}')
-        self.log_label.setText(f"Log file: {self.log_path or os.path.join('logs', 'app.log')}")
+        if hasattr(self, "system_log_tab"):
+            self.system_log_tab.set_log_path(self.log_path)
+        if hasattr(self, "diagnostics_widget"):
+            profile = get_profile(profile_name, self.profiles)
+            self.diagnostics_widget.set_profile(profile_name, profile)
         self._log(logging.INFO, f"Profile changed to {profile_name}")
 
     def on_init_instrument(self):
         self._log(logging.INFO, 'Initialize instruments requested')
-        success, message = self.inst_mgr.initialize_instruments()
+        try:
+            success, message = self.inst_mgr.initialize_instruments()
+        except Exception as e:
+            success = False
+            message = f"Initialize instruments crashed: {e}"
         if success:
             self.dashboard.output_log.append('Instruments Initialized')
             self.dashboard.output_log.append(message)
@@ -1061,6 +1086,24 @@ class MainWindow(QMainWindow):
                 except Exception:
                     pass
                 return
+            if message.startswith("[LINELOAD_LOG]"):
+                try:
+                    import json
+                    logs = json.loads(message[len("[LINELOAD_LOG]"):])
+                    if self.sequence_run_report and 0 <= index < len(self.sequence_run_report["steps"]):
+                        self.sequence_run_report["steps"][index]["line_load_logs"] = logs
+                except Exception:
+                    pass
+                return
+            if message.startswith("[SHORTCYCLE_LOG]"):
+                try:
+                    import json
+                    logs = json.loads(message[len("[SHORTCYCLE_LOG]"):])
+                    if self.sequence_run_report and 0 <= index < len(self.sequence_run_report["steps"]):
+                        self.sequence_run_report["steps"][index]["short_cycle_logs"] = logs
+                except Exception:
+                    pass
+                return
 
             self.dashboard.output_log.append(f'Step {index + 1}: {message}')
             self._log(logging.INFO, f'Step {index + 1} info: {message}')
@@ -1086,6 +1129,7 @@ class MainWindow(QMainWindow):
         """Generate an HTML report for the last sequence run."""
         if not self.sequence_run_report:
             return
+        import json
         report = self.sequence_run_report
         end_time = datetime.now()
         start_time = report.get("start_time", end_time)
@@ -1131,20 +1175,52 @@ class MainWindow(QMainWindow):
                 pass
             return str(val)
 
+        def _mag(value):
+            if value is None:
+                return None
+            if isinstance(value, (int, float)):
+                return abs(value)
+            try:
+                return abs(float(value))
+            except (TypeError, ValueError):
+                return None
+
         ramp_sections = []
         for s in steps:
             logs = s.get("ramp_logs")
             if not logs:
                 continue
-            header = (
-                "<table><thead><tr>"
-                "<th>Set Value</th><th>Status</th><th>Message</th>"
-                "<th>GS V</th><th>GS I</th><th>GS P</th><th>PF</th><th>ITHD</th><th>VTHD</th><th>Freq</th>"
-                "<th>PS V</th><th>PS I</th><th>PS P</th>"
-                "<th>Load V</th><th>Load I</th><th>Load P</th>"
-                "<th>Efficiency (%)</th><th>Errors</th>"
-                "</tr></thead><tbody>"
-            )
+            # Determine which measurement groups are present in this ramp
+            def _has_key(prefix):
+                for entry in logs:
+                    rd = entry.get("readings", {}) or {}
+                    if any(k.startswith(prefix) for k in rd.keys()):
+                        return True
+                return False
+
+            def _has_measure(flag):
+                for entry in logs:
+                    measure = entry.get("measure", {}) or {}
+                    if measure.get(flag):
+                        return True
+                return False
+
+            has_gs = _has_key("gs_") or _has_measure("gs")
+            has_ps = _has_key("ps_") or _has_measure("ps")
+            has_load = _has_key("load_") or _has_measure("load")
+
+            header_cols = ["Set Value", "Status", "Message"]
+            if has_gs:
+                header_cols.extend(["GS V", "GS I", "GS P", "PF", "ITHD", "VTHD", "Freq"])
+            if has_ps:
+                header_cols.extend(["PS V", "PS I", "PS P"])
+            if has_load:
+                header_cols.extend(["Load V", "Load I", "Load P"])
+            if has_gs and (has_ps or has_load):
+                header_cols.append("Efficiency (%)")
+            header_cols.append("Errors")
+
+            header = "<table><thead><tr>" + "".join([f"<th>{c}</th>" for c in header_cols]) + "</tr></thead><tbody>"
             body_rows = []
             for entry in logs:
                 rd = entry.get("readings", {}) or {}
@@ -1153,9 +1229,9 @@ class MainWindow(QMainWindow):
                     if rd.get(k):
                         errs.append(rd[k])
                 try:
-                    gs_p = rd.get("gs_power")
-                    ps_p = rd.get("ps_power")
-                    load_p = rd.get("load_power")
+                    gs_p = _mag(rd.get("gs_power"))
+                    ps_p = _mag(rd.get("ps_power"))
+                    load_p = _mag(rd.get("load_power"))
                     total_out = 0.0
                     if ps_p is not None:
                         total_out += ps_p
@@ -1169,22 +1245,31 @@ class MainWindow(QMainWindow):
                     f"<td>{fmt(entry.get('value'))}</td>"
                     f"<td>{entry.get('status','')}</td>"
                     f"<td>{entry.get('message','')}</td>"
-                    f"<td>{fmt(rd.get('gs_voltage'))}</td>"
-                    f"<td>{fmt(rd.get('gs_current'))}</td>"
-                    f"<td>{fmt(rd.get('gs_power'))}</td>"
-                    f"<td>{fmt(rd.get('gs_pf'))}</td>"
-                    f"<td>{fmt(rd.get('gs_ithd'))}</td>"
-                    f"<td>{fmt(rd.get('gs_vthd'))}</td>"
-                    f"<td>{fmt(rd.get('gs_freq'))}</td>"
-                    f"<td>{fmt(rd.get('ps_voltage'))}</td>"
-                    f"<td>{fmt(rd.get('ps_current'))}</td>"
-                    f"<td>{fmt(rd.get('ps_power'))}</td>"
-                    f"<td>{fmt(rd.get('load_voltage'))}</td>"
-                    f"<td>{fmt(rd.get('load_current'))}</td>"
-                    f"<td>{fmt(rd.get('load_power'))}</td>"
-                    f"<td>{fmt(eff)}</td>"
-                    f"<td>{' | '.join(errs) if errs else ''}</td>"
-                    "</tr>"
+                    + (
+                        f"<td>{fmt(rd.get('gs_voltage'))}</td>"
+                        f"<td>{fmt(rd.get('gs_current'))}</td>"
+                        f"<td>{fmt(rd.get('gs_power'))}</td>"
+                        f"<td>{fmt(rd.get('gs_pf'))}</td>"
+                        f"<td>{fmt(rd.get('gs_ithd'))}</td>"
+                        f"<td>{fmt(rd.get('gs_vthd'))}</td>"
+                        f"<td>{fmt(rd.get('gs_freq'))}</td>"
+                        if has_gs else ""
+                    )
+                    + (
+                        f"<td>{fmt(rd.get('ps_voltage'))}</td>"
+                        f"<td>{fmt(rd.get('ps_current'))}</td>"
+                        f"<td>{fmt(rd.get('ps_power'))}</td>"
+                        if has_ps else ""
+                    )
+                    + (
+                        f"<td>{fmt(rd.get('load_voltage'))}</td>"
+                        f"<td>{fmt(rd.get('load_current'))}</td>"
+                        f"<td>{fmt(rd.get('load_power'))}</td>"
+                        if has_load else ""
+                    )
+                    + (f"<td>{fmt(eff)}</td>" if has_gs and (has_ps or has_load) else "")
+                    + f"<td>{' | '.join(errs) if errs else ''}</td>"
+                    + "</tr>"
                 )
             section = (
                 f"<div class='section'><h3>Step {s.get('index')} - {s.get('action','')}</h3>"
@@ -1192,8 +1277,452 @@ class MainWindow(QMainWindow):
             )
             ramp_sections.append(section)
 
+        # Build Short Circuit Cycle sections when present
+        short_cycle_sections = []
+        for s in steps:
+            logs = s.get("short_cycle_logs")
+            if not logs:
+                continue
+
+            has_gs = False
+            for entry in logs:
+                rd = entry.get("readings", {}) or {}
+                if any(k.startswith("gs_") for k in rd.keys()):
+                    has_gs = True
+                    break
+
+            header_cols = [
+                "Cycle", "Status", "Message", "Timestamp",
+                "Pulse Set (s)", "Pulse Actual (s)",
+                "Input Delay Set (s)", "Input Delay Actual (s)",
+                "Dwell Set (s)", "Dwell Actual (s)",
+                "PS ON (s)", "PS OFF (s)", "Cycle Total (s)",
+                *(["GS V", "GS I", "GS P", "PF", "Freq"] if has_gs else []),
+                "PS V", "PS I", "PS P",
+                "Load V", "Load I", "Load P",
+                "Errors",
+            ]
+            header = "<table><thead><tr>" + "".join([f"<th>{c}</th>" for c in header_cols]) + "</tr></thead><tbody>"
+            body_rows = []
+            for entry in logs:
+                timing = entry.get("timing", {}) or {}
+                rd = entry.get("readings", {}) or {}
+                errs = entry.get("errors", []) or []
+                body_rows.append(
+                    "<tr>"
+                    f"<td>{entry.get('cycle')}</td>"
+                    f"<td>{entry.get('status','')}</td>"
+                    f"<td>{entry.get('message','')}</td>"
+                    f"<td>{entry.get('timestamp','')}</td>"
+                    f"<td>{fmt(timing.get('pulse_set_s'))}</td>"
+                    f"<td>{fmt(timing.get('pulse_actual_s'))}</td>"
+                    f"<td>{fmt(timing.get('input_on_delay_set_s'))}</td>"
+                    f"<td>{fmt(timing.get('input_on_delay_actual_s'))}</td>"
+                    f"<td>{fmt(timing.get('dwell_set_s'))}</td>"
+                    f"<td>{fmt(timing.get('dwell_actual_s'))}</td>"
+                    f"<td>{fmt(timing.get('ps_on_s'))}</td>"
+                    f"<td>{fmt(timing.get('ps_off_s'))}</td>"
+                    f"<td>{fmt(timing.get('cycle_total_s'))}</td>"
+                    + (
+                        f"<td>{fmt(rd.get('gs_voltage'))}</td>"
+                        f"<td>{fmt(rd.get('gs_current'))}</td>"
+                        f"<td>{fmt(rd.get('gs_power'))}</td>"
+                        f"<td>{fmt(rd.get('gs_pf'))}</td>"
+                        f"<td>{fmt(rd.get('gs_freq'))}</td>"
+                        if has_gs else ""
+                    )
+                    + (
+                        f"<td>{fmt(rd.get('ps_voltage'))}</td>"
+                        f"<td>{fmt(rd.get('ps_current'))}</td>"
+                        f"<td>{fmt(rd.get('ps_power'))}</td>"
+                        f"<td>{fmt(rd.get('load_voltage'))}</td>"
+                        f"<td>{fmt(rd.get('load_current'))}</td>"
+                        f"<td>{fmt(rd.get('load_power'))}</td>"
+                        f"<td>{' | '.join(errs) if errs else ''}</td>"
+                    )
+                    + "</tr>"
+                )
+            section = (
+                f"<div class='section'><h3>Step {s.get('index')} - {s.get('action','')}</h3>"
+                f"{header}{''.join(body_rows)}</tbody></table></div>"
+            )
+            short_cycle_sections.append(section)
+
+        # Build Line & Load Regulation sections when present
+        line_load_sections = []
+        line_load_plot_data = []
+        for s in steps:
+            logs = s.get("line_load_logs")
+            if not logs:
+                continue
+
+            def _has_key(prefix):
+                for entry in logs:
+                    rd = entry.get("readings", {}) or {}
+                    if any(k.startswith(prefix) for k in rd.keys()):
+                        return True
+                return False
+
+            has_gs = _has_key("gs_")
+            has_ps = _has_key("ps_")
+            has_load = _has_key("load_")
+            plot_enabled = False
+            params_raw = s.get("params")
+            if params_raw:
+                try:
+                    params_obj = json.loads(params_raw) if isinstance(params_raw, str) else params_raw
+                    if isinstance(params_obj, dict):
+                        plot_enabled = bool(params_obj.get("plot_efficiency", False))
+                except Exception:
+                    plot_enabled = False
+
+            header_cols = ["GS Set (V)", "PS Set (V)", "DL Set (A)", "Status", "Message", "Timestamp"]
+            if has_gs:
+                header_cols.extend(["GS V", "GS I", "GS P", "PF", "ITHD", "VTHD", "Freq"])
+            if has_ps:
+                header_cols.extend(["PS V", "PS I", "PS P"])
+            if has_load:
+                header_cols.extend(["Load V", "Load I", "Load P"])
+            if has_gs and (has_ps or has_load):
+                header_cols.append("Efficiency (%)")
+            header_cols.append("Errors")
+
+            header = "<table><thead><tr>" + "".join([f"<th>{c}</th>" for c in header_cols]) + "</tr></thead><tbody>"
+            body_rows = []
+            for entry in logs:
+                rd = entry.get("readings", {}) or {}
+                errs = []
+                for k in ("gs_error", "ps_error", "load_error"):
+                    if rd.get(k):
+                        errs.append(rd[k])
+                try:
+                    gs_p = _mag(rd.get("gs_power"))
+                    ps_p = _mag(rd.get("ps_power"))
+                    load_p = _mag(rd.get("load_power"))
+                    total_out = 0.0
+                    if ps_p is not None:
+                        total_out += ps_p
+                    if load_p is not None:
+                        total_out += load_p
+                    eff = (total_out / gs_p * 100.0) if gs_p not in (None, 0) and total_out is not None else None
+                except Exception:
+                    eff = None
+                body_rows.append(
+                    "<tr>"
+                    f"<td>{fmt(entry.get('gs_set'))}</td>"
+                    f"<td>{fmt(entry.get('ps_set'))}</td>"
+                    f"<td>{fmt(entry.get('dl_set'))}</td>"
+                    f"<td>{entry.get('status','')}</td>"
+                    f"<td>{entry.get('message','')}</td>"
+                    f"<td>{entry.get('timestamp','')}</td>"
+                    + (
+                        f"<td>{fmt(rd.get('gs_voltage'))}</td>"
+                        f"<td>{fmt(rd.get('gs_current'))}</td>"
+                        f"<td>{fmt(rd.get('gs_power'))}</td>"
+                        f"<td>{fmt(rd.get('gs_pf'))}</td>"
+                        f"<td>{fmt(rd.get('gs_ithd'))}</td>"
+                        f"<td>{fmt(rd.get('gs_vthd'))}</td>"
+                        f"<td>{fmt(rd.get('gs_freq'))}</td>"
+                        if has_gs else ""
+                    )
+                    + (
+                        f"<td>{fmt(rd.get('ps_voltage'))}</td>"
+                        f"<td>{fmt(rd.get('ps_current'))}</td>"
+                        f"<td>{fmt(rd.get('ps_power'))}</td>"
+                        if has_ps else ""
+                    )
+                    + (
+                        f"<td>{fmt(rd.get('load_voltage'))}</td>"
+                        f"<td>{fmt(rd.get('load_current'))}</td>"
+                        f"<td>{fmt(rd.get('load_power'))}</td>"
+                        if has_load else ""
+                    )
+                    + (f"<td>{fmt(eff)}</td>" if has_gs and (has_ps or has_load) else "")
+                    + f"<td>{' | '.join(errs) if errs else ''}</td>"
+                    + "</tr>"
+                )
+            plot_html = ""
+            if plot_enabled:
+                plot_points = []
+                for entry in logs:
+                    rd = entry.get("readings", {}) or {}
+                    gs_p = _mag(rd.get("gs_power"))
+                    if gs_p is None:
+                        gs_v = _mag(rd.get("gs_voltage"))
+                        gs_i = _mag(rd.get("gs_current"))
+                        if gs_v is not None and gs_i is not None:
+                            gs_p = gs_v * gs_i
+                    ps_p = _mag(rd.get("ps_power"))
+                    if ps_p is None:
+                        ps_v = _mag(rd.get("ps_voltage"))
+                        ps_i = _mag(rd.get("ps_current"))
+                        if ps_v is not None and ps_i is not None:
+                            ps_p = ps_v * ps_i
+                    load_p = _mag(rd.get("load_power"))
+                    if load_p is None:
+                        ld_v = _mag(rd.get("load_voltage"))
+                        ld_i = _mag(rd.get("load_current"))
+                        if ld_v is not None and ld_i is not None:
+                            load_p = ld_v * ld_i
+                    if gs_p in (None, 0):
+                        continue
+                    total_out = 0.0
+                    if ps_p is not None:
+                        total_out += ps_p
+                    if load_p is not None:
+                        total_out += load_p
+                    if total_out == 0.0:
+                        continue
+                    eff = (total_out / gs_p) * 100.0
+                    plot_points.append({
+                        "gs": entry.get("gs_set"),
+                        "ps": entry.get("ps_set"),
+                        "dl": entry.get("dl_set"),
+                        "eff": eff,
+                    })
+                plot_id = f"line-load-plot-{s.get('index')}"
+                line_load_plot_data.append({"id": plot_id, "points": plot_points})
+                plot_html = (
+                    "<div class='plot-grid' id='{pid}'>"
+                    "<div class='plot-card'>"
+                    "<div class='plot-title'>Efficiency vs GS/PS/DL (combined)</div>"
+                    "<canvas id='{pid}-combo' width='900' height='260'></canvas>"
+                    "<div class='plot-tooltip' id='{pid}-combo-tip'></div>"
+                    "</div>"
+                    "<div class='plot-card'>"
+                    "<div class='plot-title'>Efficiency vs PS Voltage</div>"
+                    "<canvas id='{pid}-ps' width='900' height='260'></canvas>"
+                    "<div class='plot-tooltip' id='{pid}-ps-tip'></div>"
+                    "</div>"
+                    "<div class='plot-card'>"
+                    "<div class='plot-title'>Efficiency vs GS Voltage</div>"
+                    "<canvas id='{pid}-gs' width='900' height='260'></canvas>"
+                    "<div class='plot-tooltip' id='{pid}-gs-tip'></div>"
+                    "</div>"
+                    "<div class='plot-card'>"
+                    "<div class='plot-title'>Efficiency vs DL Current</div>"
+                    "<canvas id='{pid}-dl' width='900' height='260'></canvas>"
+                    "<div class='plot-tooltip' id='{pid}-dl-tip'></div>"
+                    "</div>"
+                    "</div>"
+                ).format(pid=plot_id)
+
+            section = (
+                f"<div class='section'><h3>Step {s.get('index')} - {s.get('action','')}</h3>"
+                f"{plot_html}"
+                f"{header}{''.join(body_rows)}</tbody></table></div>"
+            )
+            line_load_sections.append(section)
+
         meta = report.get("meta", {})
         meta_html = "".join([f"<li><b>{k.title()}:</b> {v}</li>" for k, v in meta.items() if v])
+        plot_script = ""
+        if line_load_plot_data:
+            try:
+                plot_payload = {
+                    item["id"]: item["points"]
+                    for item in line_load_plot_data
+                    if item.get("points")
+                }
+            except Exception:
+                plot_payload = {}
+            if plot_payload:
+                plot_script = """
+<script>
+const lineLoadPlotData = __PLOT_DATA__;
+function renderScatter(canvasId, points, xKey, xLabel, tipId) {
+  const canvas = document.getElementById(canvasId);
+  const tip = document.getElementById(tipId);
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  const usable = points.filter(p => typeof p[xKey] === "number" && typeof p.eff === "number");
+  if (!usable.length) {
+    ctx.fillStyle = "#9db4d4";
+    ctx.font = "12px Segoe UI, Arial";
+    ctx.fillText("No plot data", 12, 20);
+    return;
+  }
+  const xs = usable.map(p => p[xKey]);
+  const ys = usable.map(p => p.eff);
+  const xMin = Math.min(...xs);
+  const xMax = Math.max(...xs);
+  const yMin = Math.min(...ys);
+  const yMax = Math.max(...ys);
+  const padL = 40, padR = 16, padT = 16, padB = 32;
+  const xSpan = (xMax - xMin) || 1;
+  const ySpan = (yMax - yMin) || 1;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+  ctx.strokeStyle = "#233044";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, h - padB);
+  ctx.lineTo(w - padR, h - padB);
+  ctx.stroke();
+  ctx.fillStyle = "#9db4d4";
+  ctx.font = "10px Segoe UI, Arial";
+  ctx.fillText(xLabel, padL, h - 6);
+  ctx.save();
+  ctx.translate(12, h - padB);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText("Efficiency (%)", 0, 0);
+  ctx.restore();
+  const pointsPx = [];
+  for (const p of usable) {
+    const x = padL + ((p[xKey] - xMin) / xSpan) * plotW;
+    const y = (h - padB) - ((p.eff - yMin) / ySpan) * plotH;
+    pointsPx.push({ x, y, data: p });
+    ctx.fillStyle = "#5ce1e6";
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  canvas.onmousemove = (evt) => {
+    const mx = evt.offsetX;
+    const my = evt.offsetY;
+    let hit = null;
+    let best = 9999;
+    for (const p of pointsPx) {
+      const dx = p.x - mx;
+      const dy = p.y - my;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 8 && dist < best) {
+        best = dist;
+        hit = p;
+      }
+    }
+    if (hit && tip) {
+      const d = hit.data;
+      const eff = typeof d.eff === "number" ? d.eff.toFixed(2) : "n/a";
+      tip.innerHTML = `Eff: ${eff}%<br>PSV: ${d.ps}<br>GSV: ${d.gs}<br>DLI: ${d.dl}`;
+      tip.style.left = `${mx + 10}px`;
+      tip.style.top = `${my + 10}px`;
+      tip.style.display = "block";
+    } else if (tip) {
+      tip.style.display = "none";
+    }
+  };
+  canvas.onmouseleave = () => {
+    if (tip) tip.style.display = "none";
+  };
+}
+function renderCombined(canvasId, points, tipId) {
+  const canvas = document.getElementById(canvasId);
+  const tip = document.getElementById(tipId);
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  const series = [
+    { key: "gs", label: "GS V", color: "#5ce1e6" },
+    { key: "ps", label: "PS V", color: "#f6c343" },
+    { key: "dl", label: "DL I", color: "#ff8f8f" },
+  ];
+  const usable = [];
+  for (const s of series) {
+    const pts = points.filter(p => typeof p[s.key] === "number" && typeof p.eff === "number");
+    if (pts.length) usable.push({ series: s, points: pts });
+  }
+  if (!usable.length) {
+    ctx.fillStyle = "#9db4d4";
+    ctx.font = "12px Segoe UI, Arial";
+    ctx.fillText("No plot data", 12, 20);
+    return;
+  }
+  const xsAll = usable.flatMap(group => group.points.map(p => p[group.series.key]));
+  const ysAll = usable.flatMap(group => group.points.map(p => p.eff));
+  const xMin = Math.min(...xsAll);
+  const xMax = Math.max(...xsAll);
+  const yMin = Math.min(...ysAll);
+  const yMax = Math.max(...ysAll);
+  const padL = 40, padR = 16, padT = 16, padB = 32;
+  const xSpan = (xMax - xMin) || 1;
+  const ySpan = (yMax - yMin) || 1;
+  const plotW = w - padL - padR;
+  const plotH = h - padT - padB;
+  ctx.strokeStyle = "#233044";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(padL, padT);
+  ctx.lineTo(padL, h - padB);
+  ctx.lineTo(w - padR, h - padB);
+  ctx.stroke();
+  ctx.fillStyle = "#9db4d4";
+  ctx.font = "10px Segoe UI, Arial";
+  ctx.fillText("Value", padL, h - 6);
+  ctx.save();
+  ctx.translate(12, h - padB);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillText("Efficiency (%)", 0, 0);
+  ctx.restore();
+  const pointsPx = [];
+  for (const group of usable) {
+    ctx.fillStyle = group.series.color;
+    for (const p of group.points) {
+      const x = padL + ((p[group.series.key] - xMin) / xSpan) * plotW;
+      const y = (h - padB) - ((p.eff - yMin) / ySpan) * plotH;
+      pointsPx.push({ x, y, data: p, series: group.series });
+      ctx.beginPath();
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  let legendX = w - padR - 70;
+  let legendY = padT + 4;
+  for (const s of series) {
+    ctx.fillStyle = s.color;
+    ctx.fillRect(legendX, legendY, 10, 10);
+    ctx.fillStyle = "#9db4d4";
+    ctx.fillText(s.label, legendX + 14, legendY + 9);
+    legendY += 14;
+  }
+  canvas.onmousemove = (evt) => {
+    const mx = evt.offsetX;
+    const my = evt.offsetY;
+    let hit = null;
+    let best = 9999;
+    for (const p of pointsPx) {
+      const dx = p.x - mx;
+      const dy = p.y - my;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 8 && dist < best) {
+        best = dist;
+        hit = p;
+      }
+    }
+    if (hit && tip) {
+      const d = hit.data;
+      const eff = typeof d.eff === "number" ? d.eff.toFixed(2) : "n/a";
+      const label = hit.series.label;
+      const val = d[hit.series.key];
+      tip.innerHTML = `${label}: ${val}<br>Eff: ${eff}%<br>PSV: ${d.ps}<br>GSV: ${d.gs}<br>DLI: ${d.dl}`;
+      tip.style.left = `${mx + 10}px`;
+      tip.style.top = `${my + 10}px`;
+      tip.style.display = "block";
+    } else if (tip) {
+      tip.style.display = "none";
+    }
+  };
+  canvas.onmouseleave = () => {
+    if (tip) tip.style.display = "none";
+  };
+}
+function renderLineLoadPlots() {
+  Object.entries(lineLoadPlotData).forEach(([plotId, points]) => {
+    renderCombined(`${plotId}-combo`, points, `${plotId}-combo-tip`);
+    renderScatter(`${plotId}-ps`, points, "ps", "PS Voltage (V)", `${plotId}-ps-tip`);
+    renderScatter(`${plotId}-gs`, points, "gs", "GS Voltage (V)", `${plotId}-gs-tip`);
+    renderScatter(`${plotId}-dl`, points, "dl", "DL Current (A)", `${plotId}-dl-tip`);
+  });
+}
+document.addEventListener("DOMContentLoaded", renderLineLoadPlots);
+</script>
+""".replace("__PLOT_DATA__", json.dumps(plot_payload))
         html = f"""<!DOCTYPE html>
 <html>
 <head>
@@ -1214,6 +1743,11 @@ table {{ width: 100%; border-collapse: collapse; margin-top: 16px; border: 1px s
 th, td {{ border: 1px solid #1f2b3d; padding: 10px; vertical-align: top; font-size: 13px; }}
 th {{ background: #162133; color: #c8ddf5; text-align: left; }}
 tr:nth-child(even) {{ background: #0f1726; }}
+.plot-grid {{ display: grid; grid-template-columns: 1fr; gap: 18px; margin: 16px 0 22px 0; }}
+.plot-card {{ background: linear-gradient(180deg, #111a2a 0%, #0b111a 100%); border: 1px solid #233044; border-radius: 10px; padding: 12px; position: relative; box-shadow: 0 6px 18px rgba(0,0,0,0.25); }}
+.plot-card canvas {{ width: 100%; height: 260px; display: block; }}
+.plot-title {{ font-size: 13px; color: #c8ddf5; margin-bottom: 8px; letter-spacing: 0.3px; }}
+.plot-tooltip {{ position: absolute; background: #0b111a; border: 1px solid #233044; color: #e7f1ff; padding: 6px 8px; border-radius: 6px; font-size: 11px; display: none; pointer-events: none; z-index: 5; }}
 tr:nth-child(odd) {{ background: #0c141f; }}
 .step-pass {{ color: #6dffb3; font-weight: 600; }}
 .step-fail {{ color: #ff8f8f; font-weight: 600; }}
@@ -1236,7 +1770,10 @@ tr:nth-child(odd) {{ background: #0c141f; }}
     </tbody>
   </table>
   {'<h2>Ramp Set &amp; Measure Results</h2>' + ''.join(ramp_sections) if ramp_sections else ''}
+  {'<h2>Short Circuit Cycle Results</h2>' + ''.join(short_cycle_sections) if short_cycle_sections else ''}
+  {'<h2>Line &amp; Load Regulation Results</h2>' + ''.join(line_load_sections) if line_load_sections else ''}
 </div>
+{plot_script}
 </body>
 </html>"""
         out_path.write_text(html, encoding="utf-8")
@@ -1266,31 +1803,20 @@ tr:nth-child(odd) {{ background: #0c141f; }}
             self.ensure_signalplot_tab_built()
         if index == self.canmatrix_tab_index:
             self.ensure_canmatrix_tab_built()
+        if index == self.powerbank_tab_index:
+            self.ensure_powerbank_tab_built()
         if index == self.error_tab_index:
             self.ensure_error_tab_built()
         if index == self.standards_tab_index:
             self.ensure_standards_tab_built()
+        if index == self.diagnostics_tab_index:
+            self.ensure_diagnostics_tab_built()
         if index == self.tools_tab_index:
-            self.load_log_tail()
-            self.log_timer.start()
+            if hasattr(self, "system_log_tab"):
+                self.system_log_tab.start_auto_refresh()
         else:
-            if hasattr(self, 'log_timer'):
-                self.log_timer.stop()
-    
-    def load_log_tail(self, max_lines=400):
-        """Load the tail of the log file into the log viewer."""
-        path = self.log_path or os.path.join("logs", "app.log")
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                lines = f.readlines()
-            tail_lines = lines[-max_lines:]
-            # Show most recent entries first without erasing history
-            tail = "".join(reversed(tail_lines))
-            self.log_view.setPlainText(tail)
-        except FileNotFoundError:
-            self.log_view.setPlainText(f"No log file yet at {path}")
-        except Exception as e:
-            self.log_view.setPlainText(f"Error reading log: {e}")
+            if hasattr(self, "system_log_tab"):
+                self.system_log_tab.stop_auto_refresh()
     
     def _log(self, level, message):
         """Helper to log application events consistently."""
@@ -1315,6 +1841,11 @@ tr:nth-child(odd) {{ background: #0c141f; }}
         try:
             if hasattr(self, 'inst_mgr') and self.inst_mgr:
                 self.inst_mgr.close_instruments()
+        except Exception:
+            pass
+        try:
+            if hasattr(self, "powerbank_widget") and self.powerbank_widget:
+                self.powerbank_widget.close()
         except Exception:
             pass
         event.accept()

@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "author": "",
+    "description": "",
+    "last_modified": "2026-01-20T16:39:37.680742",
+    "name": "short ckt",
+    "tags": [],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "PS / HV: Output ON",
+      "params": ""
+    },
+    {
+      "action": "Wait",
+      "params": "5"
+    },
+    {
+      "action": "LOAD / Set CC (A)",
+      "params": "6.0"
+    },
+    {
+      "action": "LOAD / Input ON",
+      "params": ""
+    },
+    {
+      "action": "Wait",
+      "params": "5"
+    },
+    {
+      "action": "LOAD / Short Circuit Pulse",
+      "params": "0.5"
+    },
+    {
+      "action": "PS / HV: Output OFF",
+      "params": ""
+    },
+    {
+      "action": "LOAD / Input OFF",
+      "params": ""
+    }
+  ]
+}

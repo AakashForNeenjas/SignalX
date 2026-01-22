@@ -1,0 +1,62 @@
+{
+  "sim": {
+    "description": "Simulation only (no hardware required)",
+    "simulation_mode": true,
+    "can": {
+      "interface": "pcan",
+      "channel": "PCAN_USBBUS1",
+      "bitrate": 500000
+    },
+    "instruments": {
+      "Bi-Directional Power Supply": "TCPIP::192.168.4.53::INSTR",
+      "Grid Emulator": "TCPIP::192.168.4.52::INSTR",
+      "Oscilloscope": "TCPIP::192.168.4.51::INSTR",
+      "DC Load": "COM3"
+    },
+    "logging": {
+      "level": "INFO",
+      "file": "app.log",
+      "dir": "logs"
+    }
+  },
+  "lab_a": {
+    "description": "Lab A bench settings",
+    "simulation_mode": false,
+    "can": {
+      "interface": "pcan",
+      "channel": "PCAN_USBBUS1",
+      "bitrate": 500000
+    },
+    "instruments": {
+      "Bi-Directional Power Supply": "TCPIP::192.168.4.53::INSTR",
+      "Grid Emulator": "TCPIP::192.168.4.52::INSTR",
+      "Oscilloscope": "TCPIP::192.168.4.51::INSTR",
+      "DC Load": "COM3"
+    },
+    "logging": {
+      "level": "INFO",
+      "file": "app.log",
+      "dir": "logs"
+    }
+  },
+  "lab_b": {
+    "description": "Lab B bench settings",
+    "simulation_mode": false,
+    "can": {
+      "interface": "pcan",
+      "channel": "PCAN_USBBUS2",
+      "bitrate": 500000
+    },
+    "instruments": {
+      "Bi-Directional Power Supply": "TCPIP::192.168.5.53::INSTR",
+      "Grid Emulator": "TCPIP::192.168.5.52::INSTR",
+      "Oscilloscope": "TCPIP::192.168.5.51::INSTR",
+      "DC Load": "COM4"
+    },
+    "logging": {
+      "level": "INFO",
+      "file": "app.log",
+      "dir": "logs"
+    }
+  }
+}
