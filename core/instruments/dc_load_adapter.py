@@ -12,6 +12,13 @@ try:
 except Exception:
     pass
 
+_SERIAL_IMPORT_ERROR: Optional[str] = None
+try:
+    import serial  # noqa: F401
+    import serial.tools.list_ports as _list_ports  # noqa: F401
+except Exception as exc:
+    _SERIAL_IMPORT_ERROR = str(exc)
+
 
 class SimDCLoader:
     def __init__(self):
@@ -89,8 +96,9 @@ def _load_dc_driver(module_path: Optional[str] = None) -> ModuleType:
 def _discover_ports() -> List[str]:
     ports = []
     try:
-        import serial.tools.list_ports as lp
-        for p in lp.comports():
+        if _SERIAL_IMPORT_ERROR:
+            return ports
+        for p in _list_ports.comports():
             ports.append(p.device)
     except Exception:
         pass
@@ -108,6 +116,8 @@ def connect_dc_load(
 ) -> Tuple[Optional[object], str]:
     if simulation_mode:
         return SimDCLoader(), "DC Load connected (simulation)"
+    if _SERIAL_IMPORT_ERROR:
+        return None, f"DC Load driver missing dependency: {_SERIAL_IMPORT_ERROR}"
 
     candidates: List[str] = []
     if port:

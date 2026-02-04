@@ -1,6 +1,8 @@
 import hashlib
 import json
+import logging
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -10,19 +12,65 @@ from typing import Optional, Dict, Any, List, Callable
 
 from packaging import version
 
+logger = logging.getLogger(__name__)
+
 try:
     import requests
-except Exception:  # pragma: no cover
+except ImportError:  # pragma: no cover
     requests = None
 import urllib.request
 import urllib.error
 
 
+def _validate_version_string(version_str: str) -> bool:
+    """Validate that a version string is safe and properly formatted."""
+    # Allow semantic versioning: X.Y.Z with optional pre-release suffix
+    pattern = r"^\d+\.\d+\.\d+(-[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*)?$"
+    return bool(re.match(pattern, version_str))
+
+
 def read_local_version(version_file: str = "VERSION") -> str:
-    try:
-        return Path(version_file).read_text(encoding="utf-8").strip()
-    except Exception:
+    """
+    Read the local application version from VERSION file.
+
+    Searches in multiple locations for the VERSION file and returns
+    the first valid version string found.
+
+    Args:
+        version_file: Name of the version file to look for.
+
+    Returns:
+        Version string or "0.0.0" if not found.
+    """
+    # Validate filename to prevent path traversal
+    if ".." in version_file or os.path.sep in version_file:
+        logger.warning(f"Invalid version_file path: {version_file}")
         return "0.0.0"
+
+    candidates = []
+    if hasattr(sys, "_MEIPASS"):
+        candidates.append(Path(sys._MEIPASS) / version_file)
+    try:
+        candidates.append(Path(sys.executable).resolve().parent / version_file)
+    except Exception as e:
+        logger.debug(f"Could not resolve executable parent: {e}")
+
+    candidates.append(Path(__file__).resolve().parent.parent / version_file)
+    candidates.append(Path.cwd() / version_file)
+
+    for path in candidates:
+        try:
+            if path.exists():
+                value = path.read_text(encoding="utf-8").strip()
+                if value and _validate_version_string(value):
+                    return value
+                elif value:
+                    logger.warning(f"Invalid version format in {path}: {value}")
+        except Exception as e:
+            logger.debug(f"Could not read version from {path}: {e}")
+            continue
+
+    return "0.0.0"
 
 
 def _fetch_json(url: str, headers: Optional[Dict[str, str]] = None) -> Dict[str, Any]:
@@ -52,34 +100,80 @@ class DownloadCancelled(Exception):
 
 
 def _download(url: str, dest_dir: str, progress_cb: Optional[Callable[[int, int], bool]] = None) -> str:
+    """
+    Download a file from URL to destination directory.
+
+    Args:
+        url: URL to download from.
+        dest_dir: Directory to save the downloaded file.
+        progress_cb: Optional callback(downloaded, total) -> bool. Return False to cancel.
+
+    Returns:
+        Path to the downloaded file.
+
+    Raises:
+        DownloadCancelled: If download was cancelled via callback.
+        ValueError: If URL is invalid.
+        Exception: On download errors.
+    """
+    # Validate URL
+    if not url or not url.startswith(("https://", "http://")):
+        raise ValueError(f"Invalid URL: {url}")
+
+    # Prefer HTTPS
+    if url.startswith("http://"):
+        logger.warning(f"Downloading over insecure HTTP: {url}")
+
     os.makedirs(dest_dir, exist_ok=True)
-    fd, tmp_path = tempfile.mkstemp(dir=dest_dir, prefix="update_", suffix=os.path.basename(url))
+
+    # Extract safe filename from URL
+    url_filename = os.path.basename(url.split("?")[0])  # Remove query params
+    safe_suffix = "".join(c for c in url_filename if c.isalnum() or c in "._-")[:50]
+    if not safe_suffix:
+        safe_suffix = "download"
+
+    fd, tmp_path = tempfile.mkstemp(dir=dest_dir, prefix="update_", suffix=f"_{safe_suffix}")
     os.close(fd)
-    if requests:
-        with requests.get(url, stream=True, timeout=30) as r:
-            r.raise_for_status()
-            total = int(r.headers.get("Content-Length", "0") or 0)
-            downloaded = 0
-            with open(tmp_path, "wb") as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    if chunk:
-                        f.write(chunk)
-                        downloaded += len(chunk)
-                        if progress_cb and progress_cb(downloaded, total) is False:
-                            raise DownloadCancelled(tmp_path)
-    else:
-        with urllib.request.urlopen(url, timeout=30) as resp, open(tmp_path, "wb") as f:
-            total = int(getattr(resp, "length", 0) or 0)
-            downloaded = 0
-            while True:
-                chunk = resp.read(8192)
-                if not chunk:
-                    break
-                f.write(chunk)
-                downloaded += len(chunk)
-                if progress_cb and progress_cb(downloaded, total) is False:
-                    raise DownloadCancelled(tmp_path)
-    return tmp_path
+
+    try:
+        if requests:
+            with requests.get(url, stream=True, timeout=30) as r:
+                r.raise_for_status()
+                total = int(r.headers.get("Content-Length", "0") or 0)
+                downloaded = 0
+                with open(tmp_path, "wb") as f:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        if chunk:
+                            f.write(chunk)
+                            downloaded += len(chunk)
+                            if progress_cb and progress_cb(downloaded, total) is False:
+                                raise DownloadCancelled(tmp_path)
+        else:
+            with urllib.request.urlopen(url, timeout=30) as resp, open(tmp_path, "wb") as f:
+                total = int(getattr(resp, "length", 0) or 0)
+                downloaded = 0
+                while True:
+                    chunk = resp.read(8192)
+                    if not chunk:
+                        break
+                    f.write(chunk)
+                    downloaded += len(chunk)
+                    if progress_cb and progress_cb(downloaded, total) is False:
+                        raise DownloadCancelled(tmp_path)
+
+        logger.info(f"Downloaded {downloaded} bytes to {tmp_path}")
+        return tmp_path
+
+    except DownloadCancelled:
+        raise
+    except Exception as e:
+        # Clean up partial download on error
+        try:
+            if os.path.exists(tmp_path):
+                os.remove(tmp_path)
+        except Exception:
+            pass
+        raise
 
 
 def _pick_release(releases: List[Dict[str, Any]], include_prerelease: bool) -> Optional[Dict[str, Any]]:
@@ -191,12 +285,64 @@ def _find_update_root(extract_dir: str, exe_name: str) -> Optional[str]:
     return None
 
 
+def _validate_path(path: str, description: str) -> bool:
+    """
+    Validate a path to prevent directory traversal and injection attacks.
+
+    Args:
+        path: The path to validate.
+        description: Description for error messages.
+
+    Returns:
+        True if path is valid.
+
+    Raises:
+        ValueError: If path contains dangerous patterns.
+    """
+    if not path:
+        raise ValueError(f"{description} is empty")
+
+    # Check for path traversal attempts
+    normalized = os.path.normpath(path)
+    if ".." in normalized:
+        raise ValueError(f"{description} contains path traversal: {path}")
+
+    # Check for shell metacharacters that could be injected
+    dangerous_chars = ['|', '&', ';', '$', '`', '\n', '\r', '"', "'", '<', '>']
+    for char in dangerous_chars:
+        if char in path:
+            raise ValueError(f"{description} contains dangerous character '{char}': {path}")
+
+    return True
+
+
 def install_update(download_path: str, relaunch: bool = True) -> Dict[str, Any]:
     """
     Replace the current executable with the downloaded one (Windows).
-    If the download is a .zip, attempts to extract the first .exe in it.
+
+    If the download is a .zip, attempts to extract and find the executable.
+
+    SECURITY NOTES:
+    - Only runs from frozen (PyInstaller) executables
+    - Validates all paths to prevent injection attacks
+    - Uses unique batch file name to prevent race conditions
+    - Waits for process to exit before overwriting
+
+    Args:
+        download_path: Path to the downloaded update file (.zip or .exe).
+        relaunch: Whether to relaunch the application after update.
+
+    Returns:
+        Dict with status and path/error information.
     """
-    if not download_path or not os.path.exists(download_path):
+    # Validate inputs
+    try:
+        _validate_path(download_path, "Download path")
+    except ValueError as e:
+        logger.error(f"Path validation failed: {e}")
+        return {"status": "error", "error": str(e)}
+
+    if not os.path.exists(download_path):
         return {"status": "error", "error": "Downloaded file not found"}
 
     if not getattr(sys, "frozen", False):
@@ -205,45 +351,104 @@ def install_update(download_path: str, relaunch: bool = True) -> Dict[str, Any]:
     target_exe = sys.executable
     src_path = download_path
 
+    # Validate target executable path
+    try:
+        _validate_path(target_exe, "Target executable")
+    except ValueError as e:
+        logger.error(f"Target path validation failed: {e}")
+        return {"status": "error", "error": str(e)}
+
     if download_path.lower().endswith(".zip"):
         try:
             with zipfile.ZipFile(download_path, "r") as zf:
+                # Security: Check for zip slip vulnerability
                 extract_dir = tempfile.mkdtemp(prefix="update_extract_")
+                for member in zf.namelist():
+                    member_path = os.path.normpath(os.path.join(extract_dir, member))
+                    if not member_path.startswith(os.path.normpath(extract_dir)):
+                        logger.error(f"Zip slip attempt detected: {member}")
+                        return {"status": "error", "error": "Malicious zip file detected"}
                 zf.extractall(extract_dir)
+
             exe_name = os.path.basename(target_exe)
             update_root = _find_update_root(extract_dir, exe_name)
             if not update_root:
                 return {"status": "error", "error": "Update zip missing expected layout or exe"}
             src_path = update_root
+        except zipfile.BadZipFile as e:
+            logger.error(f"Invalid zip file: {e}")
+            return {"status": "error", "error": f"Invalid zip file: {e}"}
         except Exception as e:
+            logger.error(f"Zip extract failed: {e}")
             return {"status": "error", "error": f"Zip extract failed: {e}"}
 
-    bat_path = os.path.join(tempfile.gettempdir(), "atomx_update.bat")
+    # Validate source path after extraction
+    try:
+        _validate_path(src_path, "Source path")
+    except ValueError as e:
+        logger.error(f"Source path validation failed: {e}")
+        return {"status": "error", "error": str(e)}
+
+    # Generate unique batch file name to prevent race conditions
+    import uuid
+    bat_name = f"atomx_update_{uuid.uuid4().hex[:8]}.bat"
+    bat_path = os.path.join(tempfile.gettempdir(), bat_name)
+
     app_dir = os.path.dirname(target_exe)
+
+    # Escape paths for batch file (double quotes handle most cases)
+    # Additional validation already done above
     if os.path.isdir(src_path):
         src_dir = src_path
-        with open(bat_path, "w", encoding="utf-8") as f:
-            f.write(
-                "@echo off\n"
-                "setlocal\n"
-                "ping 127.0.0.1 -n 3 >nul\n"
-                f"xcopy /E /Y /I \"{src_dir}\\*\" \"{app_dir}\\\" >nul\n"
-                + (f"start \"\" \"{target_exe}\"\n" if relaunch else "")
-                + "del \"%~f0\"\n"
-            )
+        batch_content = (
+            "@echo off\n"
+            "setlocal EnableDelayedExpansion\n"
+            "echo Waiting for application to close...\n"
+            "timeout /t 3 /nobreak >nul\n"
+            f'xcopy /E /Y /I "{src_dir}\\*" "{app_dir}\\" >nul 2>&1\n'
+            "if errorlevel 1 (\n"
+            "    echo Update failed. Please try again.\n"
+            "    pause\n"
+            "    exit /b 1\n"
+            ")\n"
+            "echo Update successful!\n"
+            + (f'start "" "{target_exe}"\n' if relaunch else "")
+            + 'del "%~f0"\n'
+        )
     else:
-        with open(bat_path, "w", encoding="utf-8") as f:
-            f.write(
-                "@echo off\n"
-                "setlocal\n"
-                "ping 127.0.0.1 -n 3 >nul\n"
-                f"copy /Y \"{src_path}\" \"{target_exe}\" >nul\n"
-                "if errorlevel 1 exit /b 1\n"
-                + (f"start \"\" \"{target_exe}\"\n" if relaunch else "")
-                + "del \"%~f0\"\n"
-            )
+        batch_content = (
+            "@echo off\n"
+            "setlocal EnableDelayedExpansion\n"
+            "echo Waiting for application to close...\n"
+            "timeout /t 3 /nobreak >nul\n"
+            f'copy /Y "{src_path}" "{target_exe}" >nul 2>&1\n'
+            "if errorlevel 1 (\n"
+            "    echo Update failed. Please try again.\n"
+            "    pause\n"
+            "    exit /b 1\n"
+            ")\n"
+            "echo Update successful!\n"
+            + (f'start "" "{target_exe}"\n' if relaunch else "")
+            + 'del "%~f0"\n'
+        )
+
     try:
-        subprocess.Popen(["cmd", "/c", bat_path], creationflags=subprocess.CREATE_NEW_CONSOLE)
+        with open(bat_path, "w", encoding="utf-8") as f:
+            f.write(batch_content)
     except Exception as e:
+        logger.error(f"Failed to write update script: {e}")
+        return {"status": "error", "error": f"Failed to write update script: {e}"}
+
+    try:
+        # Use shell=False and explicit cmd.exe path for security
+        subprocess.Popen(
+            ["cmd.exe", "/c", bat_path],
+            creationflags=subprocess.CREATE_NEW_CONSOLE,
+            shell=False
+        )
+        logger.info(f"Update process started, updating to {src_path}")
+    except Exception as e:
+        logger.error(f"Failed to launch updater: {e}")
         return {"status": "error", "error": f"Failed to launch updater: {e}"}
+
     return {"status": "started", "path": target_exe}

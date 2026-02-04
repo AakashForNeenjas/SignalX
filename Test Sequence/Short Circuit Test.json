@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "author": "Aakash",
+    "description": "",
+    "last_modified": "2026-01-27T13:50:36.150645",
+    "name": "Short Circuit Test",
+    "tags": [],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "LOAD / Short Circuit Cycle",
+      "params": "{\"cycles\": 3, \"pulse_s\": 0.1, \"input_on_delay_s\": 5.0, \"dwell_s\": 5.0, \"precharge_s\": 0.0, \"cc_a\": 6.0, \"ps_output\": true, \"ps_toggle_each_cycle\": true, \"gs_telemetry\": true, \"input_on_each_cycle\": true, \"stop_on_fail\": true}"
+    }
+  ]
+}

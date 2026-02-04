@@ -45,10 +45,10 @@ class SequenceEditorRow(QWidget):
             item.setForeground(QBrush(QColor("#888888")))
             item.setData(Qt.AlignmentFlag.AlignCenter, Qt.ItemDataRole.TextAlignmentRole)
 
-        grouped = {"GS": [], "PS": [], "OS": [], "LOAD": [], "INSTR": [], "RAMP": []}
+        grouped = {"GS": [], "PS": [], "OS": [], "LOAD": [], "INSTR": [], "RAMP": [], "TEST": []}
         for act in instrument_actions:
             grouped.setdefault(act.group, []).append(act)
-        for group_name in ["GS", "PS", "OS", "LOAD", "INSTR", "RAMP"]:
+        for group_name in ["GS", "PS", "OS", "LOAD", "TEST", "INSTR", "RAMP"]:
             acts = grouped.get(group_name, [])
             if not acts:
                 continue

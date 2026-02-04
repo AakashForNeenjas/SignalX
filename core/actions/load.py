@@ -1,5 +1,6 @@
 import json
 import time
+import json
 
 from core.actions.params import parse_json_dict, parse_number
 
@@ -93,11 +94,14 @@ def handle_load(action_name, params, ctx):
         cycles = int(data.get("cycles", 0) or 0)
         pulse_s = parse_number(data.get("pulse_s"), default=None)
         input_on_delay_s = parse_number(data.get("input_on_delay_s"), default=0.0)
+        post_pulse_wait_s = parse_number(data.get("post_pulse_wait_s"), default=1.0)
+        ps_reset_off_wait_s = parse_number(data.get("ps_reset_off_s"), default=1.0)
         dwell_s = parse_number(data.get("dwell_s"), default=0.0)
         precharge_s = parse_number(data.get("precharge_s"), default=0.0)
         cc_a = parse_number(data.get("cc_a"), default=None)
         ps_output = bool(data.get("ps_output", True))
         ps_toggle_each_cycle = bool(data.get("ps_toggle_each_cycle", False))
+        ps_reset_each_cycle = bool(data.get("ps_reset_each_cycle", True))
         gs_telemetry = bool(data.get("gs_telemetry", False))
         input_toggle = bool(data.get("input_on_each_cycle", True))
         stop_on_fail = bool(data.get("stop_on_fail", True))
@@ -108,6 +112,10 @@ def handle_load(action_name, params, ctx):
             return False, "pulse_s must be > 0"
         if input_on_delay_s is None or input_on_delay_s < 0:
             return False, "input_on_delay_s must be >= 0"
+        if post_pulse_wait_s is None or post_pulse_wait_s < 0:
+            return False, "post_pulse_wait_s must be >= 0"
+        if ps_reset_off_wait_s is None or ps_reset_off_wait_s < 0:
+            return False, "ps_reset_off_s must be >= 0"
         if dwell_s is None or dwell_s < 0:
             return False, "dwell_s must be >= 0"
         if precharge_s is None or precharge_s < 0:
@@ -139,6 +147,7 @@ def handle_load(action_name, params, ctx):
 
         logs = []
         last_error = None
+        skip_cycle_ps_on = False
         for idx in range(1, cycles + 1):
             if ctx.stop_event.is_set() or not ctx.running:
                 last_error = "Sequence stopped"
@@ -152,25 +161,32 @@ def handle_load(action_name, params, ctx):
             input_delay_actual_s = None
             ps_on_s = None
             ps_off_s = None
+            post_pulse_wait_actual_s = None
+            ps_reset_off_wait_actual_s = None
+            ps_reset_off_s = None
+            ps_reset_on_s = None
             ok = True
             msg = ""
 
             try:
                 if ps_output and ps_toggle_each_cycle:
-                    ctx.log_cmd("PS OUTPUT ON")
-                    try:
-                        ps_on_start = time.perf_counter()
-                        ps.power_on()
-                        ps_on_s = time.perf_counter() - ps_on_start
-                        cycle_ps_on = True
-                    except Exception as exc:
-                        last_error = f"PS Output ON failed: {exc}"
-                        if stop_on_fail:
-                            break
-                        else:
-                            continue
-                    if precharge_s:
-                        time.sleep(precharge_s)
+                    if skip_cycle_ps_on:
+                        skip_cycle_ps_on = False
+                    else:
+                        ctx.log_cmd("PS OUTPUT ON")
+                        try:
+                            ps_on_start = time.perf_counter()
+                            ps.power_on()
+                            ps_on_s = time.perf_counter() - ps_on_start
+                            cycle_ps_on = True
+                        except Exception as exc:
+                            last_error = f"PS Output ON failed: {exc}"
+                            if stop_on_fail:
+                                break
+                            else:
+                                continue
+                        if precharge_s:
+                            time.sleep(precharge_s)
 
                 if input_toggle:
                     if input_on_delay_s:
@@ -226,6 +242,41 @@ def handle_load(action_name, params, ctx):
                                 ctx.inst_mgr.dc_load_stop_short_circuit()
                             except Exception:
                                 pass
+                if ps_output and ps_reset_each_cycle:
+                    if post_pulse_wait_s:
+                        wait_start = time.perf_counter()
+                        time.sleep(post_pulse_wait_s)
+                        post_pulse_wait_actual_s = time.perf_counter() - wait_start
+                    try:
+                        ctx.log_cmd("PS OUTPUT OFF")
+                        reset_off_start = time.perf_counter()
+                        ps.power_off()
+                        ps_reset_off_s = time.perf_counter() - reset_off_start
+                    except Exception as exc:
+                        msg = f"PS reset OFF failed: {exc}"
+                        ok = False
+                        if stop_on_fail:
+                            last_error = msg
+                            break
+                    if ps_reset_off_wait_s:
+                        wait_start = time.perf_counter()
+                        time.sleep(ps_reset_off_wait_s)
+                        ps_reset_off_wait_actual_s = time.perf_counter() - wait_start
+                    try:
+                        ctx.log_cmd("PS OUTPUT ON")
+                        reset_on_start = time.perf_counter()
+                        ps.power_on()
+                        ps_reset_on_s = time.perf_counter() - reset_on_start
+                        cycle_ps_on = True
+                        skip_cycle_ps_on = True
+                    except Exception as exc:
+                        msg = f"PS reset ON failed: {exc}"
+                        ok = False
+                        if stop_on_fail:
+                            last_error = msg
+                            break
+                    if precharge_s:
+                        time.sleep(precharge_s)
             finally:
                 if ps_output and ps_toggle_each_cycle and cycle_ps_on:
                     try:
@@ -257,10 +308,16 @@ def handle_load(action_name, params, ctx):
                         "pulse_actual_s": pulse_actual_s,
                         "input_on_delay_set_s": input_on_delay_s,
                         "input_on_delay_actual_s": input_delay_actual_s,
+                        "post_pulse_wait_set_s": post_pulse_wait_s,
+                        "post_pulse_wait_actual_s": post_pulse_wait_actual_s,
+                        "ps_reset_off_wait_set_s": ps_reset_off_wait_s,
+                        "ps_reset_off_wait_actual_s": ps_reset_off_wait_actual_s,
                         "dwell_set_s": dwell_s,
                         "dwell_actual_s": dwell_actual_s,
                         "ps_on_s": ps_on_s,
                         "ps_off_s": ps_off_s,
+                        "ps_reset_off_s": ps_reset_off_s,
+                        "ps_reset_on_s": ps_reset_on_s,
                         "cycle_total_s": time.perf_counter() - cycle_start,
                     },
                     "readings": readings,

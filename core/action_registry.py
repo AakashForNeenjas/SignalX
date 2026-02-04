@@ -108,6 +108,7 @@ INSTRUMENT_ACTIONS: List[ActionDef] = [
     # Generic ramp (cross-domain)
     ActionDef("RAMP / Ramp Set & Measure", "RAMP", param_type="str", description="Ramp target (CAN/GS/PS) and measure GS+PS per step (JSON params)"),
     ActionDef("RAMP / Line and Load Regulation", "RAMP", param_type="str", description="Nested GS/PS/DL sweep with measurements (JSON params)"),
+
     # Instrument lifecycle
     ActionDef("INSTR / Initialize Instruments", "INSTR", description="Initialize all instruments"),
     ActionDef("INSTR / INIT GS", "INSTR", description="Init grid simulator only"),

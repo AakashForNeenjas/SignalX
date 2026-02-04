@@ -54,6 +54,9 @@ pyqtdarktheme==0.1.7
 pyqtgraph==0.14.0
 pyserial==3.5
 pytest==9.0.2
+pytest-cov==7.1.1
+pytest-mock==3.14.0
+pytest-asyncio==0.25.3
 python-can[pcan]==4.6.1
 python-dateutil==2.9.0.post0
 pytz==2025.2
@@ -64,15 +67,12 @@ PyYAML==6.0.3
 referencing==0.37.0
 requests==2.32.5
 rpds-py==0.30.0
-serial==0.0.97
 setuptools==80.9.0
 six==1.17.0
 smmap==5.0.2
 streamlit==1.52.1
 tenacity==9.1.2
 textparser==0.24.0
-# Editable install with no version control (thermal_analyzer==0.1.0)
--e c:\users\aakas\onedrive\desktop\projects\thermax
 toml==0.10.2
 tornado==6.5.2
 typing_extensions==4.15.0
@@ -81,3 +81,9 @@ urllib3==2.6.0
 watchdog==6.0.0
 wrapt==1.17.3
 xlsxwriter==3.2.9
+
+# Development and testing dependencies
+mypy==1.17.0
+black==26.1.1
+flake8==9.1.1
+pylint==4.1.2

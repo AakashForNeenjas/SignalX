@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "author": "Aakash",
+    "description": "",
+    "last_modified": "2026-01-28T00:41:27.753284",
+    "name": "Load Regulation",
+    "tags": [],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "RAMP / Line and Load Regulation",
+      "params": "{\"gs\": {\"start\": 0.0, \"step\": 1.0, \"end\": 0.0, \"dwell\": 0.5, \"tolerance\": 0.5}, \"ps\": {\"start\": 84.0, \"step\": 1.0, \"end\": 84.0, \"dwell\": 4.0, \"tolerance\": 0.5}, \"dl\": {\"start\": 0.0, \"step\": 1.0, \"end\": 30.0, \"dwell\": 3.0, \"tolerance\": 0.1}, \"verify\": {\"gs\": true, \"ps\": true, \"dl\": true}, \"retries\": 2, \"dl_reset\": true, \"abort_on_fail\": true, \"plot_efficiency\": true}"
+    }
+  ]
+}

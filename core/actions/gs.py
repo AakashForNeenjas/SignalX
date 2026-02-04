@@ -117,7 +117,7 @@ def handle_gs(action_name, params, ctx):
         start = data.get("start", None)
         step = data.get("step", 1.0)
         end = data.get("end", None)
-        delay = data.get("delay", 0.5)
+        delay = data.get("delay", data.get("dwell", 0.5))
         tolerance = data.get("tolerance", 0.5)
         retries = int(data.get("retries", 3))
 
@@ -178,7 +178,7 @@ def handle_gs(action_name, params, ctx):
         start = data.get("start", None)
         step = data.get("step", 1.0)
         end = data.get("end", None)
-        delay = data.get("delay", 0.5)
+        delay = data.get("delay", data.get("dwell", 0.5))
         tolerance = data.get("tolerance", 0.5)
         retries = int(data.get("retries", 3))
 

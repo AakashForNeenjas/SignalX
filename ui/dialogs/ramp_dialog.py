@@ -75,7 +75,10 @@ class RampDialog(QDialog):
         self.spin_delay = QDoubleSpinBox()
         self.spin_delay.setRange(0, 3600)
         self.spin_delay.setDecimals(3)
-        self.spin_delay.setValue(initial.get("delay", 0.5) if initial else 0.5)
+        if initial:
+            self.spin_delay.setValue(initial.get("dwell", initial.get("delay", 0.5)))
+        else:
+            self.spin_delay.setValue(0.5)
 
         self.spin_tol = QDoubleSpinBox()
         self.spin_tol.setRange(0, 1000)

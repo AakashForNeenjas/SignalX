@@ -535,7 +535,7 @@ class Dashboard(QWidget):
             import json
             try:
                 data = json.loads(params)
-                display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay')}s"
+                display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay', data.get('dwell'))}s"
                 if data.get("ps_voltage"):
                     display += f" PSV:{data.get('ps_voltage')}"
             except Exception:
@@ -550,7 +550,7 @@ class Dashboard(QWidget):
                 if 'voltage' in data and 'current' in data:
                     display = f"V:{data.get('voltage')}V I:{data.get('current')}A"
                 elif 'start' in data:
-                    display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay')}s"
+                    display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay', data.get('dwell'))}s"
                     if 'log_file' in data:
                         display += f" Log:{data.get('log_file')}"
                 else:
@@ -663,7 +663,7 @@ class Dashboard(QWidget):
                 if dialog.exec() == QDialog.DialogCode.Accepted:
                     data = dialog.get_values()
                     json_text = json.dumps(data)
-                    display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay')}s"
+                    display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay', data.get('dwell'))}s"
                     if data.get("ps_voltage"):
                         display += f" PSV:{data.get('ps_voltage')}"
                     item = QTableWidgetItem(display)
@@ -858,7 +858,7 @@ class Dashboard(QWidget):
                     if dialog.exec() == QDialog.DialogCode.Accepted:
                         data = dialog.get_values()
                         json_text = json.dumps(data)
-                        display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay')}s"
+                        display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay', data.get('dwell'))}s"
                         if 'log_file' in data:
                             display += f" Log:{data.get('log_file')}"
                         item = QTableWidgetItem(display)
@@ -1047,7 +1047,7 @@ class Dashboard(QWidget):
                             item.setData(Qt.ItemDataRole.UserRole, params_text)
                             self.sequence_table.setItem(row, 2, item)
                         elif data and (step['action'].startswith('GS / Ramp') or step['action'].startswith('RAMP / Ramp')):
-                            display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay')}s"
+                            display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay', data.get('dwell'))}s"
                             item = QTableWidgetItem(display)
                             item.setData(Qt.ItemDataRole.UserRole, params_text)
                             self.sequence_table.setItem(row, 2, item)
@@ -1067,7 +1067,7 @@ class Dashboard(QWidget):
                             if 'voltage' in data and 'current' in data:
                                 display = f"V:{data.get('voltage')}V I:{data.get('current')}A"
                             elif 'start' in data:
-                                display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay')}s"
+                                display = f"Start:{data.get('start')} Step:{data.get('step')} End:{data.get('end')} Delay:{data.get('delay', data.get('dwell'))}s"
                                 if 'log_file' in data:
                                     display += f" Log:{data.get('log_file')}"
                             else:

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(wc:*)",
+      "Bash(python:*)",
+      "Bash(powershell -Command \"Get-Content ''c:\\\\Users\\\\aakas\\\\.gemini\\\\antigravity\\\\scratch\\\\SignalX\\\\logs\\\\app.log'' | Select-Object -Last 100\")"
+    ]
+  }
+}

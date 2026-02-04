@@ -2,15 +2,15 @@
   "meta": {
     "author": "",
     "description": "",
-    "last_modified": "2026-01-20T19:15:44.159166",
+    "last_modified": "2026-01-27T14:14:50.270780",
     "name": "sequence",
     "tags": [],
     "version": 1
   },
   "steps": [
     {
-      "action": "LOAD / Short Circuit Cycle",
-      "params": "{\"cycles\": 5, \"pulse_s\": 0.1, \"input_on_delay_s\": 5.0, \"dwell_s\": 5.0, \"precharge_s\": 0.0, \"cc_a\": 6.0, \"ps_output\": true, \"ps_toggle_each_cycle\": true, \"input_on_each_cycle\": true, \"stop_on_fail\": true}"
+      "action": "RAMP / Line and Load Regulation",
+      "params": "{\"gs\": {\"start\": 230.0, \"step\": 1.0, \"end\": 232.0, \"dwell\": 1.0, \"tolerance\": 0.5}, \"ps\": {\"start\": 90.0, \"step\": 1.0, \"end\": 91.0, \"dwell\": 0.5, \"tolerance\": 0.5}, \"dl\": {\"start\": 6.0, \"step\": 1.0, \"end\": 7.0, \"dwell\": 0.5, \"tolerance\": 0.5}, \"verify\": {\"gs\": false, \"ps\": false, \"dl\": false}, \"retries\": 2, \"dl_reset\": true, \"abort_on_fail\": true, \"plot_efficiency\": true}"
     }
   ]
 }

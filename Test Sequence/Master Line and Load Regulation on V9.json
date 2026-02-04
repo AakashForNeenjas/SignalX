@@ -1,0 +1,18 @@
+{
+  "meta": {
+    "author": "Aakash",
+    "description": "Line and Load Regulation",
+    "last_modified": "2026-01-28T01:09:30.823823",
+    "name": "Master Line and Load Regulation on V9",
+    "tags": [
+      "Line and Load"
+    ],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "RAMP / Line and Load Regulation",
+      "params": "{\"gs\": {\"start\": 105.0, \"step\": 1.0, \"end\": 270.0, \"dwell\": 1.0, \"tolerance\": 1.0}, \"ps\": {\"start\": 84.0, \"step\": 1.0, \"end\": 120.0, \"dwell\": 1.0, \"tolerance\": 1.0}, \"dl\": {\"start\": 0.0, \"step\": 1.0, \"end\": 7.0, \"dwell\": 3.0, \"tolerance\": 1.0}, \"verify\": {\"gs\": true, \"ps\": true, \"dl\": true}, \"retries\": 2, \"dl_reset\": true, \"abort_on_fail\": true, \"plot_efficiency\": true}"
+    }
+  ]
+}

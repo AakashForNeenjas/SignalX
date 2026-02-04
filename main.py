@@ -1,5 +1,7 @@
 import sys
-from PyQt6.QtWidgets import QApplication
+import traceback
+import logging
+from PyQt6.QtWidgets import QApplication, QMessageBox
 try:
     import PyQt6.QtWebEngineWidgets
 except ImportError:
@@ -9,9 +11,34 @@ from logging_setup import setup_logging
 from ui.MainWindow import MainWindow
 from ui.resources import create_app_icon, create_splash_pixmap
 from PyQt6.QtWidgets import QSplashScreen
-from PyQt6.QtCore import QPropertyAnimation, QEasingCurve, QPoint, QRect
+from PyQt6.QtCore import QPropertyAnimation, QEasingCurve, QPoint
+
+
+def _global_exception_handler(exc_type, exc_value, exc_tb):
+    """Global exception handler to log unhandled exceptions."""
+    logger = logging.getLogger(__name__)
+    error_msg = "".join(traceback.format_exception(exc_type, exc_value, exc_tb))
+    logger.critical(f"Unhandled exception:\n{error_msg}")
+
+    # Show error dialog to user
+    try:
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Icon.Critical)
+        msg_box.setWindowTitle("Application Error")
+        msg_box.setText("An unexpected error occurred.")
+        msg_box.setDetailedText(error_msg)
+        msg_box.exec()
+    except Exception:
+        pass  # If we can't show dialog, at least we logged it
+
+    # Call the default handler
+    sys.__excepthook__(exc_type, exc_value, exc_tb)
+
 
 def main():
+    # Install global exception handler
+    sys.excepthook = _global_exception_handler
+
     logger, log_path = setup_logging()
     try:
         from core.action_catalog import write_action_catalog
@@ -44,7 +71,6 @@ def main():
     window.setWindowOpacity(0.0)
     # Maximized display (keeps window controls visible)
     window.showMaximized()
-    window.show()
     splash.finish(window)
 
     # Fade-in animation
@@ -56,15 +82,16 @@ def main():
     anim.start()
     window._fade_anim = anim  # prevent GC
 
-    # Slide-up animation for added polish
-    slide_anim = QPropertyAnimation(window, b"geometry", window)
-    slide_anim.setDuration(700)
-    start_rect = window.geometry()
-    slide_anim.setStartValue(QRect(start_rect.x(), start_rect.y() + 30, start_rect.width(), start_rect.height()))
-    slide_anim.setEndValue(start_rect)
-    slide_anim.setEasingCurve(QEasingCurve.Type.OutCubic)
-    slide_anim.start()
-    window._slide_anim = slide_anim
+    # Slide-up animation for added polish (skip when maximized to avoid unmaximizing)
+    if not window.isMaximized():
+        slide_anim = QPropertyAnimation(window, b"pos", window)
+        slide_anim.setDuration(700)
+        start_pos = window.pos() + QPoint(0, 30)
+        slide_anim.setStartValue(start_pos)
+        slide_anim.setEndValue(window.pos())
+        slide_anim.setEasingCurve(QEasingCurve.Type.OutCubic)
+        slide_anim.start()
+        window._slide_anim = slide_anim
     
     sys.exit(app.exec())
 

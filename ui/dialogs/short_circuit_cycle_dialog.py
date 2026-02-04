@@ -37,6 +37,18 @@ class ShortCircuitCycleDialog(QDialog):
         self.spin_input_delay.setMaximum(3600.0)
         self.spin_input_delay.setValue(float(initial.get("input_on_delay_s", 0.0)))
 
+        self.spin_post_pulse_wait = QDoubleSpinBox()
+        self.spin_post_pulse_wait.setDecimals(3)
+        self.spin_post_pulse_wait.setMinimum(0.0)
+        self.spin_post_pulse_wait.setMaximum(3600.0)
+        self.spin_post_pulse_wait.setValue(float(initial.get("post_pulse_wait_s", 1.0)))
+
+        self.spin_ps_reset_off = QDoubleSpinBox()
+        self.spin_ps_reset_off.setDecimals(3)
+        self.spin_ps_reset_off.setMinimum(0.0)
+        self.spin_ps_reset_off.setMaximum(3600.0)
+        self.spin_ps_reset_off.setValue(float(initial.get("ps_reset_off_s", 1.0)))
+
         self.spin_dwell = QDoubleSpinBox()
         self.spin_dwell.setDecimals(3)
         self.spin_dwell.setMinimum(0.0)
@@ -61,6 +73,9 @@ class ShortCircuitCycleDialog(QDialog):
         self.chk_ps_toggle = QCheckBox("Toggle PS Output each cycle")
         self.chk_ps_toggle.setChecked(bool(initial.get("ps_toggle_each_cycle", False)))
 
+        self.chk_ps_reset = QCheckBox("Reset PS OFF/ON after short pulse")
+        self.chk_ps_reset.setChecked(bool(initial.get("ps_reset_each_cycle", True)))
+
         self.chk_gs_telemetry = QCheckBox("Measure GS telemetry")
         self.chk_gs_telemetry.setChecked(bool(initial.get("gs_telemetry", False)))
 
@@ -73,11 +88,14 @@ class ShortCircuitCycleDialog(QDialog):
         form.addRow("Cycles", self.spin_cycles)
         form.addRow("Pulse (s)", self.spin_pulse)
         form.addRow("Input ON delay (s)", self.spin_input_delay)
+        form.addRow("Post-pulse wait (s)", self.spin_post_pulse_wait)
+        form.addRow("PS OFF duration (s)", self.spin_ps_reset_off)
         form.addRow("Dwell between cycles (s)", self.spin_dwell)
         form.addRow("Precharge delay (s)", self.spin_precharge)
         form.addRow("CC Setpoint (A)", self.spin_cc)
         form.addRow("", self.chk_ps_output)
         form.addRow("", self.chk_ps_toggle)
+        form.addRow("", self.chk_ps_reset)
         form.addRow("", self.chk_gs_telemetry)
         form.addRow("", self.chk_toggle_input)
         form.addRow("", self.chk_stop_on_fail)
@@ -88,7 +106,7 @@ class ShortCircuitCycleDialog(QDialog):
 
         layout = QVBoxLayout()
         layout.addLayout(form)
-        layout.addWidget(QLabel("JSON: {cycles, pulse_s, input_on_delay_s, dwell_s, precharge_s, cc_a, ps_output, ps_toggle_each_cycle, gs_telemetry, input_on_each_cycle, stop_on_fail}"))
+        layout.addWidget(QLabel("JSON: {cycles, pulse_s, input_on_delay_s, post_pulse_wait_s, ps_reset_off_s, dwell_s, precharge_s, cc_a, ps_output, ps_toggle_each_cycle, ps_reset_each_cycle, gs_telemetry, input_on_each_cycle, stop_on_fail}"))
         layout.addWidget(buttons)
         self.setLayout(layout)
 
@@ -97,11 +115,14 @@ class ShortCircuitCycleDialog(QDialog):
             "cycles": int(self.spin_cycles.value()),
             "pulse_s": float(self.spin_pulse.value()),
             "input_on_delay_s": float(self.spin_input_delay.value()),
+            "post_pulse_wait_s": float(self.spin_post_pulse_wait.value()),
+            "ps_reset_off_s": float(self.spin_ps_reset_off.value()),
             "dwell_s": float(self.spin_dwell.value()),
             "precharge_s": float(self.spin_precharge.value()),
             "cc_a": float(self.spin_cc.value()),
             "ps_output": self.chk_ps_output.isChecked(),
             "ps_toggle_each_cycle": self.chk_ps_toggle.isChecked(),
+            "ps_reset_each_cycle": self.chk_ps_reset.isChecked(),
             "gs_telemetry": self.chk_gs_telemetry.isChecked(),
             "input_on_each_cycle": self.chk_toggle_input.isChecked(),
             "stop_on_fail": self.chk_stop_on_fail.isChecked(),

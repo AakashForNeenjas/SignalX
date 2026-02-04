@@ -1,12 +1,15 @@
+import logging
 import threading
 
 from core.actions.params import parse_int, parse_json_dict
+
+logger = logging.getLogger(__name__)
 
 
 def handle_can(action_name, params, ctx):
     if not hasattr(ctx, "can_mgr") or ctx.can_mgr is None:
         msg = "CAN action failed: CAN Manager is not initialized"
-        print(msg)
+        logger.warning(msg)
         return False, msg
 
     can_mgr = ctx.can_mgr
@@ -14,34 +17,34 @@ def handle_can(action_name, params, ctx):
     if action_name.lower() in ["connect", "connect can", "connect can bus"]:
         if getattr(can_mgr, "is_connected", False):
             msg = "CAN Connect: already connected, reusing existing session"
-            print(msg)
+            logger.info(msg)
             return True, msg
         success, connect_msg = can_mgr.connect()
         msg = f"CAN Connect: {connect_msg}"
-        print(msg)
+        logger.info(msg)
         return success, msg
 
     if action_name.lower() in ["disconnect", "disconnect can"]:
         try:
             can_mgr.disconnect()
             msg = "CAN Disconnected"
-            print(msg)
+            logger.info(msg)
             return True, msg
         except Exception as e:
             msg = f"CAN Disconnect failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if action_name.startswith("Start Cyclic CAN"):
         started_messages, failed_messages = can_mgr.start_all_cyclic_messages()
         msg = f"CAN Start Cyclic: Started: {', '.join(started_messages)}; Failed: {', '.join(failed_messages)}"
-        print(msg)
+        logger.info(msg)
         return len(started_messages) > 0, msg
 
     if action_name.startswith("Stop Cyclic CAN"):
         success = can_mgr.stop_all_cyclic_messages()
         msg = "CAN Stop Cyclic: Success" if success else "CAN Stop Cyclic: Some messages may not have stopped"
-        print(msg)
+        logger.info(msg)
         return success, msg
 
     if action_name.startswith("Start Trace"):
@@ -50,22 +53,22 @@ def handle_can(action_name, params, ctx):
             filename_base = f"trace_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
             can_mgr.start_logging(filename_base)
             msg = f"CAN Trace Started: {filename_base}"
-            print(msg)
+            logger.info(msg)
             return True, msg
         except Exception as e:
             msg = f"CAN Start Trace failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if action_name.startswith("Stop Trace"):
         try:
             can_mgr.stop_logging()
             msg = "CAN Trace Stopped"
-            print(msg)
+            logger.info(msg)
             return True, msg
         except Exception as e:
             msg = f"CAN Stop Trace failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if action_name.startswith("Send Message"):
@@ -89,15 +92,15 @@ def handle_can(action_name, params, ctx):
             is_extended = data.get("extended", False)
             if arbid is None:
                 msg = "CAN Send Message failed: No message ID provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             can_mgr.send_message(arbid, payload, is_extended)
             msg = f"CAN Sent: ID=0x{arbid:X}, Data={payload}"
-            print(msg)
+            logger.info(msg)
             return True, msg
         except Exception as e:
             msg = f"CAN Send Message failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if action_name.startswith("Start Cyclic By Name"):
@@ -108,15 +111,15 @@ def handle_can(action_name, params, ctx):
             sigs = details.get("signals", {})
             if not msg_name:
                 msg = "CAN Start Cyclic By Name failed: no message name provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             success = can_mgr.start_cyclic_message_by_name(msg_name, sigs, cycle_ms)
             msg = f"CAN Start Cyclic By Name: {msg_name} -> {success}"
-            print(msg)
+            logger.info(msg)
             return success, msg
         except Exception as e:
             msg = f"CAN Start Cyclic By Name failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if action_name.startswith("Stop Cyclic By Name"):
@@ -125,25 +128,25 @@ def handle_can(action_name, params, ctx):
             msg_name = details.get("message_name") or details.get("name")
             if not msg_name:
                 msg = "CAN Stop Cyclic By Name failed: no message name provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             if can_mgr.dbc_parser and can_mgr.dbc_parser.database:
                 try:
                     message = can_mgr.dbc_parser.database.get_message_by_name(msg_name)
                     can_mgr.stop_cyclic_message(message.frame_id)
                     msg = f"CAN Stop Cyclic By Name: {msg_name} stopped"
-                    print(msg)
+                    logger.info(msg)
                     return True, msg
                 except Exception as e:
                     msg = f"CAN Stop Cyclic By Name: failed to stop {msg_name}: {e}"
-                    print(msg)
+                    logger.warning(msg)
                     return False, msg
             msg = "CAN Stop Cyclic By Name failed: DBC not loaded"
-            print(msg)
+            logger.warning(msg)
             return False, msg
         except Exception as e:
             msg = f"CAN Stop Cyclic By Name failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if "Read Signal Value" in action_name:
@@ -153,15 +156,15 @@ def handle_can(action_name, params, ctx):
             timeout = float(details.get("timeout", 2.0))
             if not signal_name:
                 msg = "CAN Read Signal Value failed: no signal name provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             ok, value, diag_msg = can_mgr.read_signal_value(signal_name, timeout)
-            print(diag_msg)
+            logger.info(diag_msg)
             ctx.emit_info(diag_msg)
             return ok, diag_msg
         except Exception as e:
             msg = f"CAN Read Signal Value failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if "Check Signal (Tolerance)" in action_name:
@@ -173,17 +176,17 @@ def handle_can(action_name, params, ctx):
             timeout = float(details.get("timeout", 2.0))
             if not signal_name:
                 msg = "CAN Check Signal (Tolerance) failed: no signal name provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             ok, value, diag_msg = can_mgr.check_signal_tolerance(
                 signal_name, expected, tolerance, timeout
             )
-            print(diag_msg)
+            logger.info(diag_msg)
             ctx.emit_info(diag_msg)
             return ok, diag_msg
         except Exception as e:
             msg = f"CAN Check Signal (Tolerance) failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if "Conditional Jump" in action_name:
@@ -195,20 +198,20 @@ def handle_can(action_name, params, ctx):
             target_step = int(details.get("target_step", 0))
             if not signal_name:
                 msg = "CAN Conditional Jump failed: no signal name provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             ok, diag_msg = can_mgr.conditional_jump_check(signal_name, expected, tolerance)
-            print(diag_msg)
+            logger.info(diag_msg)
             ctx.emit_info(diag_msg)
             if ok:
                 ctx.set_current_step(target_step - 1)
                 msg = f"CAN Conditional Jump: jumping to step {target_step}"
-                print(msg)
+                logger.info(msg)
                 return True, msg
             return True, diag_msg
         except Exception as e:
             msg = f"CAN Conditional Jump failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if "Wait For Signal Change" in action_name:
@@ -220,17 +223,17 @@ def handle_can(action_name, params, ctx):
             poll_interval = float(details.get("poll_interval", 0.1))
             if not signal_name:
                 msg = "CAN Wait For Signal Change failed: no signal name provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             ok, new_value, diag_msg = can_mgr.wait_for_signal_change(
                 signal_name, initial_value, timeout, poll_interval
             )
-            print(diag_msg)
+            logger.info(diag_msg)
             ctx.emit_info(diag_msg)
             return ok, diag_msg
         except Exception as e:
             msg = f"CAN Wait For Signal Change failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if "Monitor Signal Range" in action_name:
@@ -243,17 +246,17 @@ def handle_can(action_name, params, ctx):
             poll_interval = float(details.get("poll_interval", 0.1))
             if not signal_name:
                 msg = "CAN Monitor Signal Range failed: no signal name provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             ok, readings, diag_msg = can_mgr.monitor_signal_range(
                 signal_name, min_val, max_val, duration, poll_interval
             )
-            print(diag_msg)
+            logger.info(diag_msg)
             ctx.emit_info(diag_msg)
             return ok, diag_msg
         except Exception as e:
             msg = f"CAN Monitor Signal Range failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if "Compare Two Signals" in action_name:
@@ -265,17 +268,17 @@ def handle_can(action_name, params, ctx):
             timeout = float(details.get("timeout", 2.0))
             if not signal1 or not signal2:
                 msg = "CAN Compare Two Signals failed: signal names not provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             ok, values, diag_msg = can_mgr.compare_two_signals(
                 signal1, signal2, tolerance, timeout
             )
-            print(diag_msg)
+            logger.info(diag_msg)
             ctx.emit_info(diag_msg)
             return ok, diag_msg
         except Exception as e:
             msg = f"CAN Compare Two Signals failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if "Set Signal Value" in action_name:
@@ -289,12 +292,12 @@ def handle_can(action_name, params, ctx):
             verify_timeout = float(details.get("verify_timeout", 2.0))
             if not signal_name:
                 msg = "CAN Set Signal Value failed: no signal name provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             db = getattr(can_mgr, "dbc_parser", None)
             if not db or not db.database:
                 msg = "CAN Set Signal Value failed: DBC not loaded"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             msg_def = db.database.get_message_by_frame_id(message_id)
             can_mgr.send_message_with_overrides(msg_def.name, {signal_name: target_value})
@@ -327,12 +330,12 @@ def handle_can(action_name, params, ctx):
                 signal_name, target_value, timeout=verify_timeout, tolerance=tolerance
             )
             diag = detail if detail else f"Set {msg_def.name}.{signal_name} to {target_value}"
-            print(diag)
+            logger.info(diag)
             ctx.emit_info(diag)
             return ok, diag
         except Exception as e:
             msg = f"CAN Set Signal Value failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if "Set Signal and Verify" in action_name:
@@ -346,17 +349,17 @@ def handle_can(action_name, params, ctx):
             verify_timeout = float(details.get("verify_timeout", 2.0))
             if not signal_name:
                 msg = "CAN Set Signal and Verify failed: no signal name provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
             ok, value, round_trip_time, diag_msg = can_mgr.set_signal_and_verify(
                 message_id, signal_name, target_value, verify_timeout, tolerance
             )
-            print(diag_msg)
+            logger.info(diag_msg)
             ctx.emit_info(diag_msg)
             return ok, diag_msg
         except Exception as e:
             msg = f"CAN Set Signal and Verify failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     if action_name.startswith("Check Message") or action_name.startswith("Listen For Message"):
@@ -373,7 +376,7 @@ def handle_can(action_name, params, ctx):
                     timeout = float(parts[1]) if len(parts) > 1 else 2.0
             else:
                 msg = "CAN Check Message failed: no parameters provided"
-                print(msg)
+                logger.warning(msg)
                 return False, msg
 
             found_event = threading.Event()
@@ -393,16 +396,16 @@ def handle_can(action_name, params, ctx):
 
             if result:
                 msg = f"CAN Message received: ID=0x{search_id:X}"
-                print(msg)
+                logger.info(msg)
                 return True, msg
             msg = f"CAN Message not received within {timeout}s: ID=0x{search_id:X}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
         except Exception as e:
             msg = f"CAN Check Message failed: {e}"
-            print(msg)
+            logger.warning(msg)
             return False, msg
 
     msg = f"Unsupported CAN action: {action_name}"
-    print(msg)
+    logger.warning(msg)
     return False, msg

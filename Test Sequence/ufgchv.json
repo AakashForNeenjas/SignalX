@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "author": "",
+    "description": "",
+    "last_modified": "2026-01-31T19:06:55.530454",
+    "name": "ufgchv",
+    "tags": [],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "PS / HV: Sweep Current and Log",
+      "params": "{\"target\": {\"type\": \"PS_CURRENT\", \"message\": \"\", \"signal\": \"\"}, \"start\": 0.0, \"step\": 1.0, \"end\": 5.0, \"gs_voltage\": 230.0, \"ps_voltage\": 55.0, \"dwell\": 0.5, \"tolerance\": 0.5, \"retries\": 3, \"verify\": false, \"measure\": {\"gs\": true, \"ps\": true, \"load\": true}, \"log_file\": \"tychgj\"}"
+    }
+  ]
+}

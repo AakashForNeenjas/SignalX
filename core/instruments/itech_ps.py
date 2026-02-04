@@ -1,7 +1,10 @@
+import logging
 import time
 
 from core.driver_base import HealthStatus, PowerSupplyDriver
 from core.instruments.base import InstrumentDriver, ScpiFloatMixin
+
+logger = logging.getLogger(__name__)
 
 
 class Itech6000Base(InstrumentDriver, ScpiFloatMixin):
@@ -31,6 +34,7 @@ class Itech6006PS(Itech6000Base, PowerSupplyDriver):
         self.write("OUTP OFF")
 
     def ramp_up_voltage(self, target_voltage, step=1.0, delay=0.5, tolerance=0.5, retries=3):
+        """Ramp voltage up to target with verification at each step."""
         current = self.get_voltage()
         if current is None:
             current = 0.0
@@ -41,11 +45,12 @@ class Itech6006PS(Itech6000Base, PowerSupplyDriver):
         while v <= target_voltage:
             self.set_voltage(v)
             time.sleep(0.1)
-            for _ in range(retries + 1):
+            for retry in range(retries + 1):
                 try:
                     meas = self.get_voltage()
-                except Exception:
-                    meas = v
+                except Exception as e:
+                    logger.warning(f"Failed to read voltage during ramp (retry {retry}): {e}")
+                    meas = v  # Use setpoint as fallback
                 if abs(meas - v) <= tolerance:
                     break
                 self.set_voltage(v)
@@ -54,6 +59,7 @@ class Itech6006PS(Itech6000Base, PowerSupplyDriver):
             time.sleep(delay)
 
     def ramp_down_voltage(self, target_voltage, step=1.0, delay=0.5, tolerance=0.5, retries=3):
+        """Ramp voltage down to target with verification at each step."""
         current = self.get_voltage()
         if current is None:
             current = 0.0
@@ -64,11 +70,12 @@ class Itech6006PS(Itech6000Base, PowerSupplyDriver):
         while v >= target_voltage:
             self.set_voltage(v)
             time.sleep(0.1)
-            for _ in range(retries + 1):
+            for retry in range(retries + 1):
                 try:
                     meas = self.get_voltage()
-                except Exception:
-                    meas = v
+                except Exception as e:
+                    logger.warning(f"Failed to read voltage during ramp (retry {retry}): {e}")
+                    meas = v  # Use setpoint as fallback
                 if abs(meas - v) <= tolerance:
                     break
                 self.set_voltage(v)
@@ -89,13 +96,16 @@ class Itech6006PS(Itech6000Base, PowerSupplyDriver):
         return True
 
     def measure_vi(self):
+        """Measure voltage and current, returning (0.0, 0.0) on errors."""
         try:
             v = self.get_voltage()
-        except Exception:
+        except Exception as e:
+            logger.warning(f"Failed to measure voltage: {e}")
             v = 0.0
         try:
             c = self.get_current()
-        except Exception:
+        except Exception as e:
+            logger.warning(f"Failed to measure current: {e}")
             c = 0.0
         return v, c
 
@@ -104,16 +114,19 @@ class Itech6006PS(Itech6000Base, PowerSupplyDriver):
         return v, c, v * c
 
     def read_errors(self):
+        """Read error queue from instrument."""
         try:
             return self.query("SYST:ERR?")
-        except Exception:
+        except Exception as e:
+            logger.warning(f"Failed to read errors: {e}")
             return ""
 
     def clear_errors(self):
+        """Clear error queue on instrument."""
         try:
             self.write("SYST:ERR:CLEAR")
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"Failed to clear errors: {e}")
 
     def sweep_voltage_and_log(self, start, step, end, delay=0.5, log_path=None):
         results = []
@@ -127,7 +140,8 @@ class Itech6006PS(Itech6000Base, PowerSupplyDriver):
             try:
                 meas_v = self.get_voltage()
                 meas_c = self.get_current()
-            except Exception:
+            except Exception as e:
+                logger.warning(f"Failed to measure during voltage sweep at {v}V: {e}")
                 meas_v = v
                 meas_c = 0.0
             results.append((v, meas_v, meas_c))
@@ -135,13 +149,13 @@ class Itech6006PS(Itech6000Base, PowerSupplyDriver):
         if log_path:
             try:
                 import csv
-                with open(log_path, "w", newline="") as csvfile:
+                with open(log_path, "w", newline="", encoding="utf-8") as csvfile:
                     writer = csv.writer(csvfile)
                     writer.writerow(["set_v", "meas_v", "meas_i"])
                     for row in results:
                         writer.writerow(row)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.error(f"Failed to write sweep log to {log_path}: {e}")
         return results
 
     def sweep_current_and_log(self, start, step, end, delay=0.5, log_path=None):
@@ -156,7 +170,8 @@ class Itech6006PS(Itech6000Base, PowerSupplyDriver):
             try:
                 meas_v = self.get_voltage()
                 meas_c = self.get_current()
-            except Exception:
+            except Exception as e:
+                logger.warning(f"Failed to measure during current sweep at {v}A: {e}")
                 meas_v = 0.0
                 meas_c = v
             results.append((v, meas_v, meas_c))
@@ -164,13 +179,13 @@ class Itech6006PS(Itech6000Base, PowerSupplyDriver):
         if log_path:
             try:
                 import csv
-                with open(log_path, "w", newline="") as csvfile:
+                with open(log_path, "w", newline="", encoding="utf-8") as csvfile:
                     writer = csv.writer(csvfile)
                     writer.writerow(["set_i", "meas_v", "meas_i"])
                     for row in results:
                         writer.writerow(row)
-            except Exception:
-                pass
+            except Exception as e:
+                logger.error(f"Failed to write sweep log to {log_path}: {e}")
         return results
 
     def health_check(self):

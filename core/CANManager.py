@@ -1,66 +1,102 @@
-﻿import can
+"""CAN Manager for CAN bus communication and message handling."""
+
+import logging
+import can
 try:
     import can.interfaces.pcan  # noqa: F401
-except Exception:
+except ImportError:
+    # PCAN interface not available - will use other interfaces
     pass
 import threading
 import time
 import csv
 import os
+from collections import deque
 from datetime import datetime, timedelta
+from typing import (
+    Any, Callable, Dict, List, Optional, Set, Tuple, Union,
+    TextIO, TYPE_CHECKING
+)
 
-class CANManager:
-    def __init__(self, simulation_mode=False, dbc_parser=None, logger=None):
-        self.bus = None
-        self.simulation_mode = simulation_mode
-        self.dbc_parser = dbc_parser
-        self.cyclic_tasks = {}
-        self.listeners = []
-        self.listeners_lock = threading.RLock()
-        self.logging = False
-        self.csv_file = None
-        self.csv_writer = None
-        self.trc_file = None
-        self.start_time = None
-        self.first_msg_time = None
-        self.message_counter = 1
-        self.running = False
-        
+from core.logging_utils import LoggerMixin
+
+if TYPE_CHECKING:
+    from core.DBCParser import DBCParser
+
+
+class CANManager(LoggerMixin):
+    """Manager for CAN bus communication, logging, and signal handling."""
+
+    def __init__(
+        self,
+        simulation_mode: bool = False,
+        dbc_parser: Optional["DBCParser"] = None,
+        logger: Optional[logging.Logger] = None
+    ) -> None:
+        """Initialize CANManager.
+
+        Args:
+            simulation_mode: Enable simulation mode without hardware
+            dbc_parser: DBC parser for message definitions
+            logger: Optional logger instance
+        """
+        self.bus: Optional[can.Bus] = None
+        self.simulation_mode: bool = simulation_mode
+        self.dbc_parser: Optional["DBCParser"] = dbc_parser
+        self.cyclic_tasks: Dict[int, Any] = {}
+        self.listeners: List[Callable[[can.Message], None]] = []
+        self.listeners_lock: threading.RLock = threading.RLock()
+        self.logging: bool = False
+        self.csv_file: Optional[TextIO] = None
+        self.csv_writer: Optional[csv.writer] = None
+        self.trc_file: Optional[TextIO] = None
+        self.start_time: Optional[datetime] = None
+        self.first_msg_time: Optional[float] = None
+        self.message_counter: int = 1
+        self.running: bool = False
+
         # ===== ROBUST CAN COMMUNICATION =====
         # Signal cache: stores latest signal values for UI updates
-        self.signal_cache = {}
+        self.signal_cache: Dict[str, Dict[str, Any]] = {}
         # Thread lock for thread-safe signal_cache access
-        self.signal_cache_lock = threading.RLock()
-        # Message cache: stores last N messages for debugging
-        self.message_history = []
-        self.max_history_size = 100
+        self.signal_cache_lock: threading.RLock = threading.RLock()
+        # Message cache: stores last N messages for debugging (using deque for O(1) operations)
+        self.max_history_size: int = 100
+        self.message_history: deque[Dict[str, Any]] = deque(maxlen=self.max_history_size)
+        self.message_history_lock: threading.Lock = threading.Lock()
         # Connection state tracking
-        self.is_connected = False
+        self.is_connected: bool = False
         # Statistics
-        self.rx_count = 0
-        self.tx_count = 0
-        self.error_count = 0
+        self.rx_count: int = 0
+        self.tx_count: int = 0
+        self.error_count: int = 0
         # Decode cache (message_id -> message_definition)
-        self.message_definitions = {}
+        self.message_definitions: Dict[int, Any] = {}
         # Track last sent signals per message to preserve untouched fields
-        self.last_sent_signals = {}
+        self.last_sent_signals: Dict[str, Dict[str, Any]] = {}
         # Signal overrides: {(message_name, signal_name): value}
-        self.signal_overrides = {}
-        self.signal_overrides_lock = threading.RLock()
+        self.signal_overrides: Dict[Tuple[str, str], Any] = {}
+        self.signal_overrides_lock: threading.RLock = threading.RLock()
         # Track cyclic periods (arbitration_id -> seconds) for updates
-        self.cyclic_periods = {}
+        self.cyclic_periods: Dict[int, float] = {}
         # Logging lock to serialize CSV/TRC writes and counters
-        self.log_lock = threading.RLock()
+        self.log_lock: threading.RLock = threading.RLock()
         # Internal metrics tick threads for TX periodic visibility
-        self.metrics_threads = {}
+        self.metrics_threads: Dict[int, threading.Thread] = {}
         # Connection defaults (can be overridden via profiles)
-        self.interface = None
-        self.channel = None
-        self.bitrate = None
-        self.logger = logger
+        self.interface: Optional[str] = None
+        self.channel: Optional[str] = None
+        self.bitrate: Optional[int] = None
+        # Store external logger for backward compatibility (LoggerMixin provides self.logger)
+        self._external_logger: Optional[logging.Logger] = logger
+        self.log_info("CANManager initialized", mode="simulation" if simulation_mode else "hardware")
 
-    def get_diagnostics(self):
-        """Get current CAN diagnostics and status"""
+    def get_diagnostics(self) -> Dict[str, Any]:
+        """Get current CAN diagnostics and status.
+
+        Returns:
+            Dictionary containing connection status, counts, and logging state
+        """
         return {
             'connection_status': 'Connected' if self.is_connected else 'Disconnected',
             'rx_count': self.rx_count,
@@ -70,14 +106,29 @@ class CANManager:
             'is_logging': self.logging
         }
 
-    def _log(self, level, message):
-        if self.logger:
-            try:
-                self.logger.log(level, message)
-            except Exception:
-                pass
+    def _log(self, level: int, message: str) -> None:
+        """Log a message using LoggerMixin (legacy interface for compatibility).
 
-    def connect(self, interface=None, channel=None, bitrate=None):
+        Args:
+            level: Logging level (10=DEBUG, 20=INFO, 30=WARNING, 40=ERROR)
+            message: Log message
+        """
+        # Route through LoggerMixin's standardized methods
+        if level >= 40:
+            self.log_error(message)
+        elif level >= 30:
+            self.log_warning(message)
+        elif level >= 20:
+            self.log_info(message)
+        else:
+            self.log_debug(message)
+
+    def connect(
+        self,
+        interface: Optional[str] = None,
+        channel: Optional[str] = None,
+        bitrate: Optional[int] = None
+    ) -> Tuple[bool, str]:
         """
         Connect to CAN bus and initialize message definitions from DBC.
         ===== ROBUST CONNECTION HANDLING =====
@@ -86,21 +137,24 @@ class CANManager:
         interface = interface or self.interface or 'pcan'
         channel = channel or self.channel or 'PCAN_USBBUS1'
         bitrate = bitrate or self.bitrate or 500000
+
         if self.simulation_mode:
-            print(f"[CAN SIMULATION] Connecting to {interface} on {channel}")
-            self._log(20, f"CAN connect (sim) {interface}:{channel}")
+            self._log(20, f"CAN connect (simulation) {interface}:{channel}")
             self.is_connected = True
             self.running = True
             self._initialize_message_definitions()  # Load DBC message defs
             # Start a simulation thread to generate random messages
-            self.sim_thread = threading.Thread(target=self._simulate_traffic, daemon=True)
+            self.sim_thread = threading.Thread(
+                target=self._simulate_traffic,
+                daemon=True,
+                name="CAN_Simulation"
+            )
             self.sim_thread.start()
-            return True, "[CAN SIMULATION] Connected (Simulation Mode)"
+            return True, "Connected (Simulation Mode)"
 
         try:
             # Log connection attempt
             self._log(20, f"CAN connect attempt {interface}:{channel} bitrate={bitrate}")
-            print(f"[CAN] Attempting connection to {interface}:{channel} at {bitrate} bps...")
             self.bus = can.Bus(interface=interface, channel=channel, bitrate=bitrate)
             self.is_connected = True
             self.running = True
@@ -111,68 +165,70 @@ class CANManager:
             # Setup listener for message reception
             self.notifier = can.Notifier(self.bus, [self._on_message_received])
 
-            print(f"[CAN] ✓ Connected to {interface}:{channel}")
             self._log(20, f"CAN connected {interface}:{channel}")
-            return True, f"[CAN] ✓ Connected to {interface}:{channel}"
+            return True, f"Connected to {interface}:{channel}"
+
         except ImportError as e:
             self.is_connected = False
-            msg = ("[CAN ERROR] Connection failed: backend module missing. "
+            msg = ("Connection failed: backend module missing. "
                    "Install python-can with backend extras (e.g., python-can[pcan]) "
-                   "and ensure vendor drivers (PCAN-Basic) are installed. "
-                   f"Details: {e}")
-            print(msg)
+                   f"and ensure vendor drivers are installed. Details: {e}")
             self._log(40, msg)
             return False, msg
+
         except can.CanError as e:
             self.is_connected = False
-            msg = (f"[CAN ERROR] Connection failed: {e}. "
+            msg = (f"Connection failed: {e}. "
                    "Verify interface/channel/bitrate and that the vendor driver is installed.")
-            print(msg)
             self._log(40, msg)
             return False, msg
+
         except Exception as e:
             self.is_connected = False
-            msg = f"[CAN ERROR] Connection failed: {e}"
-            print(msg)
+            msg = f"Connection failed: {e}"
             self._log(40, msg)
             return False, msg
-    def _initialize_message_definitions(self):
-        """
-        Load all message definitions from DBC for efficient message decoding.
+    def _initialize_message_definitions(self) -> None:
+        """Load all message definitions from DBC for efficient message decoding.
+
         This enables real-time signal extraction and caching.
+
+        Raises:
+            RuntimeError: If DBC is loaded but message definitions fail to initialize.
         """
         if not self.dbc_parser or not self.dbc_parser.database:
-            print("[CAN WARNING] DBC not loaded - cannot initialize message definitions")
+            self._log(30, "DBC not loaded - cannot initialize message definitions")
             return
-        
+
         try:
             # Build cache of message ID -> message_definition for fast lookup
             for message in self.dbc_parser.database.messages:
                 self.message_definitions[message.frame_id] = message
-            
-            print(f"[CAN] âœ“ Loaded {len(self.message_definitions)} message definitions from DBC")
-            
+
+            self._log(20, f"Loaded {len(self.message_definitions)} message definitions from DBC")
+
             # Initialize signal_cache with all signals from DBC
-            for message in self.dbc_parser.database.messages:
-                for signal in message.signals:
-                    # Initialize with None, will be updated when messages are received
-                    with self.signal_cache_lock:
+            with self.signal_cache_lock:
+                for message in self.dbc_parser.database.messages:
+                    for signal in message.signals:
+                        # Initialize with None, will be updated when messages are received
                         if signal.name not in self.signal_cache:
                             self.signal_cache[signal.name] = {
                                 'value': None,
                                 'timestamp': None,
                                 'message_id': message.frame_id,
                                 'message_name': message.name,
-                                'unit': signal.unit if hasattr(signal, 'unit') else ''
+                                'unit': getattr(signal, 'unit', '') or ''
                             }
-            
-            print(f"[CAN] âœ“ Initialized signal_cache with {len(self.signal_cache)} signals")
-            
-        except Exception as e:
-            print(f"[CAN ERROR] Failed to initialize message definitions: {e}")
 
-    def disconnect(self):
-        """Cleanly disconnect from CAN bus"""
+            self._log(20, f"Initialized signal_cache with {len(self.signal_cache)} signals")
+
+        except Exception as e:
+            self._log(40, f"Failed to initialize message definitions: {e}")
+            raise RuntimeError(f"DBC initialization failed: {e}") from e
+
+    def disconnect(self) -> None:
+        """Cleanly disconnect from CAN bus."""
         self.running = False
         self.is_connected = False
         
@@ -182,80 +238,138 @@ class CANManager:
             if self.bus:
                 self.bus.shutdown()
                 self.bus = None
-            
+
             # Stop simulation thread if active
             if self.simulation_mode and hasattr(self, 'sim_thread'):
                 try:
                     self.sim_thread.join(timeout=1)
-                except Exception:
-                    pass
-            
+                except Exception as e:
+                    self._log(30, f"Warning: simulation thread join failed: {e}")
+
             self.cyclic_tasks.clear()
             with self.listeners_lock:
                 self.listeners.clear()
-            print("[CAN] Disconnected")
             self._log(20, "CAN disconnected")
         except Exception as e:
-            print(f"[CAN ERROR] Error during disconnect: {e}")
+            self._log(40, f"Error during CAN disconnect: {e}")
 
-    def send_message(self, arbitration_id, data, is_extended_id=False):
+    def send_message(
+        self,
+        arbitration_id: int,
+        data: bytes,
+        is_extended_id: bool = False
+    ) -> None:
+        """Send a CAN message.
+
+        Args:
+            arbitration_id: CAN message ID
+            data: Message data bytes
+            is_extended_id: Use extended (29-bit) ID format
+
+        Raises:
+            RuntimeError: If CAN bus is not connected
+            can.CanError: If send fails
+        """
         if self.simulation_mode:
-            print(f"SIMULATION CAN TX: ID={hex(arbitration_id)} Data={data}")
+            self._log(10, f"SIMULATION CAN TX: ID={hex(arbitration_id)} Data={data}")
             return
         if not self.bus:
             raise RuntimeError("CAN bus not connected")
 
         msg = can.Message(arbitration_id=arbitration_id, data=data, is_extended_id=is_extended_id)
         # Attach timestamp for logging consistency
-        try:
-            msg.timestamp = time.time()
-        except Exception:
-            pass
+        msg.timestamp = time.time()
+
         # Log TX locally so traces capture what we send (even if bus loopback is disabled)
-        try:
-            if self.logging:
+        if self.logging:
+            try:
                 self._log_message(msg)
-        except Exception:
-            pass
+            except Exception as e:
+                self._log(30, f"Failed to log TX message: {e}")
+
         try:
             self.bus.send(msg)
-        except can.CanError:
-            print("Message NOT sent")
+            self.tx_count += 1
+        except can.CanError as e:
+            self.error_count += 1
+            self._log(40, f"CAN send failed for ID=0x{arbitration_id:X}: {e}")
+            raise  # Re-raise so caller knows send failed
+
         # Also notify listeners/metrics about this TX so dynamic checks can see it even without loopback
         try:
             self._on_message_received(msg)
-        except Exception:
-            pass
+        except Exception as e:
+            self._log(30, f"Listener notification failed after TX: {e}")
 
-    def set_signal_override(self, message_name, signal_name, value):
-        """Set or update an override for a specific signal within a message."""
+    def set_signal_override(
+        self,
+        message_name: str,
+        signal_name: str,
+        value: Any
+    ) -> None:
+        """Set or update an override for a specific signal within a message.
+
+        Args:
+            message_name: Name of the CAN message
+            signal_name: Name of the signal within the message
+            value: Override value to set
+        """
         with self.signal_overrides_lock:
             self.signal_overrides[(message_name, signal_name)] = value
         self._log(20, f"Override set: {message_name}.{signal_name}={value}")
 
-    def _get_cycle_time_ms(self, message_name=None, arbitration_id=None):
-        """Resolve cycle time in ms for a cyclic message."""
+    def _get_cycle_time_ms(
+        self,
+        message_name: Optional[str] = None,
+        arbitration_id: Optional[int] = None
+    ) -> int:
+        """Resolve cycle time in ms for a cyclic message.
+
+        Args:
+            message_name: Optional message name to look up
+            arbitration_id: Optional arbitration ID to look up
+
+        Returns:
+            Cycle time in milliseconds (default: 100ms)
+        """
         if arbitration_id is not None:
-            try:
-                sec = self.cyclic_periods.get(arbitration_id)
-                if sec:
-                    return int(sec * 1000)
-            except Exception:
-                pass
+            sec = self.cyclic_periods.get(arbitration_id)
+            if sec:
+                return int(sec * 1000)
+
         if message_name:
             try:
                 import can_messages
                 cfg = getattr(can_messages, "CYCLIC_CAN_MESSAGES", {})
                 if message_name in cfg:
                     return int(cfg[message_name].get("cycle_time", 100))
-            except Exception:
-                pass
-        return 100
+            except ImportError:
+                self._log(10, "can_messages module not available for cycle time lookup")
+            except Exception as e:
+                self._log(30, f"Error getting cycle time for {message_name}: {e}")
 
-    def apply_signal_override(self, message_name, signal_name, value, refresh_cyclic=True):
-        """
-        Apply a signal override, send a message immediately, and refresh cyclic
-        transmission if the message is running.
+        return 100  # Default 100ms
+
+    def apply_signal_override(
+        self,
+        message_name: str,
+        signal_name: str,
+        value: Any,
+        refresh_cyclic: bool = True
+    ) -> Dict[str, Any]:
+        """Apply a signal override, send a message immediately, and refresh cyclic.
+
+        Args:
+            message_name: Name of the CAN message
+            signal_name: Name of the signal to override
+            value: Value to set
+            refresh_cyclic: Whether to refresh cyclic transmission
+
+        Returns:
+            Dictionary of all signal values in the message
+
+        Raises:
+            RuntimeError: If DBC is not loaded
         """
         if not self.dbc_parser or not self.dbc_parser.database:
             raise RuntimeError("DBC not loaded; cannot apply override")
@@ -267,8 +381,17 @@ class CANManager:
             self.start_cyclic_message_by_name(message_name, full_values, cycle_ms)
         return full_values
 
-    def clear_signal_override(self, message_name=None, signal_name=None):
-        """Clear overrides; if both provided, clear specific, else clear all."""
+    def clear_signal_override(
+        self,
+        message_name: Optional[str] = None,
+        signal_name: Optional[str] = None
+    ) -> None:
+        """Clear overrides; if both provided, clear specific, else clear all.
+
+        Args:
+            message_name: Optional message name to clear overrides for
+            signal_name: Optional signal name to clear (requires message_name)
+        """
         with self.signal_overrides_lock:
             if message_name and signal_name:
                 self.signal_overrides.pop((message_name, signal_name), None)
@@ -279,8 +402,20 @@ class CANManager:
             else:
                 self.signal_overrides.clear()
 
-    def _apply_overrides(self, message_name, signals_dict):
-        """Merge in overrides for this message before encoding."""
+    def _apply_overrides(
+        self,
+        message_name: str,
+        signals_dict: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Merge in overrides for this message before encoding.
+
+        Args:
+            message_name: Name of the message
+            signals_dict: Dictionary of signal values
+
+        Returns:
+            Merged dictionary with overrides applied
+        """
         if not self.signal_overrides:
             return signals_dict
         merged = dict(signals_dict)
@@ -290,19 +425,22 @@ class CANManager:
                     merged[sig] = val
         return merged
 
-    def _build_full_values(self, msg_def, signals_dict):
-        """
-        Build a full signal dict using provided values + overrides + cached values,
-        to avoid zeroing other signals when only one is updated.
+    def _build_full_values(self, msg_def: Any, signals_dict: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """Build a full signal dict using provided values + overrides + cached values.
+
+        This avoids zeroing other signals when only one is updated.
         Priority: last_sent for this message -> signal cache -> configured cyclic defaults -> signal.initial -> 0
+
+        Args:
+            msg_def: Message definition from DBC
+            signals_dict: Dictionary of signal values to set
+
+        Returns:
+            Complete dictionary of all signal values for the message
         """
         merged = self._apply_overrides(msg_def.name, signals_dict or {})
         # Start from last sent snapshot if we have one
-        base = {}
-        try:
-            base = dict(self.last_sent_signals.get(msg_def.name, {}) or {})
-        except Exception:
-            base = {}
+        base = dict(self.last_sent_signals.get(msg_def.name, {}) or {})
 
         full_values = dict(base)
         for sig in msg_def.signals:
@@ -313,11 +451,9 @@ class CANManager:
                 # Already carried from last_sent
                 continue
             cached_val = None
-            try:
-                if hasattr(self, "signal_cache"):
-                    cached_val = self.signal_cache.get(sig.name, {}).get("value", None)
-            except Exception:
-                cached_val = None
+            if hasattr(self, "signal_cache"):
+                cached_val = self.signal_cache.get(sig.name, {}).get("value", None)
+
             if cached_val is None:
                 # Try configured cyclic defaults if available
                 try:
@@ -327,8 +463,10 @@ class CANManager:
                         defaults = cfg[msg_def.name].get("signals", {})
                         if sig.name in defaults:
                             cached_val = defaults[sig.name]
-                except Exception:
-                    cached_val = None
+                except ImportError:
+                    pass  # can_messages not available - use other defaults
+                except Exception as e:
+                    self._log(10, f"Error loading cyclic defaults for {sig.name}: {e}")
             if cached_val is not None:
                 full_values[sig.name] = cached_val
             elif getattr(sig, "initial", None) is not None:
@@ -337,8 +475,23 @@ class CANManager:
                 full_values[sig.name] = 0
         return full_values
 
-    def send_message_with_overrides(self, message_name, signals_dict=None):
-        """Encode and send a message applying overrides."""
+    def send_message_with_overrides(
+        self,
+        message_name: str,
+        signals_dict: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """Encode and send a message applying overrides.
+
+        Args:
+            message_name: Name of the CAN message
+            signals_dict: Dictionary of signal values
+
+        Returns:
+            Dictionary of all signal values sent
+
+        Raises:
+            RuntimeError: If DBC is not loaded
+        """
         if not self.dbc_parser or not self.dbc_parser.database:
             raise RuntimeError("DBC not loaded; cannot encode message")
         msg_def = self.dbc_parser.database.get_message_by_name(message_name)
@@ -346,23 +499,33 @@ class CANManager:
         data = msg_def.encode(full_values)
         self.send_message(msg_def.frame_id, data, is_extended_id=msg_def.is_extended_frame)
         # Optimistically update local cache so verify can succeed even without bus echo
-        try:
-            from time import time as _time
-            now = _time()
-            if not hasattr(self, "signal_cache"):
-                self.signal_cache = {}
+        now = time.time()
+        with self.signal_cache_lock:
             for sig_name, val in full_values.items():
                 self.signal_cache[sig_name] = {"value": val, "timestamp": now, "message": message_name}
-            # Track last sent per message
-            self.last_sent_signals[message_name] = dict(full_values)
-        except Exception:
-            pass
+        # Track last sent per message
+        self.last_sent_signals[message_name] = dict(full_values)
         return full_values
 
-    def verify_signal_value(self, signal_name, expected_value, timeout=1.0, tolerance=0.01):
-        """
-        Closed-loop verification: wait for a decoded signal to match expected within tolerance.
+    def verify_signal_value(
+        self,
+        signal_name: str,
+        expected_value: float,
+        timeout: float = 1.0,
+        tolerance: float = 0.01
+    ) -> Tuple[bool, str]:
+        """Closed-loop verification: wait for a decoded signal to match expected within tolerance.
+
         Uses signal_cache populated by RX decoding.
+
+        Args:
+            signal_name: Name of the signal to verify
+            expected_value: Expected signal value
+            timeout: Maximum wait time in seconds
+            tolerance: Acceptable deviation from expected value
+
+        Returns:
+            Tuple of (success, message)
         """
         import time
         deadline = time.time() + timeout
@@ -375,9 +538,26 @@ class CANManager:
             time.sleep(0.05)
         return False, f"{signal_name} not verified within {timeout}s (expected {expected_value})"
 
-    def start_cyclic_message(self, arbitration_id, data, cycle_time, is_extended_id=False):
+    def start_cyclic_message(
+        self,
+        arbitration_id: int,
+        data: bytes,
+        cycle_time: float,
+        is_extended_id: bool = False
+    ) -> None:
+        """Start cyclic transmission of a CAN message.
+
+        Args:
+            arbitration_id: CAN message ID
+            data: Message data bytes
+            cycle_time: Cycle time in seconds
+            is_extended_id: Use extended (29-bit) ID format
+
+        Raises:
+            RuntimeError: If CAN bus is not connected (hardware mode)
+        """
         if self.simulation_mode:
-            print(f"SIMULATION CAN CYCLIC START: ID={hex(arbitration_id)}")
+            self._log(10, f"SIMULATION CAN CYCLIC START: ID={hex(arbitration_id)}")
             return
 
         if not self.bus:
@@ -387,15 +567,21 @@ class CANManager:
             self.stop_cyclic_message(arbitration_id)
 
         msg = can.Message(arbitration_id=arbitration_id, data=data, is_extended_id=is_extended_id)
-        try:
-            msg.timestamp = time.time()
-            if self.logging:
+        msg.timestamp = time.time()
+
+        if self.logging:
+            try:
                 # Log the first tick immediately so traces show the start of cyclic traffic
                 self._log_message(msg)
-            # Also feed metrics/listeners for TX visibility
+            except Exception as e:
+                self._log(30, f"Failed to log initial cyclic message: {e}")
+
+        # Also feed metrics/listeners for TX visibility
+        try:
             self._on_message_received(msg)
-        except Exception:
-            pass
+        except Exception as e:
+            self._log(30, f"Failed to notify listeners for cyclic start: {e}")
+
         task = self.bus.send_periodic(msg, cycle_time)
         self.cyclic_tasks[arbitration_id] = task
         self.cyclic_periods[arbitration_id] = cycle_time
@@ -406,20 +592,23 @@ class CANManager:
         def _tick_metrics():
             m = can.Message(arbitration_id=arbitration_id, data=data, is_extended_id=is_extended_id)
             while not stop_event.wait(cycle_time):
-                try:
-                    m.timestamp = time.time()
-                except Exception:
-                    pass
+                m.timestamp = time.time()
                 try:
                     self._on_message_received(m)
-                except Exception:
-                    pass
-        t = threading.Thread(target=_tick_metrics, daemon=True)
+                except Exception as e:
+                    self._log(30, f"Metrics tick failed for ID=0x{arbitration_id:X}: {e}")
+
+        t = threading.Thread(target=_tick_metrics, daemon=True, name=f"CAN_Metrics_{arbitration_id:X}")
         t.start()
 
-    def stop_cyclic_message(self, arbitration_id):
+    def stop_cyclic_message(self, arbitration_id: int) -> None:
+        """Stop cyclic transmission of a CAN message.
+
+        Args:
+            arbitration_id: CAN message ID to stop
+        """
         if self.simulation_mode:
-            print(f"SIMULATION CAN CYCLIC STOP: ID={hex(arbitration_id)}")
+            self._log(10, f"SIMULATION CAN CYCLIC STOP: ID={hex(arbitration_id)}")
             return
 
         if arbitration_id in self.cyclic_tasks:
@@ -428,57 +617,62 @@ class CANManager:
         if arbitration_id in self.cyclic_periods:
             del self.cyclic_periods[arbitration_id]
         if arbitration_id in self.metrics_threads:
-            try:
-                self.metrics_threads[arbitration_id].set()
-            except Exception:
-                pass
+            self.metrics_threads[arbitration_id].set()
             del self.metrics_threads[arbitration_id]
 
-    def start_cyclic_message_by_name(self, message_name, signals_dict, cycle_time_ms):
-        """
-        Start a cyclic CAN message using DBC encoding.
-        message_name: Name of the message in the DBC file
-        signals_dict: Dictionary of signal names and values
-        cycle_time_ms: Cycle time in milliseconds
+    def start_cyclic_message_by_name(
+        self,
+        message_name: str,
+        signals_dict: Optional[Dict[str, Any]],
+        cycle_time_ms: int
+    ) -> bool:
+        """Start a cyclic CAN message using DBC encoding.
+
+        Args:
+            message_name: Name of the message in the DBC file
+            signals_dict: Dictionary of signal names and values
+            cycle_time_ms: Cycle time in milliseconds
+
+        Returns:
+            True if successful, False otherwise
         """
         if not self.dbc_parser or not self.dbc_parser.database:
-            print(f"Warning: No DBC loaded, cannot encode message '{message_name}'")
+            self._log(30, f"No DBC loaded, cannot encode message '{message_name}'")
             return False
-        
+
         try:
             # Get message from DBC
             message = self.dbc_parser.database.get_message_by_name(message_name)
-            
+
             # Encode signals into CAN data (preserve other signals via cache/defaults)
             full_values = self._build_full_values(message, signals_dict or {})
-            
+
             data = message.encode(full_values)
             # Remember what we are sending for future preservation and cache
-            try:
-                now = time.time()
-                self.last_sent_signals[message.name] = dict(full_values)
+            now = time.time()
+            self.last_sent_signals[message.name] = dict(full_values)
+            with self.signal_cache_lock:
                 for sig_name, val in full_values.items():
                     self.signal_cache[sig_name] = {"value": val, "timestamp": now, "message": message.name}
-            except Exception:
-                pass
-            
+
             # Start cyclic transmission
             self.start_cyclic_message(message.frame_id, data, cycle_time_ms / 1000.0, is_extended_id=message.is_extended_frame)
-            
-            print(f"Started cyclic message: {message_name} (ID: 0x{message.frame_id:03X})")
+
+            self._log(20, f"Started cyclic message: {message_name} (ID: 0x{message.frame_id:03X})")
             return True
-            
-        except KeyError as e:
-            print(f"Error: Message '{message_name}' not found in DBC file")
+
+        except KeyError:
+            self._log(40, f"Message '{message_name}' not found in DBC file")
             return False
         except Exception as e:
-            print(f"Error: Error encoding message '{message_name}': {e}")
+            self._log(40, f"Error encoding message '{message_name}': {e}")
             return False
     
-    def start_all_cyclic_messages(self):
-        """
-        Start all cyclic messages defined in can_messages.py
-        Returns: (started_messages, failed_messages) tuple of lists
+    def start_all_cyclic_messages(self) -> Tuple[List[str], List[str]]:
+        """Start all cyclic messages defined in can_messages.py.
+
+        Returns:
+            Tuple of (started_messages, failed_messages) lists
         """
         import sys
         import os
@@ -495,100 +689,144 @@ class CANManager:
             import can_messages
             CYCLIC_CAN_MESSAGES = can_messages.CYCLIC_CAN_MESSAGES
         except ImportError as e:
-            print(f"Error importing can_messages: {e}")
+            self._log(40, f"Error importing can_messages: {e}")
             return [], []
-        
+
         started_messages = []
         failed_messages = []
-        
+
         for msg_name, msg_config in CYCLIC_CAN_MESSAGES.items():
             signals = msg_config['signals']
             cycle_time = msg_config['cycle_time']
-            
+
             # Start cyclic message using DBC encoding
             success = self.start_cyclic_message_by_name(msg_name, signals, cycle_time)
             if success:
                 started_messages.append(msg_name)
             else:
                 failed_messages.append(msg_name)
-        
+
+        self._log(20, f"Started {len(started_messages)} cyclic messages, {len(failed_messages)} failed")
         return started_messages, failed_messages
     
-    def stop_all_cyclic_messages(self):
-        """
-        Stop all cyclic messages defined in can_messages.py
-        Returns: True if successful, False otherwise
+    def stop_all_cyclic_messages(self) -> bool:
+        """Stop all cyclic messages defined in can_messages.py.
+
+        Returns:
+            True if successful, False otherwise
         """
         import sys
         import os
-        
+
         # Add CAN Configuration to path
         script_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.dirname(script_dir)
         config_path = os.path.join(project_root, "CAN Configuration")
-        
+
         if config_path not in sys.path:
             sys.path.insert(0, config_path)
-        
+
         try:
             import can_messages
             CYCLIC_CAN_MESSAGES = can_messages.CYCLIC_CAN_MESSAGES
         except ImportError as e:
-            print(f"âœ— Error importing can_messages: {e}")
-            return False
-        
-        try:
-            # Get message IDs from DBC
-            if not self.dbc_parser or not self.dbc_parser.database:
-                print("âš  Warning: No DBC loaded, cannot stop cyclic messages")
-                return False
-            
-            for msg_name in CYCLIC_CAN_MESSAGES.keys():
-                try:
-                    message = self.dbc_parser.database.get_message_by_name(msg_name)
-                    self.stop_cyclic_message(message.frame_id)
-                except KeyError:
-                    print(f"Warning: Message '{msg_name}' not found in DBC")
-            
-            return True
-        except Exception as e:
-            print(f"Error: Error stopping cyclic messages: {e}")
+            self._log(40, f"Error importing can_messages: {e}")
             return False
 
+        # Get message IDs from DBC
+        if not self.dbc_parser or not self.dbc_parser.database:
+            self._log(30, "No DBC loaded, cannot stop cyclic messages")
+            return False
 
-    def start_logging(self, filename_base):
-        # Create Test Results folder if it doesn't exist
+        stopped_count = 0
+        for msg_name in CYCLIC_CAN_MESSAGES.keys():
+            try:
+                message = self.dbc_parser.database.get_message_by_name(msg_name)
+                self.stop_cyclic_message(message.frame_id)
+                stopped_count += 1
+            except KeyError:
+                self._log(30, f"Message '{msg_name}' not found in DBC")
+            except Exception as e:
+                self._log(40, f"Error stopping cyclic message '{msg_name}': {e}")
+
+        self._log(20, f"Stopped {stopped_count} cyclic messages")
+        return True
+
+
+    def start_logging(self, filename_base: str) -> str:
+        """Start logging CAN messages to CSV and TRC files.
+
+        Args:
+            filename_base: Base filename (without extension) for log files.
+                          Must be a valid filename without path separators.
+
+        Returns:
+            Full path to the log files (without extension).
+
+        Raises:
+            ValueError: If filename_base contains invalid characters.
+            OSError: If the results directory cannot be created or files cannot be opened.
+        """
+        # Validate filename to prevent path traversal
+        if not filename_base or '..' in filename_base or os.path.sep in filename_base:
+            raise ValueError(f"Invalid filename_base: {filename_base}")
+
+        # Sanitize filename - only allow alphanumeric, underscore, hyphen, and dot
+        import re
+        if not re.match(r'^[\w\-\.]+$', filename_base):
+            raise ValueError(f"Filename contains invalid characters: {filename_base}")
+
+        # Create Test Results folder if it doesn't exist (race-condition safe)
         results_dir = "Test Results"
-        if not os.path.exists(results_dir):
-            os.makedirs(results_dir)
-        
+        os.makedirs(results_dir, exist_ok=True)
+
         # Full path with Test Results folder
         full_path = os.path.join(results_dir, filename_base)
-        
+
         self.logging = True
         self.start_time = datetime.now()  # Record start time for TRC
-        
+
         # CSV file
-        self.csv_file = open(f"{full_path}.csv", 'w', newline='')
+        self.csv_file = open(f"{full_path}.csv", 'w', newline='', encoding='utf-8')
         self.csv_writer = csv.writer(self.csv_file)
         self.csv_writer.writerow(["Time", "Type", "ID", "DLC", "Data"])
-        
+
         # TRC file (PCAN format)
-        self.trc_file = open(f"{full_path}.trc", 'w')
+        self.trc_file = open(f"{full_path}.trc", 'w', encoding='utf-8')
         self._write_trc_header()
-        
+
+        self._log(20, f"Started logging to {full_path}")
         return full_path
 
-    def stop_logging(self):
+    def stop_logging(self) -> None:
+        """Stop logging and safely close all log files."""
         self.logging = False
-        if self.csv_file:
-            self.csv_file.close()
-            self.csv_file = None
-        if self.trc_file:
-            self.trc_file.close()
-            self.trc_file = None
+        errors = []
 
-    def _write_trc_header(self):
+        if self.csv_file:
+            try:
+                self.csv_file.close()
+            except Exception as e:
+                errors.append(f"CSV close failed: {e}")
+            finally:
+                self.csv_file = None
+                self.csv_writer = None
+
+        if self.trc_file:
+            try:
+                self.trc_file.close()
+            except Exception as e:
+                errors.append(f"TRC close failed: {e}")
+            finally:
+                self.trc_file = None
+
+        if errors:
+            self._log(30, f"Errors stopping logging: {'; '.join(errors)}")
+        else:
+            self._log(20, "Logging stopped")
+
+    def _write_trc_header(self) -> None:
+        """Write TRC file header in PCAN format."""
         start_time_str = self.start_time.strftime("%d-%m-%Y %H:%M:%S.%f")[:-3]
         # PCAN-style STARTTIME uses Excel/PCAN serial days (days since 1899-12-30)
         excel_epoch = datetime(1899, 12, 30)
@@ -611,25 +849,38 @@ class CANManager:
             self.message_counter = 1
             self.first_msg_time = None
 
-    def add_listener(self, callback):
+    def add_listener(self, callback: Callable[[can.Message], None]) -> None:
+        """Add a message listener callback.
+
+        Args:
+            callback: Function to call when a message is received
+        """
         with self.listeners_lock:
             self.listeners.append(callback)
 
-    def remove_listener(self, callback):
+    def remove_listener(self, callback: Callable[[can.Message], None]) -> None:
+        """Remove a message listener callback.
+
+        Args:
+            callback: Function to remove from listeners
+        """
         with self.listeners_lock:
             try:
                 self.listeners.remove(callback)
             except ValueError:
                 pass
 
-    def _on_message_received(self, msg):
-        """
-        ===== ROBUST MESSAGE RECEPTION AND DECODING =====
+    def _on_message_received(self, msg: can.Message) -> None:
+        """Handle received CAN message with robust decoding and caching.
+
         This is the core of CAN communication. Every received message:
         1. Gets logged (CSV/TRC)
         2. Gets decoded using DBC
         3. Gets cached in signal_cache
         4. Gets distributed to listeners
+
+        Args:
+            msg: Received CAN message
         """
         try:
             # Track statistics
@@ -657,36 +908,52 @@ class CANManager:
                 try:
                     listener(msg)
                 except Exception as e:
-                    print(f"[CAN ERROR] Listener error: {e}")
                     self._log(40, f"Listener error: {e}")
                     self.error_count += 1
-        
+
         except Exception as e:
-            print(f"[CAN ERROR] Message reception failed: {e}")
+            self._log(40, f"Message reception failed: {e}")
             self.error_count += 1
     
-    def _decode_message(self, msg, decode_choices=True):
+    def _decode_message(self, msg: can.Message, decode_choices: bool = True) -> Dict[str, Any]:
+        """Decode a CAN message using DBC definitions.
+
+        Args:
+            msg: CAN message to decode
+            decode_choices: Whether to decode choice values to strings
+
+        Returns:
+            Dictionary of {signal_name: value} or {} if message not in DBC or decoding fails
         """
-        Decode a CAN message using DBC definitions.
-        Returns: dict of {signal_name: value} or {} if decoding fails
-        """
+        # Quick lookup in message definitions cache
+        if msg.arbitration_id not in self.message_definitions:
+            return {}  # Message not in DBC - this is expected for unknown messages
+
+        message_def = self.message_definitions[msg.arbitration_id]
         try:
-            # Quick lookup in message definitions cache
-            if msg.arbitration_id not in self.message_definitions:
-                return {}  # Message not in DBC
-            
-            message_def = self.message_definitions[msg.arbitration_id]
             decoded = message_def.decode(msg.data, decode_choices=decode_choices)
             return decoded
-        
         except Exception as e:
-            # Silently ignore decode errors (malformed data, unknown messages)
+            # Log decode errors at debug level (can be noisy with malformed data)
+            self._log(10, f"Failed to decode message 0x{msg.arbitration_id:X}: {e}")
             return {}
 
-    def _cache_signals(self, message_id, decoded_signals, timestamp, raw_signals=None):
-        """
-        Update signal_cache with latest signal values.
+    def _cache_signals(
+        self,
+        message_id: int,
+        decoded_signals: Dict[str, Any],
+        timestamp: Optional[float],
+        raw_signals: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """Update signal_cache with latest signal values.
+
         This is what the UI Dashboard reads for real-time updates.
+
+        Args:
+            message_id: CAN message arbitration ID
+            decoded_signals: Decoded signal values
+            timestamp: Message timestamp
+            raw_signals: Optional raw signal values before choice decoding
         """
         with self.signal_cache_lock:
             for signal_name, value in decoded_signals.items():
@@ -707,8 +974,12 @@ class CANManager:
                     if raw_signals and signal_name in raw_signals:
                         self.signal_cache[signal_name]['raw_value'] = raw_signals[signal_name]
     
-    def _log_message(self, msg):
-        """Log message to CSV and TRC files"""
+    def _log_message(self, msg: can.Message) -> None:
+        """Log message to CSV and TRC files.
+
+        Args:
+            msg: CAN message to log
+        """
         # Skip CAN error/status frames or remote frames
         try:
             if getattr(msg, "is_error_frame", False) or getattr(msg, "is_remote_frame", False):
@@ -746,37 +1017,42 @@ class CANManager:
                     dlc,
                     data_bytes
                 ])
-                try:
+                if self.csv_file:
                     self.csv_file.flush()
-                except Exception:
-                    pass
-            
+
             # TRC format
             if hasattr(self, 'trc_file') and self.trc_file:
                 msg_type = "Rx" if msg.is_rx else "Tx"
                 # Align to PCAN textual layout similar to provided templates
                 trc_line = f"{self.message_counter:6d}){relative_time:11.1f}  {msg_type:2s} {msg.arbitration_id:9X}  {dlc:1d}  {data_bytes} \n"
                 self.trc_file.write(trc_line)
-                try:
-                    self.trc_file.flush()
-                except Exception:
-                    pass
+                self.trc_file.flush()
                 self.message_counter += 1
-        
-        # Add to message history for debugging
-        self.message_history.append({
-            'timestamp': getattr(msg, "timestamp", None),
-            'msg_id': msg.arbitration_id,
-            'data': getattr(msg, "data", b''),
-            'direction': 'RX' if getattr(msg, "is_rx", False) else 'TX'
-        })
-        if len(self.message_history) > self.max_history_size:
-            self.message_history.pop(0)
 
-    def get_signal_value(self, message_name, signal_name, timeout=2.0):
-        """
-        Listen for a CAN message and return the decoded signal value.
-        Returns: (success, value, message) tuple
+        # Add to message history for debugging (thread-safe with deque)
+        with self.message_history_lock:
+            self.message_history.append({
+                'timestamp': getattr(msg, "timestamp", None),
+                'msg_id': msg.arbitration_id,
+                'data': getattr(msg, "data", b''),
+                'direction': 'RX' if getattr(msg, "is_rx", False) else 'TX'
+            })
+
+    def get_signal_value(
+        self,
+        message_name: str,
+        signal_name: str,
+        timeout: float = 2.0
+    ) -> Tuple[bool, Optional[Any], str]:
+        """Listen for a CAN message and return the decoded signal value.
+
+        Args:
+            message_name: Name of the CAN message
+            signal_name: Name of the signal within the message
+            timeout: Maximum wait time in seconds
+
+        Returns:
+            Tuple of (success, value, message)
         """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, None, "No DBC loaded"
@@ -809,7 +1085,7 @@ class CANManager:
                         result['success'] = True
                         found_event.set()
                 except Exception as e:
-                    print(f"[CAN ERROR] Error decoding message: {e}")
+                    self._log(30, f"Error decoding message: {e}")
         
         # Add listener
         self.add_listener(_listener)
@@ -828,10 +1104,17 @@ class CANManager:
         else:
             return False, None, f"[CAN TIMEOUT] Signal '{signal_name}' not received within {timeout}s"
     
-    def get_signal_from_cache(self, signal_name):
-        """
-        Get current signal value from cache (non-blocking, returns immediately).
-        Returns: (success, value, timestamp) tuple
+    def get_signal_from_cache(
+        self,
+        signal_name: str
+    ) -> Tuple[bool, Optional[Any], Optional[float]]:
+        """Get current signal value from cache (non-blocking, returns immediately).
+
+        Args:
+            signal_name: Name of the signal
+
+        Returns:
+            Tuple of (success, value, timestamp)
         """
         with self.signal_cache_lock:
             if signal_name in self.signal_cache:
@@ -840,15 +1123,34 @@ class CANManager:
         
         return False, None, None
     
-    def get_all_signals_from_cache(self):
-        """Get all signals currently in cache"""
+    def get_all_signals_from_cache(self) -> Dict[str, Dict[str, Any]]:
+        """Get all signals currently in cache.
+
+        Returns:
+            Dictionary of all cached signals
+        """
         with self.signal_cache_lock:
             return dict(self.signal_cache)
 
-    def wait_for_signal_condition(self, message_name, signal_name, expected_value, tolerance, timeout=2.0):
-        """
-        Wait for a signal to match expected value within tolerance.
-        Returns: (success, actual_value, message) tuple
+    def wait_for_signal_condition(
+        self,
+        message_name: str,
+        signal_name: str,
+        expected_value: float,
+        tolerance: float,
+        timeout: float = 2.0
+    ) -> Tuple[bool, Optional[float], str]:
+        """Wait for a signal to match expected value within tolerance.
+
+        Args:
+            message_name: Name of the CAN message
+            signal_name: Name of the signal
+            expected_value: Expected signal value
+            tolerance: Acceptable deviation
+            timeout: Maximum wait time in seconds
+
+        Returns:
+            Tuple of (success, actual_value, message)
         """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, None, "No DBC loaded"
@@ -877,7 +1179,7 @@ class CANManager:
                             result['success'] = True
                             found_event.set()
                 except Exception as e:
-                    print(f"Error decoding message: {e}")
+                    self._log(30, f"Error decoding message: {e}")
         
         # Add listener
         self.add_listener(_listener)
@@ -898,11 +1200,27 @@ class CANManager:
         else:
             return False, None, f"Timeout: Signal '{signal_name}' not received within {timeout}s"
 
-    def wait_for_signal_change(self, message_name, signal_name, from_value, to_value, timeout=10.0, progress_callback=None):
-        """
-        Wait for signal to change from one value to another.
-        progress_callback: Optional function(message_str) for progress updates
-        Returns: (success, actual_value, time_taken, message)
+    def wait_for_signal_change(
+        self,
+        message_name: str,
+        signal_name: str,
+        from_value: Any,
+        to_value: Any,
+        timeout: float = 10.0,
+        progress_callback: Optional[Callable[[str], None]] = None
+    ) -> Tuple[bool, Optional[Any], float, str]:
+        """Wait for signal to change from one value to another.
+
+        Args:
+            message_name: Name of the CAN message
+            signal_name: Name of the signal
+            from_value: Initial value to detect
+            to_value: Target value to wait for
+            timeout: Maximum wait time in seconds
+            progress_callback: Optional function(message_str) for progress updates
+
+        Returns:
+            Tuple of (success, actual_value, time_taken, message)
         """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, None, 0, "No DBC loaded"
@@ -938,7 +1256,7 @@ class CANManager:
                             # Report intermediate values
                             progress_callback(f"Current value: {signal_name}={current_value} (waiting for {to_value})")
                 except Exception as e:
-                    print(f"Error decoding message: {e}")
+                    self._log(30, f"Error decoding message: {e}")
         
         self.add_listener(_listener)
         
@@ -959,11 +1277,27 @@ class CANManager:
         else:
             return False, result['value'], time_taken, f"Signal did not change to {to_value} within {timeout}s (last value: {result['value']})"
 
-    def monitor_signal_range(self, message_name, signal_name, min_value, max_value, duration, progress_callback=None):
-        """
-        Monitor signal stays within range for specified duration.
-        progress_callback: Called with (elapsed_time, current_value, status_message)
-        Returns: (success, min_observed, max_observed, violation_info, message)
+    def monitor_signal_range(
+        self,
+        message_name: str,
+        signal_name: str,
+        min_value: float,
+        max_value: float,
+        duration: float,
+        progress_callback: Optional[Callable[[str], None]] = None
+    ) -> Tuple[bool, Optional[float], Optional[float], Optional[str], str]:
+        """Monitor signal stays within range for specified duration.
+
+        Args:
+            message_name: Name of the CAN message
+            signal_name: Name of the signal
+            min_value: Minimum acceptable value
+            max_value: Maximum acceptable value
+            duration: Monitoring duration in seconds
+            progress_callback: Called with status message strings
+
+        Returns:
+            Tuple of (success, min_observed, max_observed, violation_info, message)
         """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, None, None, None, "No DBC loaded"
@@ -998,7 +1332,7 @@ class CANManager:
                                 if progress_callback:
                                     progress_callback(f"âš  VIOLATION at {elapsed:.2f}s: {signal_name}={current_value} (range: {min_value}-{max_value})")
                 except Exception as e:
-                    print(f"Error decoding message: {e}")
+                    self._log(30, f"Error decoding message: {e}")
         
         self.add_listener(_listener)
         
@@ -1045,10 +1379,27 @@ class CANManager:
         else:
             return True, min_observed, max_observed, None, f"Signal stayed in range [{min_value}, {max_value}] for {duration}s (observed: [{min_observed:.2f}, {max_observed:.2f}])"
 
-    def compare_two_signals(self, msg1_name, sig1_name, msg2_name, sig2_name, tolerance, timeout=5.0):
-        """
-        Compare two signal values within tolerance.
-        Returns: (success, value1, value2, difference, message)
+    def compare_two_signals(
+        self,
+        msg1_name: str,
+        sig1_name: str,
+        msg2_name: str,
+        sig2_name: str,
+        tolerance: float,
+        timeout: float = 5.0
+    ) -> Tuple[bool, Optional[float], Optional[float], Optional[float], str]:
+        """Compare two signal values within tolerance.
+
+        Args:
+            msg1_name: Name of the first message
+            sig1_name: Name of the first signal
+            msg2_name: Name of the second message
+            sig2_name: Name of the second signal
+            tolerance: Maximum acceptable difference
+            timeout: Maximum wait time in seconds
+
+        Returns:
+            Tuple of (success, value1, value2, difference, message)
         """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, None, None, None, "No DBC loaded"
@@ -1078,7 +1429,7 @@ class CANManager:
                     result['both_received'] = True
                     found_event.set()
             except Exception as e:
-                print(f"Error decoding message: {e}")
+                self._log(30, f"Error decoding message: {e}")
         
         self.add_listener(_listener)
         
@@ -1107,10 +1458,23 @@ class CANManager:
         else:
             return False, result['value1'], result['value2'], difference, f"Signals differ: {sig1_name}={result['value1']:.2f}, {sig2_name}={result['value2']:.2f} (diff={difference:.2f} > tol={tolerance})"
 
-    def set_signal_and_verify(self, message_name, signal_name, value, verify_timeout=2.0):
-        """
-        Set signal via cyclic message and verify it was received back.
-        Returns: (success, verified_value, round_trip_time, message)
+    def set_signal_and_verify(
+        self,
+        message_name: str,
+        signal_name: str,
+        value: Any,
+        verify_timeout: float = 2.0
+    ) -> Tuple[bool, Optional[Any], float, str]:
+        """Set signal via cyclic message and verify it was received back.
+
+        Args:
+            message_name: Name of the CAN message
+            signal_name: Name of the signal
+            value: Value to set
+            verify_timeout: Maximum wait time for verification
+
+        Returns:
+            Tuple of (success, verified_value, round_trip_time, message)
         """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, None, 0, "No DBC loaded"
@@ -1146,7 +1510,7 @@ class CANManager:
                             result['verified'] = True
                             found_event.set()
                 except Exception as e:
-                    print(f"Error decoding message: {e}")
+                    self._log(30, f"Error decoding message: {e}")
         
         self.add_listener(_listener)
         
@@ -1169,8 +1533,20 @@ class CANManager:
 
     # ===== NEW CAN SIGNAL TEST ACTIONS =====
     
-    def read_signal_value(self, signal_name, timeout=2.0):
-        """Read and return current value of a signal from received messages"""
+    def read_signal_value(
+        self,
+        signal_name: str,
+        timeout: float = 2.0
+    ) -> Tuple[bool, Optional[Any], str]:
+        """Read and return current value of a signal from received messages.
+
+        Args:
+            signal_name: Name of the signal to read
+            timeout: Maximum wait time in seconds
+
+        Returns:
+            Tuple of (success, value, message)
+        """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, 0, "DBC not loaded"
         
@@ -1191,8 +1567,24 @@ class CANManager:
         else:
             return False, None, f"Signal '{signal_name}' not received within {timeout}s"
     
-    def check_signal_tolerance(self, signal_name, expected_value, tolerance, timeout=2.0):
-        """Check if signal value is within tolerance of expected value"""
+    def check_signal_tolerance(
+        self,
+        signal_name: str,
+        expected_value: float,
+        tolerance: float,
+        timeout: float = 2.0
+    ) -> Tuple[bool, Optional[float], str]:
+        """Check if signal value is within tolerance of expected value.
+
+        Args:
+            signal_name: Name of the signal
+            expected_value: Expected signal value
+            tolerance: Acceptable deviation
+            timeout: Maximum wait time in seconds
+
+        Returns:
+            Tuple of (success, actual_value, message)
+        """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, None, f"DBC not loaded"
         
@@ -1211,8 +1603,22 @@ class CANManager:
         
         return False, None, f"Signal '{signal_name}' not received within {timeout}s"
     
-    def conditional_jump_check(self, signal_name, expected_value, tolerance=0.1):
-        """Check condition for conditional jump - returns True if condition met"""
+    def conditional_jump_check(
+        self,
+        signal_name: str,
+        expected_value: float,
+        tolerance: float = 0.1
+    ) -> Tuple[bool, str]:
+        """Check condition for conditional jump - returns True if condition met.
+
+        Args:
+            signal_name: Name of the signal
+            expected_value: Expected signal value
+            tolerance: Acceptable deviation
+
+        Returns:
+            Tuple of (condition_met, message)
+        """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, f"DBC not loaded"
         
@@ -1227,8 +1633,24 @@ class CANManager:
         else:
             return False, f"Signal '{signal_name}' not available"
     
-    def wait_for_signal_change(self, signal_name, initial_value, timeout=5.0, poll_interval=0.1):
-        """Wait for signal to change from initial value with progress feedback"""
+    def wait_for_signal_change_simple(
+        self,
+        signal_name: str,
+        initial_value: Any,
+        timeout: float = 5.0,
+        poll_interval: float = 0.1
+    ) -> Tuple[bool, Any, str]:
+        """Wait for signal to change from initial value with progress feedback.
+
+        Args:
+            signal_name: Name of the signal
+            initial_value: Value to change from
+            timeout: Maximum wait time in seconds
+            poll_interval: Polling interval in seconds
+
+        Returns:
+            Tuple of (success, final_value, message)
+        """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, 0, f"DBC not loaded"
         
@@ -1250,8 +1672,26 @@ class CANManager:
         elapsed_time = time.time() - start_time
         return False, last_value, f"TIMEOUT: {signal_name} did not change within {timeout}s ({elapsed_checks} checks)"
     
-    def monitor_signal_range(self, signal_name, min_val, max_val, duration=5.0, poll_interval=0.5):
-        """Monitor signal continuously for violations with periodic updates"""
+    def monitor_signal_range_simple(
+        self,
+        signal_name: str,
+        min_val: float,
+        max_val: float,
+        duration: float = 5.0,
+        poll_interval: float = 0.5
+    ) -> Tuple[bool, List[float], str]:
+        """Monitor signal continuously for violations with periodic updates.
+
+        Args:
+            signal_name: Name of the signal
+            min_val: Minimum acceptable value
+            max_val: Maximum acceptable value
+            duration: Monitoring duration in seconds
+            poll_interval: Polling interval in seconds
+
+        Returns:
+            Tuple of (success, readings_list, message)
+        """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, [], f"DBC not loaded"
         
@@ -1283,8 +1723,24 @@ class CANManager:
             avg_value = sum(readings) / len(readings) if readings else 0
             return True, readings, f"OK: {signal_name} remained within [{min_val}, {max_val}] for {elapsed_time:.2f}s (avg={avg_value:.2f}, samples={len(readings)})"
     
-    def compare_two_signals(self, signal1_name, signal2_name, tolerance=1.0, timeout=2.0):
-        """Compare values from two different signals within tolerance"""
+    def compare_two_signals_simple(
+        self,
+        signal1_name: str,
+        signal2_name: str,
+        tolerance: float = 1.0,
+        timeout: float = 2.0
+    ) -> Tuple[bool, Tuple[Optional[float], Optional[float]], str]:
+        """Compare values from two different signals within tolerance.
+
+        Args:
+            signal1_name: Name of the first signal
+            signal2_name: Name of the second signal
+            tolerance: Maximum acceptable difference
+            timeout: Maximum wait time in seconds
+
+        Returns:
+            Tuple of (success, (value1, value2), message)
+        """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, (None, None), f"DBC not loaded"
         
@@ -1306,8 +1762,26 @@ class CANManager:
         
         return False, (None, None), f"Signals not received within {timeout}s"
     
-    def set_signal_and_verify(self, message_id, signal_name, target_value, verify_timeout=2.0, tolerance=0.5):
-        """Send CAN message and verify signal reached target value (round-trip test)"""
+    def set_signal_and_verify_by_id(
+        self,
+        message_id: int,
+        signal_name: str,
+        target_value: float,
+        verify_timeout: float = 2.0,
+        tolerance: float = 0.5
+    ) -> Tuple[bool, Optional[float], float, str]:
+        """Send CAN message and verify signal reached target value (round-trip test).
+
+        Args:
+            message_id: CAN message arbitration ID
+            signal_name: Name of the signal
+            target_value: Target value to verify
+            verify_timeout: Maximum wait time for verification
+            tolerance: Acceptable deviation
+
+        Returns:
+            Tuple of (success, received_value, round_trip_time, message)
+        """
         if not self.dbc_parser or not self.dbc_parser.database:
             return False, None, 0, f"DBC not loaded"
         
@@ -1332,10 +1806,11 @@ class CANManager:
         round_trip_time = time.time() - start_time
         return False, None, round_trip_time, f"TIMEOUT: Signal not verified within {verify_timeout}s (round-trip={round_trip_time:.3f}s)"
 
-    def get_diagnostics(self):
-        """
-        ===== CAN DIAGNOSTICS =====
-        Returns comprehensive diagnostics for debugging CAN communication issues.
+    def get_full_diagnostics(self) -> Dict[str, Any]:
+        """Get comprehensive diagnostics for debugging CAN communication issues.
+
+        Returns:
+            Dictionary with detailed diagnostic information
         """
         with self.signal_cache_lock:
             signal_count = len([s for s in self.signal_cache.values() if s['value'] is not None])
@@ -1355,9 +1830,9 @@ class CANManager:
         }
         return diagnostics
     
-    def print_diagnostics(self):
-        """Print diagnostics to console for troubleshooting"""
-        diag = self.get_diagnostics()
+    def print_diagnostics(self) -> None:
+        """Print diagnostics to console for troubleshooting."""
+        diag = self.get_full_diagnostics()
         print("\n" + "="*60)
         print("[CAN DIAGNOSTICS]")
         print("="*60)
@@ -1374,11 +1849,10 @@ class CANManager:
         print(f"  Message History:      {diag['history_size']}/{self.max_history_size}")
         print("="*60 + "\n")
 
-    def _simulate_traffic(self):
-        """
-        ===== SIMULATION MODE =====
-        Simulate CAN traffic with properly encoded messages from DBC definitions.
-        This generates valid CAN messages with realistic signal values.
+    def _simulate_traffic(self) -> None:
+        """Simulate CAN traffic with properly encoded messages from DBC definitions.
+
+        This generates valid CAN messages with realistic signal values for simulation mode.
         """
         import random
         
@@ -1439,7 +1913,7 @@ class CANManager:
                 
                 # Progress indicator every 100 messages
                 if simulation_iteration % 100 == 0:
-                    diag = self.get_diagnostics()
+                    diag = self.get_full_diagnostics()
                     print(f"[CAN SIMULATION] {simulation_iteration} messages, {diag['signals_with_values']} signals updated")
             
             except Exception as e:

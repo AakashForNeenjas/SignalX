@@ -1,5 +1,7 @@
 import json
 import os
+import sys
+from pathlib import Path
 from typing import Dict, Any
 
 
@@ -54,6 +56,26 @@ DEFAULT_PROFILES: Dict[str, Dict[str, Any]] = {
 }
 
 
+def _resolve_profile_path(path: str) -> Path:
+    candidates = []
+    # direct path
+    candidates.append(Path(path))
+    # PyInstaller bundle
+    if hasattr(sys, "_MEIPASS"):
+        candidates.append(Path(sys._MEIPASS) / path)
+    # executable directory (onedir)
+    try:
+        candidates.append(Path(sys.executable).resolve().parent / path)
+    except Exception:
+        pass
+    # repo root (developer)
+    candidates.append(Path(__file__).resolve().parent / path)
+    for cand in candidates:
+        if cand.exists():
+            return cand
+    return Path(path)
+
+
 def load_profiles(path: str = os.path.join("config_profiles", "profiles.json")) -> Dict[str, Dict[str, Any]]:
     """
     Load profile definitions from JSON. Falls back to DEFAULT_PROFILES if file is absent or invalid.
@@ -63,9 +85,10 @@ def load_profiles(path: str = os.path.join("config_profiles", "profiles.json")) 
       "dev": {...}
     }
     """
-    if os.path.exists(path):
+    resolved = _resolve_profile_path(path)
+    if resolved.exists():
         try:
-            with open(path, "r", encoding="utf-8") as f:
+            with open(resolved, "r", encoding="utf-8") as f:
                 profiles = json.load(f)
                 if isinstance(profiles, dict) and profiles:
                     return profiles

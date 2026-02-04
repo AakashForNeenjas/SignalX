@@ -1,13 +1,14 @@
 import logging
 import os
 import json
+import threading
 from pathlib import Path
 from datetime import datetime
 from PyQt6.QtWidgets import (
     QMainWindow, QTabWidget, QWidget, QVBoxLayout, QLabel, QHBoxLayout,
     QComboBox, QPushButton, QTextEdit, QMessageBox, QScrollArea, QFormLayout,
     QLineEdit, QSpinBox, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem,
-    QDialog, QDialogButtonBox, QProgressDialog
+    QDialog, QDialogButtonBox, QProgressDialog, QCheckBox
 )
 from config_loader import load_profiles, get_profile
 import config
@@ -34,12 +35,11 @@ class MainWindow(QMainWindow):
         self.current_version = updater.read_local_version()
         # Load profiles (simulation/dev/hw)
         self.profiles = load_profiles()
-        if 'hw' in self.profiles:
-            self.active_profile = 'hw'
-        elif 'sim' in self.profiles:
-            self.active_profile = 'sim'
-        else:
-            self.active_profile = next(iter(self.profiles.keys()))
+        preferred_profiles = ("lab_a", "hw", "sim")
+        self.active_profile = next(
+            (name for name in preferred_profiles if name in self.profiles),
+            next(iter(self.profiles.keys())),
+        )
         self.logger = logger
         self.log_path = log_path
         
@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
         self.layout = QVBoxLayout(self.central_widget)
         self.layout.setContentsMargins(0, 0, 0, 0)
         # Header branding
-        self.header_bar = HeaderBar(on_check_updates=self.on_check_updates)
+        self.header_bar = HeaderBar(on_check_updates=self.on_check_updates, version_text=f"Version: {self.current_version}")
         self.layout.addWidget(self.header_bar)
 
         self.tabs, tab_map, tab_indices = create_main_tabs()
@@ -170,6 +170,9 @@ class MainWindow(QMainWindow):
         self.diagnostics_built = True
 
     def on_check_updates(self):
+        self.current_version = updater.read_local_version()
+        if hasattr(self, "header_bar"):
+            self.header_bar.set_version(f"Version: {self.current_version}")
         repo = getattr(config, "UPDATE_GITHUB_REPO", "") or ""
         asset_name = getattr(config, "UPDATE_GITHUB_ASSET", "") or ""
         include_prerelease = bool(getattr(config, "UPDATE_GITHUB_INCLUDE_PRERELEASE", False))
@@ -679,20 +682,103 @@ class MainWindow(QMainWindow):
         self._log(logging.INFO, f"Profile changed to {profile_name}")
 
     def on_init_instrument(self):
-        self._log(logging.INFO, 'Initialize instruments requested')
         try:
-            success, message = self.inst_mgr.initialize_instruments()
+            profile = get_profile(self.active_profile, self.profiles)
+            instrument_map = (profile or {}).get("instruments") or getattr(config, "INSTRUMENT_ADDRESSES", {})
+            instrument_names = list(instrument_map.keys()) or [
+                "Bi-Directional Power Supply",
+                "Grid Emulator",
+                "Oscilloscope",
+                "DC Load",
+            ]
+            selected = self._prompt_instrument_selection(instrument_names)
+            if not selected:
+                return
+
+            timeout_s = float(getattr(config, "INSTRUMENT_INIT_TIMEOUT_S", 5.0))
+            retries = int(getattr(config, "INSTRUMENT_INIT_RETRIES", 2))
+
+            self._log(logging.INFO, 'Initialize instruments requested')
+            self.dashboard.output_log.append(f"Initialize instruments requested: {', '.join(selected)}")
+            self.init_progress_dialog = QProgressDialog(
+                "Initializing instruments...", "Cancel", 0, len(selected), self
+            )
+            self.init_progress_dialog.setWindowTitle("Initialize Instruments")
+            self.init_progress_dialog.setWindowModality(Qt.WindowModality.WindowModal)
+            self.init_progress_dialog.setValue(0)
+            self.init_progress_dialog.canceled.connect(self._cancel_instrument_init)
+
+            self._init_worker = _InstrumentInitWorker(
+                self.inst_mgr, selected, timeout_s=timeout_s, retries=retries
+            )
+            self._init_worker.progress.connect(self._on_instrument_init_progress)
+            self._init_worker.finished.connect(self._on_instrument_init_finished)
+            self._init_worker.start()
         except Exception as e:
-            success = False
-            message = f"Initialize instruments crashed: {e}"
-        if success:
-            self.dashboard.output_log.append('Instruments Initialized')
-            self.dashboard.output_log.append(message)
-            self._log(logging.INFO, f'Instruments initialized: {message}')
-        else:
-            self.dashboard.output_log.append('Failed to Initialize Instruments')
-            self.dashboard.output_log.append(message)
-            self._log(logging.ERROR, f'Initialize instruments failed: {message}')
+            self._log(logging.ERROR, f'Initialize instruments failed with exception: {e}')
+            self.dashboard.output_log.append(f'Initialize instruments error: {e}')
+            if getattr(self, "init_progress_dialog", None):
+                try:
+                    self.init_progress_dialog.close()
+                except Exception:
+                    pass
+                self.init_progress_dialog = None
+
+    def _prompt_instrument_selection(self, instrument_names):
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Select Instruments")
+        layout = QVBoxLayout(dialog)
+        layout.addWidget(QLabel("Choose instruments to initialize:"))
+
+        checkboxes = []
+        for name in instrument_names:
+            cb = QCheckBox(name)
+            cb.setChecked(True)
+            layout.addWidget(cb)
+            checkboxes.append(cb)
+
+        buttons = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+        buttons.accepted.connect(dialog.accept)
+        buttons.rejected.connect(dialog.reject)
+        layout.addWidget(buttons)
+
+        if dialog.exec() != QDialog.DialogCode.Accepted:
+            return []
+        return [cb.text() for cb in checkboxes if cb.isChecked()]
+
+    def _cancel_instrument_init(self):
+        if hasattr(self, "_init_worker") and self._init_worker:
+            self._init_worker.cancel()
+
+    def _on_instrument_init_progress(self, name, status, completed):
+        if getattr(self, "init_progress_dialog", None):
+            self.init_progress_dialog.setValue(completed)
+            self.init_progress_dialog.setLabelText(f"{name}: {status}")
+        self.dashboard.output_log.append(f"{name}: {status}")
+
+    def _on_instrument_init_finished(self, success, message):
+        try:
+            if getattr(self, "init_progress_dialog", None):
+                self.init_progress_dialog.setValue(self.init_progress_dialog.maximum())
+                self.init_progress_dialog.close()
+                self.init_progress_dialog = None
+        except Exception as e:
+            self._log(logging.WARNING, f'Error closing progress dialog: {e}')
+            self.init_progress_dialog = None
+
+        try:
+            if success:
+                self.dashboard.output_log.append('Instruments Initialized')
+                self.dashboard.output_log.append(message)
+                self._log(logging.INFO, f'Instruments initialized: {message}')
+            else:
+                self.dashboard.output_log.append('Failed to Initialize Instruments')
+                self.dashboard.output_log.append(message)
+                self._log(logging.ERROR, f'Initialize instruments failed: {message}')
+        except Exception as e:
+            self._log(logging.ERROR, f'Error in instrument init finished handler: {e}')
 
     def on_connect_can(self):
         self._log(logging.INFO, 'Connect CAN requested')
@@ -1359,8 +1445,9 @@ class MainWindow(QMainWindow):
                 "Cycle", "Status", "Message", "Timestamp",
                 "Pulse Set (s)", "Pulse Actual (s)",
                 "Input Delay Set (s)", "Input Delay Actual (s)",
+                "Post-Pulse Wait Set (s)", "Post-Pulse Wait Actual (s)",
                 "Dwell Set (s)", "Dwell Actual (s)",
-                "PS ON (s)", "PS OFF (s)", "Cycle Total (s)",
+                "PS ON (s)", "PS OFF (s)", "PS Reset OFF (s)", "PS Reset ON (s)", "Cycle Total (s)",
                 *(["GS V", "GS I", "GS P", "PF", "Freq"] if has_gs else []),
                 "PS V", "PS I", "PS P",
                 "Load V", "Load I", "Load P",
@@ -1382,10 +1469,14 @@ class MainWindow(QMainWindow):
                     f"<td>{fmt(timing.get('pulse_actual_s'))}</td>"
                     f"<td>{fmt(timing.get('input_on_delay_set_s'))}</td>"
                     f"<td>{fmt(timing.get('input_on_delay_actual_s'))}</td>"
+                    f"<td>{fmt(timing.get('post_pulse_wait_set_s'))}</td>"
+                    f"<td>{fmt(timing.get('post_pulse_wait_actual_s'))}</td>"
                     f"<td>{fmt(timing.get('dwell_set_s'))}</td>"
                     f"<td>{fmt(timing.get('dwell_actual_s'))}</td>"
                     f"<td>{fmt(timing.get('ps_on_s'))}</td>"
                     f"<td>{fmt(timing.get('ps_off_s'))}</td>"
+                    f"<td>{fmt(timing.get('ps_reset_off_s'))}</td>"
+                    f"<td>{fmt(timing.get('ps_reset_on_s'))}</td>"
                     f"<td>{fmt(timing.get('cycle_total_s'))}</td>"
                     + (
                         f"<td>{fmt(rd.get('gs_voltage'))}</td>"
@@ -2033,6 +2124,104 @@ tr:nth-child(odd) {{ background: #0c141f; }}
             }
         """
         self.setStyleSheet(dark_stylesheet)
+
+
+class _InstrumentInitWorker(QThread):
+    progress = pyqtSignal(str, str, int)
+    finished = pyqtSignal(bool, str)
+
+    def __init__(self, inst_mgr, instruments, timeout_s=5.0, retries=2, parent=None):
+        super().__init__(parent)
+        self.inst_mgr = inst_mgr
+        self.instruments = instruments
+        self.timeout_s = max(0.5, float(timeout_s))
+        self.retries = max(1, int(retries))
+        self._cancel = False
+
+    def cancel(self):
+        self._cancel = True
+
+    def _run_with_timeout(self, func):
+        result = {"done": False, "ok": False, "msg": ""}
+
+        def _runner():
+            try:
+                ok, msg = func()
+            except Exception as e:
+                ok = False
+                msg = str(e)
+            result["done"] = True
+            result["ok"] = ok
+            result["msg"] = msg
+
+        thread = threading.Thread(target=_runner, daemon=True)
+        thread.start()
+        thread.join(self.timeout_s)
+        if not result["done"]:
+            return False, f"Timeout after {self.timeout_s:.1f}s"
+        return result["ok"], result["msg"]
+
+    def _init_callable(self, name):
+        if name == "Bi-Directional Power Supply":
+            return self.inst_mgr.init_ps
+        if name == "Grid Emulator":
+            return self.inst_mgr.init_gs
+        if name == "Oscilloscope":
+            return self.inst_mgr.init_os
+        if name == "DC Load":
+            return self.inst_mgr.init_load
+        return None
+
+    def run(self):
+        messages = []
+        success = True
+        completed = 0
+        try:
+            for name in self.instruments:
+                if self._cancel:
+                    messages.append("Initialization cancelled by user.")
+                    success = False
+                    break
+                func = self._init_callable(name)
+                if func is None:
+                    msg = "Unsupported instrument"
+                    messages.append(f"{name}: {msg}")
+                    try:
+                        self.progress.emit(name, msg, completed)
+                    except Exception:
+                        pass
+                    success = False
+                    completed += 1
+                    continue
+                last_msg = ""
+                ok = False
+                for attempt in range(1, self.retries + 1):
+                    if self._cancel:
+                        break
+                    status = "Connecting" if attempt == 1 else f"Retry {attempt}/{self.retries}"
+                    try:
+                        self.progress.emit(name, status, completed)
+                    except Exception:
+                        pass
+                    ok, msg = self._run_with_timeout(func)
+                    last_msg = msg
+                    if ok:
+                        break
+                if not ok:
+                    success = False
+                messages.append(f"{name}: {last_msg}")
+                completed += 1
+                try:
+                    self.progress.emit(name, "OK" if ok else "Failed", completed)
+                except Exception:
+                    pass
+        except Exception as e:
+            messages.append(f"Initialization error: {e}")
+            success = False
+        try:
+            self.finished.emit(success, "\n".join(messages))
+        except Exception:
+            pass
 
 
 class _UpdateDownloadWorker(QThread):

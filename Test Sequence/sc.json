@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "author": "",
+    "description": "",
+    "last_modified": "2026-01-27T13:43:04.846895",
+    "name": "sc",
+    "tags": [],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "PS / HV: Set Current (CV)",
+      "params": "90.0"
+    },
+    {
+      "action": "PS / HV: Output ON",
+      "params": ""
+    },
+    {
+      "action": "CAN / Start Trace",
+      "params": ""
+    },
+    {
+      "action": "CAN / Start Cyclic CAN",
+      "params": ""
+    },
+    {
+      "action": "Wait",
+      "params": "10"
+    },
+    {
+      "action": "GS / Set Voltage AC",
+      "params": "230.0"
+    },
+    {
+      "action": "GS / Power: ON",
+      "params": ""
+    },
+    {
+      "action": "Wait",
+      "params": "5"
+    },
+    {
+      "action": "LOAD / Short Circuit Cycle",
+      "params": "{\"cycles\": 3, \"pulse_s\": 0.1, \"input_on_delay_s\": 5.0, \"dwell_s\": 5.0, \"precharge_s\": 0.0, \"cc_a\": 0.0, \"ps_output\": true, \"ps_toggle_each_cycle\": true, \"gs_telemetry\": true, \"input_on_each_cycle\": true, \"stop_on_fail\": true}"
+    }
+  ]
+}
