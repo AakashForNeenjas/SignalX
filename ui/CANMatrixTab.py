@@ -1,6 +1,6 @@
 
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QListWidget, QListWidgetItem, QTextEdit, QGroupBox, QGridLayout, QProgressBar
-from PyQt6.QtCore import Qt, QThread, pyqtSignal
+from PyQt6.QtCore import QThread, pyqtSignal
 import json
 import os
 import datetime
@@ -8,8 +8,7 @@ import threading
 from canmatrix.runner import TestRunner, build_auto_suite_from_dbc
 from canmatrix.can_interface import CanInterface
 from canmatrix.dbc_manager import DbcManager
-from canmatrix.models import Project, TestSuite, TestCase, TestStep, Assertion, StepType
-from canmatrix.dbc_manager import DbcManager
+from canmatrix.models import TestSuite, TestCase, TestStep, Assertion, StepType
 from canmatrix import report as cm_report
 
 # Serialize report writes to avoid race between JSON/HTML generations when runs overlap

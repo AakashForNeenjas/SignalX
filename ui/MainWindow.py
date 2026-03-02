@@ -1,20 +1,18 @@
 import logging
 import os
 import json
-import threading
 from pathlib import Path
 from datetime import datetime
 from PyQt6.QtWidgets import (
-    QMainWindow, QTabWidget, QWidget, QVBoxLayout, QLabel, QHBoxLayout,
-    QComboBox, QPushButton, QTextEdit, QMessageBox, QScrollArea, QFormLayout,
-    QLineEdit, QSpinBox, QListWidget, QListWidgetItem, QTableWidget, QTableWidgetItem,
+    QMainWindow, QWidget, QVBoxLayout, QLabel, QHBoxLayout,
+    QComboBox, QTextEdit, QMessageBox,
+    QLineEdit, QListWidget, QListWidgetItem, QTableWidget,
     QDialog, QDialogButtonBox, QProgressDialog, QCheckBox
 )
 from config_loader import load_profiles, get_profile
 import config
 from core import updater
-from PyQt6.QtCore import Qt, QThread, pyqtSignal
-from PyQt6.QtGui import QTextCursor
+from PyQt6.QtCore import Qt
 from ui.resources import create_app_icon
 from ui.widgets import (
     ConfigHeader,
@@ -24,13 +22,14 @@ from ui.widgets import (
     HeaderBar,
     create_main_tabs,
 )
+# Import extracted modules
+from ui.workers import InstrumentInitWorker, UpdateDownloadWorker
+from ui.report_generator import generate_sequence_report
 
 class MainWindow(QMainWindow):
     def __init__(self, logger=None, log_path=None):
         super().__init__()
         self.setWindowTitle("AtomX - Instrument Control & CAN Analysis")
-        # Start maximized while keeping window controls visible
-        self.setWindowState(Qt.WindowState.WindowMaximized)
         self.setWindowIcon(create_app_icon())
         self.current_version = updater.read_local_version()
         # Load profiles (simulation/dev/hw)
@@ -55,104 +54,57 @@ class MainWindow(QMainWindow):
         self.layout.addWidget(self.header_bar)
 
         self.tabs, tab_map, tab_indices = create_main_tabs()
-        self.layout.addWidget(self.tabs)
+        self.layout.addWidget(self.tabs, 1)  # stretch factor so tabs take all available space
 
         # Initialize Tabs
         self.config_tab = tab_map["config"]
-        self.instrument_tab = tab_map["instrument"]
-        self.data_tab = tab_map["data"]
         self.error_tab = tab_map["error"]
         self.tools_tab = tab_map["tools"]
-        self.diagnostics_tab = tab_map["diagnostics"]
-        self.logconv_tab = tab_map["logconv"]
-        self.signalplot_tab = tab_map["signalplot"]
+        self.tracex_tab = tab_map["tracex"]
         self.canmatrix_tab = tab_map["canmatrix"]
-        self.powerbank_tab = tab_map["powerbank"]
         self.standards_tab = tab_map["standards"]
 
         self.tools_tab_index = tab_indices["tools"]
-        self.logconv_tab_index = tab_indices["logconv"]
-        self.diagnostics_tab_index = tab_indices["diagnostics"]
-        self.signalplot_tab_index = tab_indices["signalplot"]
+        self.tracex_tab_index = tab_indices["tracex"]
         self.canmatrix_tab_index = tab_indices["canmatrix"]
-        self.powerbank_tab_index = tab_indices["powerbank"]
         self.error_tab_index = tab_indices["error"]
         self.standards_tab_index = tab_indices["standards"]
         self.tabs.currentChanged.connect(self.on_tab_changed)
         # Lazy-load flags must be set before building tabs
         self.tools_built = False
-        self.instrument_built = False
-        self.data_built = False
-        self.logconv_built = False
         self.error_built = False
-        self.signalplot_built = False
+        self.tracex_built = False
         self.canmatrix_built = False
-        self.powerbank_built = False
         self.standards_built = False
-        self.diagnostics_built = False
         self.err_state_cache = None
         self.sequence_run_report = None
         
         # Placeholder content
         self.setup_config_tab()
         self.setup_tools_tab()
-        # Log Converter tab lazy
         # Error tab lazy
-        # Signal Plot tab lazy
+        # TraceX tab lazy
         # CAN Matrix tab lazy
 
-    def ensure_data_tab_built(self):
-        """Build data tab UI if not already built."""
-        if not self.data_built:
-            self.setup_data_tab()
-
-    def ensure_instrument_tab_built(self):
-        """Build instrument tab UI if not already built."""
-        if not self.instrument_built:
-            self.setup_instrument_tab()
-    
-    def ensure_logconv_tab_built(self):
-        """Build Log Converter tab UI if not already built."""
-        if not self.logconv_built:
-            self.setup_logconv_tab()
-
-    def ensure_diagnostics_tab_built(self):
-        """Build Diagnostics tab UI if not already built."""
-        if not self.diagnostics_built:
-            self.setup_diagnostics_tab()
-    
-    def ensure_signalplot_tab_built(self):
-        """Build Signal Plot tab UI if not already built."""
-        if not self.signalplot_built:
-            self.setup_signalplot_tab()
+    def ensure_tracex_tab_built(self):
+        """Build TraceX tab UI if not already built."""
+        if not self.tracex_built:
+            self.setup_tracex_tab()
     
     def ensure_canmatrix_tab_built(self):
         """Build CAN Matrix tab UI if not already built."""
         if not self.canmatrix_built:
             self.setup_canmatrix_tab()
 
-    def ensure_powerbank_tab_built(self):
-        """Build Power Bank Tester tab UI if not already built."""
-        if not self.powerbank_built:
-            self.setup_powerbank_tab()
-    
     def ensure_standards_tab_built(self):
         """Build Standards tab UI if not already built."""
         if not self.standards_built:
             self.setup_standards_tab()
     
     def ensure_error_tab_built(self):
-        """Build Error and Warnings tab UI if not already built."""
+        """Build CAN Tx Config tab UI if not already built."""
         if not self.error_built:
             self.setup_error_tab()
-    
-        
-    def setup_instrument_tab(self):
-        layout = QVBoxLayout(self.instrument_tab)
-        from ui.InstrumentView import InstrumentView
-        self.instrument_view = InstrumentView()
-        layout.addWidget(self.instrument_view)
-        self.instrument_built = True
     
     def setup_tools_tab(self):
         layout = QVBoxLayout(self.tools_tab)
@@ -160,14 +112,6 @@ class MainWindow(QMainWindow):
         self.system_log_tab = SystemLogTab(log_path=self.log_path, on_check_health=self.on_check_health)
         layout.addWidget(self.system_log_tab)
         self.tools_built = True
-
-    def setup_diagnostics_tab(self):
-        layout = QVBoxLayout(self.diagnostics_tab)
-        from ui.DiagnosticsTab import DiagnosticsTab
-        profile = get_profile(self.active_profile, self.profiles)
-        self.diagnostics_widget = DiagnosticsTab(self.active_profile, profile)
-        layout.addWidget(self.diagnostics_widget)
-        self.diagnostics_built = True
 
     def on_check_updates(self):
         self.current_version = updater.read_local_version()
@@ -218,7 +162,7 @@ class MainWindow(QMainWindow):
         self.update_progress_dialog.setAutoReset(False)
         self.update_progress_dialog.show()
 
-        self.update_worker = _UpdateDownloadWorker(manifest)
+        self.update_worker = UpdateDownloadWorker(manifest)
         self.update_worker.progress.connect(self._on_update_progress)
         self.update_worker.finished.connect(self._on_update_download_finished)
         self.update_progress_dialog.canceled.connect(self.update_worker.cancel)
@@ -301,31 +245,22 @@ class MainWindow(QMainWindow):
 
         return dialog.exec() == QDialog.DialogCode.Accepted
 
-    def setup_logconv_tab(self):
-        """Initialize the Log Converter tab UI."""
-        layout = QVBoxLayout(self.logconv_tab)
+    def setup_tracex_tab(self):
+        """Initialize the TraceX tab UI."""
+        layout = QVBoxLayout(self.tracex_tab)
         try:
-            from logconv.ui.LogConverterTab import LogConverterTab
-            self.logconv_widget = LogConverterTab(logger=self.logger)
-            layout.addWidget(self.logconv_widget)
-            self.logconv_built = True
+            from ui.TraceXTab import TraceXTab
+            self.tracex_widget = TraceXTab(
+                can_mgr=self.can_mgr,
+                dbc_parser=self.dbc_parser,
+                logger=self.logger,
+            )
+            layout.addWidget(self.tracex_widget)
+            self.tracex_built = True
         except Exception as e:
-            fallback = QLabel(f"Log Converter unavailable: {e}")
+            fallback = QLabel(f"TraceX unavailable: {e}")
             layout.addWidget(fallback)
-            self.logconv_built = True
-
-    def setup_signalplot_tab(self):
-        """Initialize the Signal Plot tab UI."""
-        layout = QVBoxLayout(self.signalplot_tab)
-        try:
-            from ui.SignalPlotTab import SignalPlotTab
-            self.signalplot_widget = SignalPlotTab(signal_manager=self.signal_manager, dbc_parser=self.dbc_parser, can_mgr=self.can_mgr)
-            layout.addWidget(self.signalplot_widget)
-            self.signalplot_built = True
-        except Exception as e:
-            fallback = QLabel(f"Signal Plot unavailable: {e}")
-            layout.addWidget(fallback)
-            self.signalplot_built = True
+            self.tracex_built = True
     
 
     def setup_canmatrix_tab(self):
@@ -340,19 +275,6 @@ class MainWindow(QMainWindow):
             fallback = QLabel(f"CAN Matrix unavailable: {e}")
             layout.addWidget(fallback)
             self.canmatrix_built = True
-
-    def setup_powerbank_tab(self):
-        """Initialize the Power Bank Tester tab UI."""
-        layout = QVBoxLayout(self.powerbank_tab)
-        try:
-            from ui.PowerBankTesterTab import PowerBankTesterTab
-            self.powerbank_widget = PowerBankTesterTab(logger=self.logger)
-            layout.addWidget(self.powerbank_widget)
-            self.powerbank_built = True
-        except Exception as e:
-            fallback = QLabel(f"Power Bank Tester unavailable: {e}")
-            layout.addWidget(fallback)
-            self.powerbank_built = True
 
     def setup_standards_tab(self):
         """Initialize the Standards tab UI to view Charger_Standard JSON."""
@@ -484,25 +406,8 @@ class MainWindow(QMainWindow):
             self.standards_text.setVisible(True)
             self.standards_text.setText(json.dumps(data, indent=2))
 
-    def setup_data_tab(self):
-        """Setup the futuristic data dashboard with signal_cache reference"""
-        if not hasattr(self, 'data_tab_layout'):
-            self.data_tab_layout = QVBoxLayout(self.data_tab)
-        else:
-            while self.data_tab_layout.count():
-                item = self.data_tab_layout.takeAt(0)
-                widget = item.widget()
-                if widget:
-                    widget.setParent(None)
-                    widget.deleteLater()
-        from ui.DataDashboard import DataDashboard
-        # Pass BOTH signal_manager AND can_mgr's signal_cache for real-time updates
-        self.data_dashboard = DataDashboard(self.signal_manager, can_mgr=self.can_mgr)
-        self.data_tab_layout.addWidget(self.data_dashboard)
-        self.data_built = True
-    
     def setup_error_tab(self):
-        """Setup CAN transmit builder in Error and Warnings tab."""
+        """Setup CAN transmit builder in CAN Tx Config tab."""
         layout = QVBoxLayout(self.error_tab)
 
         self.err_controls = ErrorTabControls()
@@ -652,23 +557,16 @@ class MainWindow(QMainWindow):
                 
                 # Add CAN message listener (for logging/debug only, UI updates are now polled)
                 self.can_mgr.add_listener(self.on_can_message_received)
-                
-                # Setup Data Dashboard (after signal_manager is ready)
-                self.ensure_data_tab_built()
-                self.refresh_data_dashboard()
             else:
                 self.dashboard.output_log.append(f"Mapping load failed: {msg}")
         else:
             self.dashboard.output_log.append(f"DBC load failed: {msg}")
 
-    def refresh_data_dashboard(self):
-        """Recreate the Data dashboard to point at the current CAN manager."""
-        self.ensure_data_tab_built()
-        if hasattr(self, 'data_dashboard') and self.data_dashboard:
-            self.data_dashboard.setParent(None)
-            self.data_dashboard.deleteLater()
-            self.data_dashboard = None
-        self.setup_data_tab()
+        if hasattr(self, "tracex_widget") and self.tracex_widget:
+            try:
+                self.tracex_widget.update_context(can_mgr=self.can_mgr, dbc_parser=self.dbc_parser)
+            except Exception as e:
+                self._log(logging.WARNING, f"TraceX context refresh failed: {e}")
 
     def on_profile_change(self, profile_name):
         """Handle UI profile change and reinitialize core components."""
@@ -676,9 +574,6 @@ class MainWindow(QMainWindow):
         self.dashboard.output_log.append(f'Active profile: {profile_name}')
         if hasattr(self, "system_log_tab"):
             self.system_log_tab.set_log_path(self.log_path)
-        if hasattr(self, "diagnostics_widget"):
-            profile = get_profile(profile_name, self.profiles)
-            self.diagnostics_widget.set_profile(profile_name, profile)
         self._log(logging.INFO, f"Profile changed to {profile_name}")
 
     def on_init_instrument(self):
@@ -708,7 +603,7 @@ class MainWindow(QMainWindow):
             self.init_progress_dialog.setValue(0)
             self.init_progress_dialog.canceled.connect(self._cancel_instrument_init)
 
-            self._init_worker = _InstrumentInitWorker(
+            self._init_worker = InstrumentInitWorker(
                 self.inst_mgr, selected, timeout_s=timeout_s, retries=retries
             )
             self._init_worker.progress.connect(self._on_instrument_init_progress)
@@ -753,9 +648,13 @@ class MainWindow(QMainWindow):
             self._init_worker.cancel()
 
     def _on_instrument_init_progress(self, name, status, completed):
-        if getattr(self, "init_progress_dialog", None):
-            self.init_progress_dialog.setValue(completed)
-            self.init_progress_dialog.setLabelText(f"{name}: {status}")
+        dialog = getattr(self, "init_progress_dialog", None)
+        if dialog is not None:
+            try:
+                dialog.setValue(completed)
+                dialog.setLabelText(f"{name}: {status}")
+            except Exception as e:
+                self._log(logging.WARNING, f"Progress dialog update failed: {e}")
         self.dashboard.output_log.append(f"{name}: {status}")
 
     def _on_instrument_init_finished(self, success, message):
@@ -819,7 +718,7 @@ class MainWindow(QMainWindow):
             self.dashboard.output_log.append(f"Health check failed: {e}")
             self._log(logging.ERROR, f"Health check failed: {e}")
 
-    # ------------------ Error & Warnings tab helpers (CAN TX builder) ------------------
+    # ------------------ CAN Tx Config tab helpers (CAN TX builder) ------------------
     def _err_state_file(self):
         return Path("error_tab_state.json")
 
@@ -1195,7 +1094,6 @@ class MainWindow(QMainWindow):
         for row in range(self.dashboard.sequence_table.rowCount()):
             self.dashboard.update_step_status(row, 'Pending')
         self.dashboard.set_running_test_name(test_name)
-        self.data_dashboard.set_test_name(test_name)
         self.sequencer.set_steps(steps)
         self.sequencer.start_sequence()
         self.dashboard.output_log.append(f'Sequence Started: {test_name}')
@@ -1215,7 +1113,6 @@ class MainWindow(QMainWindow):
     def on_sequence_finished(self):
         self.dashboard.output_log.append('Sequence Finished')
         self.dashboard.clear_running_test_name()
-        self.data_dashboard.set_test_name(None)
         self._log(logging.INFO, 'Sequence finished')
         try:
             self._generate_sequence_report()
@@ -1276,665 +1173,24 @@ class MainWindow(QMainWindow):
                 pass
 
     def _generate_sequence_report(self):
-        """Generate an HTML report for the last sequence run."""
+        """Generate an HTML report for the last sequence run.
+
+        Delegates to the external report_generator module.
+        """
         if not self.sequence_run_report:
             return
-        import json
-        report = self.sequence_run_report
-        end_time = datetime.now()
-        start_time = report.get("start_time", end_time)
-        steps = report.get("steps", [])
-        overall_pass = all(s.get("status") == "Pass" for s in steps) if steps else True
-        status_text = "PASS" if overall_pass else "FAIL"
-        total_seconds = max(0, (end_time - start_time).total_seconds())
-        total_hms = f"{int(total_seconds // 3600):02d}:{int((total_seconds % 3600)//60):02d}:{int(total_seconds % 60):02d}"
-        ts_str = end_time.strftime("%Y%m%d_%H%M%S")
-        seq_name = report.get("name", "Sequence").replace(" ", "_")
-        filename = f"{seq_name}_{status_text}_{ts_str}.html"
-        json_filename = f"{seq_name}_{status_text}_{ts_str}.json"
-        out_dir = Path("Test Results")
-        out_dir.mkdir(parents=True, exist_ok=True)
-        out_path = out_dir / filename
-        json_path = out_dir / json_filename
 
-        # Persist structured report (including ramp logs) as JSON
-        try:
-            import json
-            json_path.write_text(json.dumps(report, default=str, indent=2), encoding="utf-8")
-        except Exception:
-            pass
+        # Use the extracted report generator module
+        def output_callback(msg):
+            if hasattr(self, 'dashboard') and hasattr(self.dashboard, 'output_log'):
+                self.dashboard.output_log.append(msg)
 
-        # Build HTML
-        rows = []
-        for s in steps:
-            msgs = "<br>".join(s.get("messages", [])) or "&nbsp;"
-            params = s.get("params", "")
-            rows.append(
-                f"<tr><td>{s.get('index')}</td><td>{s.get('action','')}</td>"
-                f"<td>{params}</td><td>{s.get('status','')}</td><td>{msgs}</td></tr>"
-            )
-
-        # Build ramp sections when present
-        def fmt(val):
-            if val is None:
-                return ""
-            try:
-                if isinstance(val, (float, int)):
-                    return f"{val:.3f}"
-            except Exception:
-                pass
-            return str(val)
-
-        def _mag(value):
-            if value is None:
-                return None
-            if isinstance(value, (int, float)):
-                return abs(value)
-            try:
-                return abs(float(value))
-            except (TypeError, ValueError):
-                return None
-
-        ramp_sections = []
-        for s in steps:
-            logs = s.get("ramp_logs")
-            if not logs:
-                continue
-            # Determine which measurement groups are present in this ramp
-            def _has_key(prefix):
-                for entry in logs:
-                    rd = entry.get("readings", {}) or {}
-                    if any(k.startswith(prefix) for k in rd.keys()):
-                        return True
-                return False
-
-            def _has_measure(flag):
-                for entry in logs:
-                    measure = entry.get("measure", {}) or {}
-                    if measure.get(flag):
-                        return True
-                return False
-
-            has_gs = _has_key("gs_") or _has_measure("gs")
-            has_ps = _has_key("ps_") or _has_measure("ps")
-            has_load = _has_key("load_") or _has_measure("load")
-
-            header_cols = ["Set Value", "Status", "Message"]
-            if has_gs:
-                header_cols.extend(["GS V", "GS I", "GS P", "PF", "ITHD", "VTHD", "Freq"])
-            if has_ps:
-                header_cols.extend(["PS V", "PS I", "PS P"])
-            if has_load:
-                header_cols.extend(["Load V", "Load I", "Load P"])
-            if has_gs and (has_ps or has_load):
-                header_cols.append("Efficiency (%)")
-            header_cols.append("Errors")
-
-            header = "<table><thead><tr>" + "".join([f"<th>{c}</th>" for c in header_cols]) + "</tr></thead><tbody>"
-            body_rows = []
-            for entry in logs:
-                rd = entry.get("readings", {}) or {}
-                errs = []
-                for k in ("gs_error", "ps_error", "load_error"):
-                    if rd.get(k):
-                        errs.append(rd[k])
-                try:
-                    gs_p = _mag(rd.get("gs_power"))
-                    ps_p = _mag(rd.get("ps_power"))
-                    load_p = _mag(rd.get("load_power"))
-                    total_out = 0.0
-                    if ps_p is not None:
-                        total_out += ps_p
-                    if load_p is not None:
-                        total_out += load_p
-                    eff = (total_out / gs_p * 100.0) if gs_p not in (None, 0) and total_out is not None else None
-                except Exception:
-                    eff = None
-                body_rows.append(
-                    "<tr>"
-                    f"<td>{fmt(entry.get('value'))}</td>"
-                    f"<td>{entry.get('status','')}</td>"
-                    f"<td>{entry.get('message','')}</td>"
-                    + (
-                        f"<td>{fmt(rd.get('gs_voltage'))}</td>"
-                        f"<td>{fmt(rd.get('gs_current'))}</td>"
-                        f"<td>{fmt(rd.get('gs_power'))}</td>"
-                        f"<td>{fmt(rd.get('gs_pf'))}</td>"
-                        f"<td>{fmt(rd.get('gs_ithd'))}</td>"
-                        f"<td>{fmt(rd.get('gs_vthd'))}</td>"
-                        f"<td>{fmt(rd.get('gs_freq'))}</td>"
-                        if has_gs else ""
-                    )
-                    + (
-                        f"<td>{fmt(rd.get('ps_voltage'))}</td>"
-                        f"<td>{fmt(rd.get('ps_current'))}</td>"
-                        f"<td>{fmt(rd.get('ps_power'))}</td>"
-                        if has_ps else ""
-                    )
-                    + (
-                        f"<td>{fmt(rd.get('load_voltage'))}</td>"
-                        f"<td>{fmt(rd.get('load_current'))}</td>"
-                        f"<td>{fmt(rd.get('load_power'))}</td>"
-                        if has_load else ""
-                    )
-                    + (f"<td>{fmt(eff)}</td>" if has_gs and (has_ps or has_load) else "")
-                    + f"<td>{' | '.join(errs) if errs else ''}</td>"
-                    + "</tr>"
-                )
-            section = (
-                f"<div class='section'><h3>Step {s.get('index')} - {s.get('action','')}</h3>"
-                f"{header}{''.join(body_rows)}</tbody></table></div>"
-            )
-            ramp_sections.append(section)
-
-        # Build Short Circuit Cycle sections when present
-        short_cycle_sections = []
-        for s in steps:
-            logs = s.get("short_cycle_logs")
-            if not logs:
-                continue
-
-            has_gs = False
-            for entry in logs:
-                rd = entry.get("readings", {}) or {}
-                if any(k.startswith("gs_") for k in rd.keys()):
-                    has_gs = True
-                    break
-
-            header_cols = [
-                "Cycle", "Status", "Message", "Timestamp",
-                "Pulse Set (s)", "Pulse Actual (s)",
-                "Input Delay Set (s)", "Input Delay Actual (s)",
-                "Post-Pulse Wait Set (s)", "Post-Pulse Wait Actual (s)",
-                "Dwell Set (s)", "Dwell Actual (s)",
-                "PS ON (s)", "PS OFF (s)", "PS Reset OFF (s)", "PS Reset ON (s)", "Cycle Total (s)",
-                *(["GS V", "GS I", "GS P", "PF", "Freq"] if has_gs else []),
-                "PS V", "PS I", "PS P",
-                "Load V", "Load I", "Load P",
-                "Errors",
-            ]
-            header = "<table><thead><tr>" + "".join([f"<th>{c}</th>" for c in header_cols]) + "</tr></thead><tbody>"
-            body_rows = []
-            for entry in logs:
-                timing = entry.get("timing", {}) or {}
-                rd = entry.get("readings", {}) or {}
-                errs = entry.get("errors", []) or []
-                body_rows.append(
-                    "<tr>"
-                    f"<td>{entry.get('cycle')}</td>"
-                    f"<td>{entry.get('status','')}</td>"
-                    f"<td>{entry.get('message','')}</td>"
-                    f"<td>{entry.get('timestamp','')}</td>"
-                    f"<td>{fmt(timing.get('pulse_set_s'))}</td>"
-                    f"<td>{fmt(timing.get('pulse_actual_s'))}</td>"
-                    f"<td>{fmt(timing.get('input_on_delay_set_s'))}</td>"
-                    f"<td>{fmt(timing.get('input_on_delay_actual_s'))}</td>"
-                    f"<td>{fmt(timing.get('post_pulse_wait_set_s'))}</td>"
-                    f"<td>{fmt(timing.get('post_pulse_wait_actual_s'))}</td>"
-                    f"<td>{fmt(timing.get('dwell_set_s'))}</td>"
-                    f"<td>{fmt(timing.get('dwell_actual_s'))}</td>"
-                    f"<td>{fmt(timing.get('ps_on_s'))}</td>"
-                    f"<td>{fmt(timing.get('ps_off_s'))}</td>"
-                    f"<td>{fmt(timing.get('ps_reset_off_s'))}</td>"
-                    f"<td>{fmt(timing.get('ps_reset_on_s'))}</td>"
-                    f"<td>{fmt(timing.get('cycle_total_s'))}</td>"
-                    + (
-                        f"<td>{fmt(rd.get('gs_voltage'))}</td>"
-                        f"<td>{fmt(rd.get('gs_current'))}</td>"
-                        f"<td>{fmt(rd.get('gs_power'))}</td>"
-                        f"<td>{fmt(rd.get('gs_pf'))}</td>"
-                        f"<td>{fmt(rd.get('gs_freq'))}</td>"
-                        if has_gs else ""
-                    )
-                    + (
-                        f"<td>{fmt(rd.get('ps_voltage'))}</td>"
-                        f"<td>{fmt(rd.get('ps_current'))}</td>"
-                        f"<td>{fmt(rd.get('ps_power'))}</td>"
-                        f"<td>{fmt(rd.get('load_voltage'))}</td>"
-                        f"<td>{fmt(rd.get('load_current'))}</td>"
-                        f"<td>{fmt(rd.get('load_power'))}</td>"
-                        f"<td>{' | '.join(errs) if errs else ''}</td>"
-                    )
-                    + "</tr>"
-                )
-            section = (
-                f"<div class='section'><h3>Step {s.get('index')} - {s.get('action','')}</h3>"
-                f"{header}{''.join(body_rows)}</tbody></table></div>"
-            )
-            short_cycle_sections.append(section)
-
-        # Build Line & Load Regulation sections when present
-        line_load_sections = []
-        line_load_plot_data = []
-        for s in steps:
-            logs = s.get("line_load_logs")
-            if not logs:
-                continue
-
-            def _has_key(prefix):
-                for entry in logs:
-                    rd = entry.get("readings", {}) or {}
-                    if any(k.startswith(prefix) for k in rd.keys()):
-                        return True
-                return False
-
-            has_gs = _has_key("gs_")
-            has_ps = _has_key("ps_")
-            has_load = _has_key("load_")
-            plot_enabled = False
-            params_raw = s.get("params")
-            if params_raw:
-                try:
-                    params_obj = json.loads(params_raw) if isinstance(params_raw, str) else params_raw
-                    if isinstance(params_obj, dict):
-                        plot_enabled = bool(params_obj.get("plot_efficiency", False))
-                except Exception:
-                    plot_enabled = False
-
-            header_cols = ["GS Set (V)", "PS Set (V)", "DL Set (A)", "Status", "Message", "Timestamp"]
-            if has_gs:
-                header_cols.extend(["GS V", "GS I", "GS P", "PF", "ITHD", "VTHD", "Freq"])
-            if has_ps:
-                header_cols.extend(["PS V", "PS I", "PS P"])
-            if has_load:
-                header_cols.extend(["Load V", "Load I", "Load P"])
-            if has_gs and (has_ps or has_load):
-                header_cols.append("Efficiency (%)")
-            header_cols.append("Errors")
-
-            header = "<table><thead><tr>" + "".join([f"<th>{c}</th>" for c in header_cols]) + "</tr></thead><tbody>"
-            body_rows = []
-            for entry in logs:
-                rd = entry.get("readings", {}) or {}
-                errs = []
-                for k in ("gs_error", "ps_error", "load_error"):
-                    if rd.get(k):
-                        errs.append(rd[k])
-                try:
-                    gs_p = _mag(rd.get("gs_power"))
-                    ps_p = _mag(rd.get("ps_power"))
-                    load_p = _mag(rd.get("load_power"))
-                    total_out = 0.0
-                    if ps_p is not None:
-                        total_out += ps_p
-                    if load_p is not None:
-                        total_out += load_p
-                    eff = (total_out / gs_p * 100.0) if gs_p not in (None, 0) and total_out is not None else None
-                except Exception:
-                    eff = None
-                body_rows.append(
-                    "<tr>"
-                    f"<td>{fmt(entry.get('gs_set'))}</td>"
-                    f"<td>{fmt(entry.get('ps_set'))}</td>"
-                    f"<td>{fmt(entry.get('dl_set'))}</td>"
-                    f"<td>{entry.get('status','')}</td>"
-                    f"<td>{entry.get('message','')}</td>"
-                    f"<td>{entry.get('timestamp','')}</td>"
-                    + (
-                        f"<td>{fmt(rd.get('gs_voltage'))}</td>"
-                        f"<td>{fmt(rd.get('gs_current'))}</td>"
-                        f"<td>{fmt(rd.get('gs_power'))}</td>"
-                        f"<td>{fmt(rd.get('gs_pf'))}</td>"
-                        f"<td>{fmt(rd.get('gs_ithd'))}</td>"
-                        f"<td>{fmt(rd.get('gs_vthd'))}</td>"
-                        f"<td>{fmt(rd.get('gs_freq'))}</td>"
-                        if has_gs else ""
-                    )
-                    + (
-                        f"<td>{fmt(rd.get('ps_voltage'))}</td>"
-                        f"<td>{fmt(rd.get('ps_current'))}</td>"
-                        f"<td>{fmt(rd.get('ps_power'))}</td>"
-                        if has_ps else ""
-                    )
-                    + (
-                        f"<td>{fmt(rd.get('load_voltage'))}</td>"
-                        f"<td>{fmt(rd.get('load_current'))}</td>"
-                        f"<td>{fmt(rd.get('load_power'))}</td>"
-                        if has_load else ""
-                    )
-                    + (f"<td>{fmt(eff)}</td>" if has_gs and (has_ps or has_load) else "")
-                    + f"<td>{' | '.join(errs) if errs else ''}</td>"
-                    + "</tr>"
-                )
-            plot_html = ""
-            if plot_enabled:
-                plot_points = []
-                for entry in logs:
-                    rd = entry.get("readings", {}) or {}
-                    gs_p = _mag(rd.get("gs_power"))
-                    if gs_p is None:
-                        gs_v = _mag(rd.get("gs_voltage"))
-                        gs_i = _mag(rd.get("gs_current"))
-                        if gs_v is not None and gs_i is not None:
-                            gs_p = gs_v * gs_i
-                    ps_p = _mag(rd.get("ps_power"))
-                    if ps_p is None:
-                        ps_v = _mag(rd.get("ps_voltage"))
-                        ps_i = _mag(rd.get("ps_current"))
-                        if ps_v is not None and ps_i is not None:
-                            ps_p = ps_v * ps_i
-                    load_p = _mag(rd.get("load_power"))
-                    if load_p is None:
-                        ld_v = _mag(rd.get("load_voltage"))
-                        ld_i = _mag(rd.get("load_current"))
-                        if ld_v is not None and ld_i is not None:
-                            load_p = ld_v * ld_i
-                    if gs_p in (None, 0):
-                        continue
-                    total_out = 0.0
-                    if ps_p is not None:
-                        total_out += ps_p
-                    if load_p is not None:
-                        total_out += load_p
-                    if total_out == 0.0:
-                        continue
-                    eff = (total_out / gs_p) * 100.0
-                    plot_points.append({
-                        "gs": entry.get("gs_set"),
-                        "ps": entry.get("ps_set"),
-                        "dl": entry.get("dl_set"),
-                        "eff": eff,
-                    })
-                plot_id = f"line-load-plot-{s.get('index')}"
-                line_load_plot_data.append({"id": plot_id, "points": plot_points})
-                plot_html = (
-                    "<div class='plot-grid' id='{pid}'>"
-                    "<div class='plot-card'>"
-                    "<div class='plot-title'>Efficiency vs GS/PS/DL (combined)</div>"
-                    "<canvas id='{pid}-combo' width='900' height='260'></canvas>"
-                    "<div class='plot-tooltip' id='{pid}-combo-tip'></div>"
-                    "</div>"
-                    "<div class='plot-card'>"
-                    "<div class='plot-title'>Efficiency vs PS Voltage</div>"
-                    "<canvas id='{pid}-ps' width='900' height='260'></canvas>"
-                    "<div class='plot-tooltip' id='{pid}-ps-tip'></div>"
-                    "</div>"
-                    "<div class='plot-card'>"
-                    "<div class='plot-title'>Efficiency vs GS Voltage</div>"
-                    "<canvas id='{pid}-gs' width='900' height='260'></canvas>"
-                    "<div class='plot-tooltip' id='{pid}-gs-tip'></div>"
-                    "</div>"
-                    "<div class='plot-card'>"
-                    "<div class='plot-title'>Efficiency vs DL Current</div>"
-                    "<canvas id='{pid}-dl' width='900' height='260'></canvas>"
-                    "<div class='plot-tooltip' id='{pid}-dl-tip'></div>"
-                    "</div>"
-                    "</div>"
-                ).format(pid=plot_id)
-
-            section = (
-                f"<div class='section'><h3>Step {s.get('index')} - {s.get('action','')}</h3>"
-                f"{plot_html}"
-                f"{header}{''.join(body_rows)}</tbody></table></div>"
-            )
-            line_load_sections.append(section)
-
-        meta = report.get("meta", {})
-        meta_html = "".join([f"<li><b>{k.title()}:</b> {v}</li>" for k, v in meta.items() if v])
-        plot_script = ""
-        if line_load_plot_data:
-            try:
-                plot_payload = {
-                    item["id"]: item["points"]
-                    for item in line_load_plot_data
-                    if item.get("points")
-                }
-            except Exception:
-                plot_payload = {}
-            if plot_payload:
-                plot_script = """
-<script>
-const lineLoadPlotData = __PLOT_DATA__;
-function renderScatter(canvasId, points, xKey, xLabel, tipId) {
-  const canvas = document.getElementById(canvasId);
-  const tip = document.getElementById(tipId);
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  const w = canvas.width;
-  const h = canvas.height;
-  ctx.clearRect(0, 0, w, h);
-  const usable = points.filter(p => typeof p[xKey] === "number" && typeof p.eff === "number");
-  if (!usable.length) {
-    ctx.fillStyle = "#9db4d4";
-    ctx.font = "12px Segoe UI, Arial";
-    ctx.fillText("No plot data", 12, 20);
-    return;
-  }
-  const xs = usable.map(p => p[xKey]);
-  const ys = usable.map(p => p.eff);
-  const xMin = Math.min(...xs);
-  const xMax = Math.max(...xs);
-  const yMin = Math.min(...ys);
-  const yMax = Math.max(...ys);
-  const padL = 40, padR = 16, padT = 16, padB = 32;
-  const xSpan = (xMax - xMin) || 1;
-  const ySpan = (yMax - yMin) || 1;
-  const plotW = w - padL - padR;
-  const plotH = h - padT - padB;
-  ctx.strokeStyle = "#233044";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(padL, padT);
-  ctx.lineTo(padL, h - padB);
-  ctx.lineTo(w - padR, h - padB);
-  ctx.stroke();
-  ctx.fillStyle = "#9db4d4";
-  ctx.font = "10px Segoe UI, Arial";
-  ctx.fillText(xLabel, padL, h - 6);
-  ctx.save();
-  ctx.translate(12, h - padB);
-  ctx.rotate(-Math.PI / 2);
-  ctx.fillText("Efficiency (%)", 0, 0);
-  ctx.restore();
-  const pointsPx = [];
-  for (const p of usable) {
-    const x = padL + ((p[xKey] - xMin) / xSpan) * plotW;
-    const y = (h - padB) - ((p.eff - yMin) / ySpan) * plotH;
-    pointsPx.push({ x, y, data: p });
-    ctx.fillStyle = "#5ce1e6";
-    ctx.beginPath();
-    ctx.arc(x, y, 3, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  canvas.onmousemove = (evt) => {
-    const mx = evt.offsetX;
-    const my = evt.offsetY;
-    let hit = null;
-    let best = 9999;
-    for (const p of pointsPx) {
-      const dx = p.x - mx;
-      const dy = p.y - my;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 8 && dist < best) {
-        best = dist;
-        hit = p;
-      }
-    }
-    if (hit && tip) {
-      const d = hit.data;
-      const eff = typeof d.eff === "number" ? d.eff.toFixed(2) : "n/a";
-      tip.innerHTML = `Eff: ${eff}%<br>PSV: ${d.ps}<br>GSV: ${d.gs}<br>DLI: ${d.dl}`;
-      tip.style.left = `${mx + 10}px`;
-      tip.style.top = `${my + 10}px`;
-      tip.style.display = "block";
-    } else if (tip) {
-      tip.style.display = "none";
-    }
-  };
-  canvas.onmouseleave = () => {
-    if (tip) tip.style.display = "none";
-  };
-}
-function renderCombined(canvasId, points, tipId) {
-  const canvas = document.getElementById(canvasId);
-  const tip = document.getElementById(tipId);
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  const w = canvas.width;
-  const h = canvas.height;
-  ctx.clearRect(0, 0, w, h);
-  const series = [
-    { key: "gs", label: "GS V", color: "#5ce1e6" },
-    { key: "ps", label: "PS V", color: "#f6c343" },
-    { key: "dl", label: "DL I", color: "#ff8f8f" },
-  ];
-  const usable = [];
-  for (const s of series) {
-    const pts = points.filter(p => typeof p[s.key] === "number" && typeof p.eff === "number");
-    if (pts.length) usable.push({ series: s, points: pts });
-  }
-  if (!usable.length) {
-    ctx.fillStyle = "#9db4d4";
-    ctx.font = "12px Segoe UI, Arial";
-    ctx.fillText("No plot data", 12, 20);
-    return;
-  }
-  const xsAll = usable.flatMap(group => group.points.map(p => p[group.series.key]));
-  const ysAll = usable.flatMap(group => group.points.map(p => p.eff));
-  const xMin = Math.min(...xsAll);
-  const xMax = Math.max(...xsAll);
-  const yMin = Math.min(...ysAll);
-  const yMax = Math.max(...ysAll);
-  const padL = 40, padR = 16, padT = 16, padB = 32;
-  const xSpan = (xMax - xMin) || 1;
-  const ySpan = (yMax - yMin) || 1;
-  const plotW = w - padL - padR;
-  const plotH = h - padT - padB;
-  ctx.strokeStyle = "#233044";
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(padL, padT);
-  ctx.lineTo(padL, h - padB);
-  ctx.lineTo(w - padR, h - padB);
-  ctx.stroke();
-  ctx.fillStyle = "#9db4d4";
-  ctx.font = "10px Segoe UI, Arial";
-  ctx.fillText("Value", padL, h - 6);
-  ctx.save();
-  ctx.translate(12, h - padB);
-  ctx.rotate(-Math.PI / 2);
-  ctx.fillText("Efficiency (%)", 0, 0);
-  ctx.restore();
-  const pointsPx = [];
-  for (const group of usable) {
-    ctx.fillStyle = group.series.color;
-    for (const p of group.points) {
-      const x = padL + ((p[group.series.key] - xMin) / xSpan) * plotW;
-      const y = (h - padB) - ((p.eff - yMin) / ySpan) * plotH;
-      pointsPx.push({ x, y, data: p, series: group.series });
-      ctx.beginPath();
-      ctx.arc(x, y, 3, 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-  let legendX = w - padR - 70;
-  let legendY = padT + 4;
-  for (const s of series) {
-    ctx.fillStyle = s.color;
-    ctx.fillRect(legendX, legendY, 10, 10);
-    ctx.fillStyle = "#9db4d4";
-    ctx.fillText(s.label, legendX + 14, legendY + 9);
-    legendY += 14;
-  }
-  canvas.onmousemove = (evt) => {
-    const mx = evt.offsetX;
-    const my = evt.offsetY;
-    let hit = null;
-    let best = 9999;
-    for (const p of pointsPx) {
-      const dx = p.x - mx;
-      const dy = p.y - my;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < 8 && dist < best) {
-        best = dist;
-        hit = p;
-      }
-    }
-    if (hit && tip) {
-      const d = hit.data;
-      const eff = typeof d.eff === "number" ? d.eff.toFixed(2) : "n/a";
-      const label = hit.series.label;
-      const val = d[hit.series.key];
-      tip.innerHTML = `${label}: ${val}<br>Eff: ${eff}%<br>PSV: ${d.ps}<br>GSV: ${d.gs}<br>DLI: ${d.dl}`;
-      tip.style.left = `${mx + 10}px`;
-      tip.style.top = `${my + 10}px`;
-      tip.style.display = "block";
-    } else if (tip) {
-      tip.style.display = "none";
-    }
-  };
-  canvas.onmouseleave = () => {
-    if (tip) tip.style.display = "none";
-  };
-}
-function renderLineLoadPlots() {
-  Object.entries(lineLoadPlotData).forEach(([plotId, points]) => {
-    renderCombined(`${plotId}-combo`, points, `${plotId}-combo-tip`);
-    renderScatter(`${plotId}-ps`, points, "ps", "PS Voltage (V)", `${plotId}-ps-tip`);
-    renderScatter(`${plotId}-gs`, points, "gs", "GS Voltage (V)", `${plotId}-gs-tip`);
-    renderScatter(`${plotId}-dl`, points, "dl", "DL Current (A)", `${plotId}-dl-tip`);
-  });
-}
-document.addEventListener("DOMContentLoaded", renderLineLoadPlots);
-</script>
-""".replace("__PLOT_DATA__", json.dumps(plot_payload))
-        html = f"""<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>{seq_name} {status_text}</title>
-<style>
-body {{ font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; background: #0b111a; color: #e7f1ff; margin: 0; padding: 0; }}
-.container {{ max-width: 1080px; margin: 0 auto; padding: 32px 24px 48px 24px; }}
-.header {{ display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #233044; padding-bottom: 12px; margin-bottom: 16px; }}
-.title {{ font-size: 28px; font-weight: 700; letter-spacing: 0.5px; color: #5ce1e6; }}
-.badge {{ padding: 8px 14px; border-radius: 16px; font-weight: 700; text-transform: uppercase; }}
-.status-pass {{ background: #0f3c2a; color: #5df0a1; border: 1px solid #1f6c46; }}
-.status-fail {{ background: #3c1f1f; color: #ff9b9b; border: 1px solid #7a2f2f; }}
-.meta {{ list-style: none; padding: 0; margin: 0 0 12px 0; display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 13px; color: #9db4d4; }}
-.meta li b {{ color: #e7f1ff; }}
-.dates {{ font-size: 13px; color: #9db4d4; margin-bottom: 8px; }}
-table {{ width: 100%; border-collapse: collapse; margin-top: 16px; border: 1px solid #1f2b3d; }}
-th, td {{ border: 1px solid #1f2b3d; padding: 10px; vertical-align: top; font-size: 13px; }}
-th {{ background: #162133; color: #c8ddf5; text-align: left; }}
-tr:nth-child(even) {{ background: #0f1726; }}
-.plot-grid {{ display: grid; grid-template-columns: 1fr; gap: 18px; margin: 16px 0 22px 0; }}
-.plot-card {{ background: linear-gradient(180deg, #111a2a 0%, #0b111a 100%); border: 1px solid #233044; border-radius: 10px; padding: 12px; position: relative; box-shadow: 0 6px 18px rgba(0,0,0,0.25); }}
-.plot-card canvas {{ width: 100%; height: 260px; display: block; }}
-.plot-title {{ font-size: 13px; color: #c8ddf5; margin-bottom: 8px; letter-spacing: 0.3px; }}
-.plot-tooltip {{ position: absolute; background: #0b111a; border: 1px solid #233044; color: #e7f1ff; padding: 6px 8px; border-radius: 6px; font-size: 11px; display: none; pointer-events: none; z-index: 5; }}
-tr:nth-child(odd) {{ background: #0c141f; }}
-.step-pass {{ color: #6dffb3; font-weight: 600; }}
-.step-fail {{ color: #ff8f8f; font-weight: 600; }}
-.step-running {{ color: #f6c343; font-weight: 600; }}
-.section {{ margin-top: 18px; }}
-</style>
-</head>
-<body>
-<div class="container">
-  <div class="header">
-    <div class="title">{report.get("name","Test Sequence")}</div>
-    <div class="badge status-{status_text.lower()}">{status_text}</div>
-  </div>
-  <div class="dates"><b>Started:</b> {start_time} &nbsp; <b>Ended:</b> {end_time} &nbsp; <b>Total:</b> {total_hms}</div>
-  <ul class="meta">{meta_html}</ul>
-  <table>
-    <thead><tr><th>#</th><th>Action</th><th>Parameters</th><th>Status</th><th>Messages</th></tr></thead>
-    <tbody>
-    {''.join(rows)}
-    </tbody>
-  </table>
-  {'<h2>Ramp Set &amp; Measure Results</h2>' + ''.join(ramp_sections) if ramp_sections else ''}
-  {'<h2>Short Circuit Cycle Results</h2>' + ''.join(short_cycle_sections) if short_cycle_sections else ''}
-  {'<h2>Line &amp; Load Regulation Results</h2>' + ''.join(line_load_sections) if line_load_sections else ''}
-</div>
-{plot_script}
-</body>
-</html>"""
-        out_path.write_text(html, encoding="utf-8")
-        self.dashboard.output_log.append(f"Report saved: {out_path}")
-        self._log(logging.INFO, f"Sequence report saved: {out_path}")
-        # clear report context
+        generate_sequence_report(
+            report_data=self.sequence_run_report,
+            output_callback=output_callback,
+            logger=self.logger
+        )
+        # Clear report context
         self.sequence_run_report = None
 
     def on_can_message_received(self, msg):
@@ -1946,26 +1202,16 @@ tr:nth-child(odd) {{ background: #0c141f; }}
     
     def on_tab_changed(self, index):
         """Start/stop log auto-refresh depending on active tab."""
-        if index == self.tabs.indexOf(self.instrument_tab):
-            self.ensure_instrument_tab_built()
-        if index == self.tabs.indexOf(self.data_tab):
-            self.ensure_data_tab_built()
         if index == self.tools_tab_index and not self.tools_built:
             self.setup_tools_tab()
-        if index == self.logconv_tab_index:
-            self.ensure_logconv_tab_built()
-        if index == self.signalplot_tab_index:
-            self.ensure_signalplot_tab_built()
+        if index == self.tracex_tab_index:
+            self.ensure_tracex_tab_built()
         if index == self.canmatrix_tab_index:
             self.ensure_canmatrix_tab_built()
-        if index == self.powerbank_tab_index:
-            self.ensure_powerbank_tab_built()
         if index == self.error_tab_index:
             self.ensure_error_tab_built()
         if index == self.standards_tab_index:
             self.ensure_standards_tab_built()
-        if index == self.diagnostics_tab_index:
-            self.ensure_diagnostics_tab_built()
         if index == self.tools_tab_index:
             if hasattr(self, "system_log_tab"):
                 self.system_log_tab.start_auto_refresh()
@@ -1996,11 +1242,6 @@ tr:nth-child(odd) {{ background: #0c141f; }}
         try:
             if hasattr(self, 'inst_mgr') and self.inst_mgr:
                 self.inst_mgr.close_instruments()
-        except Exception:
-            pass
-        try:
-            if hasattr(self, "powerbank_widget") and self.powerbank_widget:
-                self.powerbank_widget.close()
         except Exception:
             pass
         event.accept()
@@ -2126,120 +1367,3 @@ tr:nth-child(odd) {{ background: #0c141f; }}
         self.setStyleSheet(dark_stylesheet)
 
 
-class _InstrumentInitWorker(QThread):
-    progress = pyqtSignal(str, str, int)
-    finished = pyqtSignal(bool, str)
-
-    def __init__(self, inst_mgr, instruments, timeout_s=5.0, retries=2, parent=None):
-        super().__init__(parent)
-        self.inst_mgr = inst_mgr
-        self.instruments = instruments
-        self.timeout_s = max(0.5, float(timeout_s))
-        self.retries = max(1, int(retries))
-        self._cancel = False
-
-    def cancel(self):
-        self._cancel = True
-
-    def _run_with_timeout(self, func):
-        result = {"done": False, "ok": False, "msg": ""}
-
-        def _runner():
-            try:
-                ok, msg = func()
-            except Exception as e:
-                ok = False
-                msg = str(e)
-            result["done"] = True
-            result["ok"] = ok
-            result["msg"] = msg
-
-        thread = threading.Thread(target=_runner, daemon=True)
-        thread.start()
-        thread.join(self.timeout_s)
-        if not result["done"]:
-            return False, f"Timeout after {self.timeout_s:.1f}s"
-        return result["ok"], result["msg"]
-
-    def _init_callable(self, name):
-        if name == "Bi-Directional Power Supply":
-            return self.inst_mgr.init_ps
-        if name == "Grid Emulator":
-            return self.inst_mgr.init_gs
-        if name == "Oscilloscope":
-            return self.inst_mgr.init_os
-        if name == "DC Load":
-            return self.inst_mgr.init_load
-        return None
-
-    def run(self):
-        messages = []
-        success = True
-        completed = 0
-        try:
-            for name in self.instruments:
-                if self._cancel:
-                    messages.append("Initialization cancelled by user.")
-                    success = False
-                    break
-                func = self._init_callable(name)
-                if func is None:
-                    msg = "Unsupported instrument"
-                    messages.append(f"{name}: {msg}")
-                    try:
-                        self.progress.emit(name, msg, completed)
-                    except Exception:
-                        pass
-                    success = False
-                    completed += 1
-                    continue
-                last_msg = ""
-                ok = False
-                for attempt in range(1, self.retries + 1):
-                    if self._cancel:
-                        break
-                    status = "Connecting" if attempt == 1 else f"Retry {attempt}/{self.retries}"
-                    try:
-                        self.progress.emit(name, status, completed)
-                    except Exception:
-                        pass
-                    ok, msg = self._run_with_timeout(func)
-                    last_msg = msg
-                    if ok:
-                        break
-                if not ok:
-                    success = False
-                messages.append(f"{name}: {last_msg}")
-                completed += 1
-                try:
-                    self.progress.emit(name, "OK" if ok else "Failed", completed)
-                except Exception:
-                    pass
-        except Exception as e:
-            messages.append(f"Initialization error: {e}")
-            success = False
-        try:
-            self.finished.emit(success, "\n".join(messages))
-        except Exception:
-            pass
-
-
-class _UpdateDownloadWorker(QThread):
-    progress = pyqtSignal(int, int)
-    finished = pyqtSignal(dict)
-
-    def __init__(self, manifest, parent=None):
-        super().__init__(parent)
-        self.manifest = manifest
-        self._cancel = False
-
-    def cancel(self):
-        self._cancel = True
-
-    def _progress_cb(self, downloaded, total):
-        self.progress.emit(downloaded, total)
-        return not self._cancel
-
-    def run(self):
-        result = updater.download_update(self.manifest, dest_dir="updates", progress_cb=self._progress_cb)
-        self.finished.emit(result)

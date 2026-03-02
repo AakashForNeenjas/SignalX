@@ -20,7 +20,7 @@ the Maynuo M97 communication manual.
 from __future__ import annotations
 
 import struct
-from typing import Tuple, Optional, List
+from typing import Tuple, Optional
 
 import serial
 import serial.tools.list_ports as lp

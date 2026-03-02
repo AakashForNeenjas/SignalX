@@ -9,10 +9,10 @@ This manual is derived directly from the current codebase. It replaces prior doc
 - Supports simulation and hardware profiles (from `config_loader.py`).
 - Drives CAN (via `CANManager`) and SCPI instruments (via `InstrumentManager` drivers).
 - Runs scripted sequences through `Sequencer` (prefix-based action dispatch).
-- Provides GUI (tabs for configuration, instruments, data gauges, tools) and a headless CLI (`run_sequence.py`).
+- Provides GUI (tabs: Configuration, CAN Tx Config, TraceX, CAN Matrix, Standards, App Log) and a headless CLI (`run_sequence.py`).
 
 ## 2. Architecture
-- UI (PyQt6): `MainWindow` (tabs), `Dashboard` (controls/sequence editor), `DataDashboard` (gauges), `InstrumentView` (web panes), icons/splash (`ui/resources.py`), styles (`ui/Styles.py`).
+- UI (PyQt6): `MainWindow` (tabs), `Dashboard` (controls/sequence editor), `TraceXTab`/`TraceXView` (trace analysis), icons/splash (`ui/resources.py`), styles (`ui/Styles.py`).
 - Control: `Sequencer` runs steps on a worker thread; dispatches CAN/GS/PS/utility actions.
 - CAN: `CANManager` handles connect/disconnect, DBC load, decode, signal cache, listeners, cyclic TX, CSV/TRC logging, CAN test methods.
 - Instruments: `InstrumentManager` orchestrates SCPI drivers (PS/Grid/Scope), health checks, safe power-down.
@@ -35,8 +35,8 @@ This manual is derived directly from the current codebase. It replaces prior doc
 - `ui/`
   - `MainWindow.py`: tabs, wiring, preflight, E-Stop, health check.
   - `Dashboard.py`: controls, sequence editor, CAN dialogs, E-Stop button, save/load with metadata popup.
-  - `DataDashboard.py`: gauges (static layout) from CAN cache, lazy-loaded.
-  - `InstrumentView.py`: web views for instrument UIs.
+  - `TraceXTab.py`: container tab for TraceX tooling.
+  - `TraceXView.py`: trace analysis UI and plotting.
   - `Styles.py`: shared styles (incl. E-Stop).
   - `resources.py`: generated AtomX icon/splash.
 - `docs/DEPLOYMENT_AND_CLI.md`: CLI usage, PyInstaller guidance.
@@ -49,7 +49,7 @@ This manual is derived directly from the current codebase. It replaces prior doc
 ## 4. Startup & Lifecycle
 - Logging initialized (`setup_logging`), theme applied, icon/splash created, splash shown, MainWindow fades/slides in.
 - Profiles loaded; core managers initialized (`InstrumentManager`, `DBCParser`, `SignalManager`, `CANManager`, `Sequencer`).
-- Tabs added; Data/Instrument tabs lazy-loaded.
+- Tabs added; TraceX/CAN Matrix/Standards tabs lazy-loaded.
 
 ## 5. Configuration & Profiles
 - Profiles from `config_profiles/profiles.json` if present; else built-in sim/dev/hw (`config_loader.py`).
@@ -57,14 +57,12 @@ This manual is derived directly from the current codebase. It replaces prior doc
 - `config.py` provides CAN/instrument defaults as fallback.
 
 ## 6. UI (Key Elements & Workflows)
-- Tabs: Configuration (Dashboard), Instrument (web views), Data (gauges), Error/Warn (placeholder), Tools (log viewer + health check).
+- Tabs: Configuration (Dashboard), CAN Tx Config, TraceX, CAN Matrix, Standards, App Log (log viewer + health check).
 - Dashboard controls:
   - Initialize Instruments; Connect/Disconnect CAN; Start/Stop Cyclic CAN; Start/Stop Trace; Run Sequence (preflight enforced); E-Stop.
   - Sequence editor: add/edit/delete/reorder/duplicate; status column; save/load (metadata popup: Name/Author/Description/Tags; cancel still saves with defaults).
   - CAN dialogs for 7 test actions (parameter validation in dialogs).
-- Tools tab: Refresh Logs; Check Instrument Health (reports ✓/✗ to Output log); log auto-refresh when active.
-- Data tab: gauges (static `SIGNALS` list) updated from CAN cache via timer; lazy-loaded.
-- Instrument tab: embedded web views for grid/PS/scope URLs.
+- App Log tab: Refresh Logs; Check Instrument Health (reports pass/fail to Output log); log auto-refresh when active.
 - Branding/animation: AtomX icon/splash; main window fade + slide.
 
 ## 7. Sequence Engine (Sequencer)
@@ -152,7 +150,7 @@ This manual is derived directly from the current codebase. It replaces prior doc
 ## 17. Threading Model
 - Sequencer: worker thread; `running` flag checked for stop/E-Stop.
 - CANManager: notifier callback; simulation thread for synthetic traffic.
-- UI: main Qt thread; timers (DataDashboard), events for dialogs/buttons.
+- UI: main Qt thread; timers/events drive live widgets, dialogs, and log refresh.
 
 ## 18. Error Handling Patterns
 - Methods often return `(bool, message)`; Sequencer stops on first failure.
@@ -162,10 +160,14 @@ This manual is derived directly from the current codebase. It replaces prior doc
 
 ## 19. Diagnostics
 - `CANManager.get_diagnostics/print_diagnostics`: connection status, rx/tx counts, cache sizes, listeners, DBC load.
-- Health: `InstrumentManager.health_report` (Tools tab hook).
+- Health: `InstrumentManager.health_report` (App Log tab hook).
 - Message history: last 100 decoded entries in CANManager.
 
 ## 20. Deployment & Packaging
+- Canonical build path:
+  ```
+  .\build_atomx.ps1
+  ```
 - PyInstaller example (PowerShell):
   ```
   pyinstaller --name AtomX --noconsole `
@@ -178,7 +180,7 @@ This manual is derived directly from the current codebase. It replaces prior doc
 
 ## 21. Troubleshooting
 - PyInstaller not found: use full path or add Scripts to PATH.
-- Preflight fails: connect CAN; ensure instrument health OK (Tools → Check Instrument Health).
+- Preflight fails: connect CAN; ensure instrument health OK (App Log -> Check Instrument Health).
 - CAN connect errors: check interface/channel/bitrate; ensure DBC load success.
 - Sequence stops early: inspect Output log; Sequencer stops on first failure.
 - Trace empty: ensure CAN connected before start trace.
@@ -187,7 +189,7 @@ This manual is derived directly from the current codebase. It replaces prior doc
 ## 22. Extension Checklist
 - New instrument: implement interface in `driver_base`, add SCPI methods + health_check, wire into InstrumentManager init/health.
 - New CAN action: add CANManager method; wire in Sequencer; optionally add UI dialog.
-- New UI control/tab: add to Dashboard/MainWindow; connect signals; lazy-load heavy tabs.
+- New UI control/tab: add to Dashboard/MainWindow; connect signals; lazy-load heavy tabs (TraceX/CAN Matrix/Standards).
 - New Sequencer behavior: extend `_execute_action`; maintain `(bool, message)` and stop-on-failure semantics.
 - Logging: use injected logger; CSV/TRC only for CAN traces via CANManager.
 
@@ -203,7 +205,7 @@ This manual is derived directly from the current codebase. It replaces prior doc
 ## 25. Audit Checklist
 - Profiles validated (sim/dev/hw).
 - DBC load succeeds at startup.
-- Instrument health passes (Tools).
+- Instrument health passes (App Log tab).
 - Preflight enforced before run.
 - E-Stop tested (stops sequence, cyclic CAN, powers down).
 - CAN trace start/stop verified.
@@ -213,7 +215,6 @@ This manual is derived directly from the current codebase. It replaces prior doc
 ## 26. Known Behaviors/Limits
 - Sequencer has no built-in retries; stops on first failure.
 - Ramps/sweeps are synchronous; cancellation via stop/E-Stop.
-- DataDashboard layout is static.
 - Save metadata dialog: cancel still saves using defaults.
 - CLI lacks E-Stop (stops on failure only).
 
@@ -221,7 +222,7 @@ This manual is derived directly from the current codebase. It replaces prior doc
 - Soft limits/confirmations for PS/Grid setpoints.
 - CLI E-Stop or retry support.
 - Rich oscilloscope SCPI coverage.
-- Configurable gauges/thresholds with alerts.
+- Richer TraceX analysis presets and export options.
 - Sequencer branching/loop constructs beyond current actions.
 - Structured step-level reporting/export.
 

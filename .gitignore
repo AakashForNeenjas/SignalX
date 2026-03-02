@@ -8,7 +8,9 @@ __pycache__/
 
 # Builds / dist
 build/
+build*/
 dist/
+dist_*/
 *.spec
 
 # Logs
@@ -17,6 +19,11 @@ logs/
 
 # Test artifacts
 Test Results/
+htmlcov/
+.coverage
+coverage.xml
+converted_logs/
+TraceX/
 
 # IDE
 .vscode/
@@ -24,3 +31,4 @@ Test Results/
 
 # updates
 updates/
+*.bak

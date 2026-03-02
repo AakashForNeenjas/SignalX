@@ -30,6 +30,12 @@ python run_sequence.py --sequence "Test Sequence/sequence.json" --profile hw --i
 
 ## Packaging (PyInstaller)
 
+Canonical build path (recommended, from repo root):
+```powershell
+.\build_atomx.ps1
+```
+
+Fallback direct PyInstaller command:
 Basic build command (from repo root):
 ```bash
 pyinstaller --name AtomX --noconsole --add-data "DBC;DBC" --add-data "CAN Configuration;CAN Configuration" --add-data "Test Sequence;Test Sequence" main.py

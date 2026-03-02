@@ -5,7 +5,8 @@
       "Bash(python -m pytest:*)",
       "Bash(wc:*)",
       "Bash(python:*)",
-      "Bash(powershell -Command \"Get-Content ''c:\\\\Users\\\\aakas\\\\.gemini\\\\antigravity\\\\scratch\\\\SignalX\\\\logs\\\\app.log'' | Select-Object -Last 100\")"
+      "Bash(powershell -Command \"Get-Content ''c:\\\\Users\\\\aakas\\\\.gemini\\\\antigravity\\\\scratch\\\\SignalX\\\\logs\\\\app.log'' | Select-Object -Last 100\")",
+      "Bash(del \"c:\\\\Users\\\\aakas\\\\.gemini\\\\antigravity\\\\scratch\\\\SignalX\\\\ui\\\\SequenceGeneratorDialog.py\")"
     ]
   }
 }

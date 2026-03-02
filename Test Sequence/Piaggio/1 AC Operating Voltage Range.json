@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "author": "Aakash Borse",
+    "description": "Apply AC input from 150\u2013280 VAC (domestic range) at 45\u201365 Hz at full load (53A/59V).\nVerify: Input current <15A rms @ 230VAC; PF >0.99; THD-i <2%; Stable output throughout.\nConfirm cut-off at >280\u00b15 VAC and auto-resume at 270\u00b15 VAC.\nCondition: Tambient = 25\u00b0C, rated output load.",
+    "last_modified": "2026-02-24T13:10:29.176128",
+    "name": "1 AC Operating Voltage Range",
+    "tags": [
+      "Voltage",
+      "Current",
+      "THD",
+      "Power Factor"
+    ],
+    "version": 1
+  },
+  "steps": [
+    {
+      "action": "RAMP / Ramp Set & Measure",
+      "params": "{\"target\": {\"type\": \"GS_VOLT\", \"message\": \"\", \"signal\": \"\"}, \"start\": 150.0, \"step\": 1.0, \"end\": 280.0, \"gs_voltage\": 230.0, \"ps_voltage\": null, \"dwell\": 3.0, \"tolerance\": 1.0, \"retries\": 3, \"verify\": false, \"measure\": {\"gs\": true, \"ps\": true, \"load\": false}}"
+    }
+  ]
+}

@@ -5,7 +5,6 @@ import sys
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from typing import Optional, Dict, Any
-from datetime import datetime
 
 
 # Standard log format for consistency

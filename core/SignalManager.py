@@ -1,7 +1,6 @@
 import json
 import os
-import sys
-from typing import Dict, Any, Callable
+from typing import Callable
 from core.DBCParser import DBCParser, resource_path
 
 class SignalManager:

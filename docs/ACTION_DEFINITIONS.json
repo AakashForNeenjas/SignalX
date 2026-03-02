@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-02-04T07:08:06.934937Z",
-  "action_count": 110,
+  "generated_at": "2026-03-02T10:38:30.701963Z",
+  "action_count": 220,
   "actions": [
     {
       "name": "GS / Check Error",
@@ -617,6 +617,71 @@
       }
     },
     {
+      "name": "OS / Identify",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Query *IDN?",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Reset",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Reset scope",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Clear Status",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Clear status/errors",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Get System Status",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Query system status",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Get Error",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Query error queue",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Buzzer",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable/disable buzzer (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Auto Setup",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Auto setup",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
       "name": "OS / Run",
       "group": "OS",
       "param_type": "none",
@@ -635,155 +700,21 @@
       }
     },
     {
-      "name": "OS / Get Waveform",
+      "name": "OS / Single",
       "group": "OS",
       "param_type": "none",
-      "description": "Fetch waveform",
+      "description": "Single-shot acquisition",
       "params": {
         "type": "none"
       }
     },
     {
-      "name": "OS / Set Timebase",
+      "name": "OS / Normal",
       "group": "OS",
-      "param_type": "str",
-      "description": "Set timebase",
+      "param_type": "none",
+      "description": "Normal trigger mode",
       "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Channel Enable",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Enable/disable channel",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Channel Scale",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Set vertical scale",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Channel Offset",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Set offset",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Coupling",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Set coupling mode",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Bandwidth Limit",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Set bandwidth limit",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Probe Attenuation",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Set probe attenuation",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Acquisition Mode",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Set acquisition mode",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Memory Depth",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Set memory depth",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Trigger Source",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Trigger source",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Trigger Type",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Trigger type",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Trigger Level",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Trigger level",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Set Trigger Slope",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Trigger slope/polarity",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
+        "type": "none"
       }
     },
     {
@@ -796,39 +727,244 @@
       }
     },
     {
-      "name": "OS / Auto Setup",
+      "name": "OS / Wait For Trigger",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Wait for trigger (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Configure Channel",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Configure channel (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Channel ON",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable channel (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Channel OFF",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Disable channel (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Coupling",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set coupling (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Vdiv",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set volts/div (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Offset",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set vertical offset (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Probe",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set probe attenuation (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set BW Limit",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set bandwidth limit (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Skew",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set channel skew (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Invert",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Invert channel (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Unit",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set channel unit (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Timebase",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set time/div (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Time Offset",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set time offset (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Memory Depth",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set memory depth (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Hor Magnify",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Horizontal magnify on/off (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Hor Magnify Scale",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Horizontal magnify scale (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Hor Magnify Position",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Horizontal magnify position (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Get Sample Rate",
       "group": "OS",
       "param_type": "none",
-      "description": "Auto setup",
+      "description": "Get sample rate",
       "params": {
         "type": "none"
       }
     },
     {
-      "name": "OS / Measure (single)",
-      "group": "OS",
-      "param_type": "str",
-      "description": "Single measurement",
-      "params": {
-        "type": "string",
-        "required": true,
-        "note": "Freeform string or JSON (see UI prompt)."
-      }
-    },
-    {
-      "name": "OS / Measure (all enabled)",
+      "name": "OS / Get Memory Depth",
       "group": "OS",
       "param_type": "none",
-      "description": "Measure all enabled",
+      "description": "Get memory depth",
       "params": {
         "type": "none"
       }
     },
     {
-      "name": "OS / Acquire Screenshot",
+      "name": "OS / Get Timebase",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Get time/div",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Get Time Offset",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Get time offset",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Setup Edge Trigger",
       "group": "OS",
       "param_type": "str",
-      "description": "Save screenshot",
+      "description": "Edge trigger (JSON)",
       "params": {
         "type": "string",
         "required": true,
@@ -836,10 +972,10 @@
       }
     },
     {
-      "name": "OS / Save Setup",
+      "name": "OS / Setup Pulse Trigger",
       "group": "OS",
       "param_type": "str",
-      "description": "Save setup",
+      "description": "Pulse trigger (JSON)",
       "params": {
         "type": "string",
         "required": true,
@@ -847,10 +983,1034 @@
       }
     },
     {
-      "name": "OS / Load Setup",
+      "name": "OS / Setup Slope Trigger",
       "group": "OS",
       "param_type": "str",
-      "description": "Load setup",
+      "description": "Slope trigger (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup Video Trigger",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Video trigger (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup Dropout Trigger",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Dropout trigger (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup Runt Trigger",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Runt trigger (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup Window Trigger",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Window trigger (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup Pattern Trigger",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Pattern trigger (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Trigger Holdoff",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set trigger holdoff (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Trigger Level",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set trigger level (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Trigger Slope",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set trigger slope (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Trigger Coupling",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set trigger coupling (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Trigger Type",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set trigger type (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Trigger 50%",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Set trigger level to 50%",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Set Acquire Mode",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set acquisition mode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Average Count",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set average count (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Interpolation",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set interpolation (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Sequence",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set sequence mode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set XY Mode",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable XY mode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Measure Value",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Measure value (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Measure PkPk",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Measure Vpp (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Measure All",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Measure all (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Add Measurement",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Add measurement (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Clear Measurements",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Clear measurements",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Set Statistics",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable stats (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Reset Statistics",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Reset stats",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Get Statistics",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Get stats (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Counter ON",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable counter (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Counter OFF",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Disable counter",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Get Counter",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Get counter value",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Set Cursor Type",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set cursor type (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Cursor Mode",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set cursor mode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Cursor Source",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set cursor source (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Cursor Positions",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set cursor positions (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Cursor HPos",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set cursor horizontal (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Cursor VPos",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set cursor vertical (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Get Cursor Values",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Get cursor values",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Set Math",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set math op (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Math ON",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Enable math",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Math OFF",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Disable math",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Set Math Vdiv",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set math volts/div (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Math Offset",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set math offset (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set FFT Window",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set FFT window (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set FFT Scale",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set FFT scale (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set FFT Center",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set FFT center (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set FFT Span",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set FFT span (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set FFT Source",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set FFT source (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / FFT ON",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Enable FFT",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / FFT OFF",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Disable FFT",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Set Waveform Source",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set waveform source (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Get Waveform",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Get waveform (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Get Waveform Raw",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Get waveform raw bytes (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Screenshot",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Save screenshot (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Screenshot PNG",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Save PNG screenshot (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Save Waveform CSV",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Save waveform CSV (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Save Waveform NPZ",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Save waveform NPZ (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Grid",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set grid style (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Intensity",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set display intensity (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Persistence",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set persistence (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Clear Sweeps",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Clear sweeps",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Set Display Type",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set display type (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Color Display",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable color display (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Ref ON",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable reference (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Ref OFF",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Disable reference (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Ref Save",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Save ref waveform (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Ref Vdiv",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set ref volts/div (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Ref Offset",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set ref offset (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / PassFail ON",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Enable pass/fail",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / PassFail OFF",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Disable pass/fail",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / PassFail Source",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set pass/fail source (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / PassFail Create Mask",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Create pass/fail mask (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / PassFail Set Action",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Pass/fail action (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / PassFail Result",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Get pass/fail result",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Decode ON",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable decode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Decode OFF",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Disable decode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup UART Decode",
+      "group": "OS",
+      "param_type": "str",
+      "description": "UART decode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup UART Trigger",
+      "group": "OS",
+      "param_type": "str",
+      "description": "UART trigger (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup SPI Decode",
+      "group": "OS",
+      "param_type": "str",
+      "description": "SPI decode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup I2C Decode",
+      "group": "OS",
+      "param_type": "str",
+      "description": "I2C decode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup I2C Trigger",
+      "group": "OS",
+      "param_type": "str",
+      "description": "I2C trigger (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup CAN Decode",
+      "group": "OS",
+      "param_type": "str",
+      "description": "CAN decode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Setup LIN Decode",
+      "group": "OS",
+      "param_type": "str",
+      "description": "LIN decode (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Digital ON",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable digital channel (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Digital OFF",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Disable digital channel (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Digital Threshold",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set digital threshold (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Digital Bus ON",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Enable digital bus (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Digital Bus OFF",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Disable digital bus (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Power Analysis ON",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Enable power analysis",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Power Analysis OFF",
+      "group": "OS",
+      "param_type": "none",
+      "description": "Disable power analysis",
+      "params": {
+        "type": "none"
+      }
+    },
+    {
+      "name": "OS / Set Power Type",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set power analysis type (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Set Power Source",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Set power source channels (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Measure Ripple Noise",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Ripple/noise measurement (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Analyze Power Integrity",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Power integrity analysis (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Quick Power Check",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Quick power check (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Bode Plot",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Bode plot sweep (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Capture Eye Diagram",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Eye diagram capture (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Analyze Jitter",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Jitter analysis (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Limit Monitor",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Limit monitor (JSON)",
+      "params": {
+        "type": "string",
+        "required": true,
+        "note": "Freeform string or JSON (see UI prompt)."
+      }
+    },
+    {
+      "name": "OS / Limit Monitor Multi",
+      "group": "OS",
+      "param_type": "str",
+      "description": "Multi limit monitor (JSON)",
       "params": {
         "type": "string",
         "required": true,

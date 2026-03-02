@@ -7,7 +7,7 @@
     <IsReplayFilterEnabled>FALSE</IsReplayFilterEnabled>
     <IsLogFilterEnabled>FALSE</IsLogFilterEnabled>
     <IsLogFilterLINEnabled>FALSE</IsLogFilterLINEnabled>
-    <IsLoggingEnabled>FALSE</IsLoggingEnabled>
+    <IsLoggingEnabled>TRUE</IsLoggingEnabled>
     <IsMsgIntepretationEnabled>FALSE</IsMsgIntepretationEnabled>
     <IsOverWriteEnabled>TRUE</IsOverWriteEnabled>
     <DisplayTimeMode>SYSTEM</DisplayTimeMode>
@@ -17,19 +17,21 @@
     <LogOnConnect_LIN>FALSE</LogOnConnect_LIN>
     <Window_Position>
       <Visibility>SHOWNORMAL</Visibility>
-      <WindowPlacement>HIDE</WindowPlacement>
-      <Top>555</Top>
-      <Left>0</Left>
-      <Bottom>740</Bottom>
-      <Right>1212</Right>
+      <WindowPlacement>SHOWNORMAL</WindowPlacement>
+      <Top>470</Top>
+      <Left>-6</Left>
+      <Bottom>736</Bottom>
+      <Right>1507</Right>
     </Window_Position>
   </Global_Configuration>
   <Module_Configuration>
-    <CAN_Database_Files/>
+    <CAN_Database_Files>
+      <FilePath>RE.dbf</FilePath>
+    </CAN_Database_Files>
     <J1939_Database_Files/>
     <CAN_DIL_Section>
       <DriverName>Simulation</DriverName>
-      <ControllerMode>Bus Off</ControllerMode>
+      <ControllerMode>Unknown</ControllerMode>
       <ControllerSettings>
         <Channel>
           <BaudRate>500</BaudRate>
@@ -837,10 +839,10 @@
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>HIDE</WindowPlacement>
-        <Top>70</Top>
-        <Left>10</Left>
-        <Right>500</Right>
-        <Bottom>300</Bottom>
+        <Top>426</Top>
+        <Left>295</Left>
+        <Right>785</Right>
+        <Bottom>656</Bottom>
       </Window_Position>
       <COLUMN_WIDTH>
         <MESSAGE_COLUMN>94</MESSAGE_COLUMN>
@@ -924,6 +926,24 @@
     </CAN_Signal_Graph>
     <CAN_Log>
       <LogOnConnect>0</LogOnConnect>
+      <Log_Block>
+        <IsEnabled>TRUE</IsEnabled>
+        <Time_Mode>SYSTEM</Time_Mode>
+        <Numeric_Mode>HEX</Numeric_Mode>
+        <IsAppendLog_Enabled>TRUE</IsAppendLog_Enabled>
+        <Reset_Absolute_Time>FALSE</Reset_Absolute_Time>
+        <Channel>0</Channel>
+        <File_Path>..\..\..\..\..\OneDrive\Documents\BUSMASTER\3.2.2\BUSMASTERLogFile_0_S0.log</File_Path>
+        <Trigger_Start_ID>-1</Trigger_Start_ID>
+        <Trigger_Stop_ID>-1</Trigger_Stop_ID>
+        <IsLogOnTransmission>FALSE</IsLogOnTransmission>
+        <IsLogOnSize>TRUE</IsLogOnSize>
+        <LogOnSize>500</LogOnSize>
+        <IsLogOnTime>FALSE</IsLogOnTime>
+        <LogOnTime>0.30</LogOnTime>
+        <FilesAllowed>10</FilesAllowed>
+        <Comments/>
+      </Log_Block>
     </CAN_Log>
     <J1939_Log>
       <LogOnConnect>0</LogOnConnect>
@@ -933,12 +953,12 @@
     </LIN_Log>
     <CAN_Simulated_Systems>
       <Window_Position>
-        <Visibility>HIDE</Visibility>
+        <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
         <Top>0</Top>
         <Left>0</Left>
-        <Bottom>0</Bottom>
-        <Right>0</Right>
+        <Bottom>502</Bottom>
+        <Right>337</Right>
       </Window_Position>
     </CAN_Simulated_Systems>
     <J1939_Simulated_Systems>
@@ -1016,7 +1036,7 @@
       <Time_Mode>SYSTEM</Time_Mode>
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
-        <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
+        <WindowPlacement>SETMINPOSITION</WindowPlacement>
         <Top>0</Top>
         <Left>0</Left>
         <Bottom>467</Bottom>
@@ -1025,10 +1045,10 @@
       <Interpretation_Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
-        <Top>179</Top>
-        <Left>10</Left>
-        <Bottom>457</Bottom>
-        <Right>359</Right>
+        <Top>181</Top>
+        <Left>18</Left>
+        <Bottom>459</Bottom>
+        <Right>367</Right>
       </Interpretation_Window_Position>
     </CAN_Message_Window>
     <J1939_Message_Window>
@@ -1116,7 +1136,7 @@
       <Time_Mode>SYSTEM</Time_Mode>
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
-        <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
+        <WindowPlacement>SETMINPOSITION</WindowPlacement>
         <Top>0</Top>
         <Left>0</Left>
         <Bottom>467</Bottom>
@@ -1125,10 +1145,10 @@
       <Interpretation_Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
-        <Top>179</Top>
-        <Left>10</Left>
-        <Bottom>457</Bottom>
-        <Right>359</Right>
+        <Top>181</Top>
+        <Left>18</Left>
+        <Bottom>459</Bottom>
+        <Right>367</Right>
       </Interpretation_Window_Position>
     </J1939_Message_Window>
     <LIN_Message_Window>
@@ -1201,7 +1221,7 @@
       <Time_Mode>SYSTEM</Time_Mode>
       <Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
-        <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
+        <WindowPlacement>SETMINPOSITION</WindowPlacement>
         <Top>0</Top>
         <Left>0</Left>
         <Bottom>467</Bottom>
@@ -1210,10 +1230,10 @@
       <Interpretation_Window_Position>
         <Visibility>SHOWNORMAL</Visibility>
         <WindowPlacement>RESTORETOMAXIMIZED</WindowPlacement>
-        <Top>179</Top>
-        <Left>10</Left>
-        <Bottom>457</Bottom>
-        <Right>359</Right>
+        <Top>181</Top>
+        <Left>18</Left>
+        <Bottom>459</Bottom>
+        <Right>367</Right>
       </Interpretation_Window_Position>
     </LIN_Message_Window>
     <CAN_Tx_Window>
@@ -1222,10 +1242,71 @@
         <WindowPlacement>SETMINPOSITION</WindowPlacement>
         <Top>1</Top>
         <Left>4</Left>
-        <Bottom>661</Bottom>
+        <Bottom>656</Bottom>
         <Right>864</Right>
       </Window_Position>
-      <Message_List/>
+      <Message_List>
+        <Message>
+          <Channel>1</Channel>
+          <Message_ID>267</Message_ID>
+          <IsExtended>FALSE</IsExtended>
+          <IsRtr>FALSE</IsRtr>
+          <DLC>8</DLC>
+          <DataBytes>5,15,0,0,0,0,0,0</DataBytes>
+          <Repetion>10</Repetion>
+          <Repetition_Enabled>TRUE</Repetition_Enabled>
+          <Key_Value>a</Key_Value>
+          <Key_Enabled>TRUE</Key_Enabled>
+        </Message>
+        <Message>
+          <Channel>1</Channel>
+          <Message_ID>268</Message_ID>
+          <IsExtended>FALSE</IsExtended>
+          <IsRtr>FALSE</IsRtr>
+          <DLC>8</DLC>
+          <DataBytes>0,0,128,0,0,0,0,0</DataBytes>
+          <Repetion>10</Repetion>
+          <Repetition_Enabled>TRUE</Repetition_Enabled>
+          <Key_Value>a</Key_Value>
+          <Key_Enabled>TRUE</Key_Enabled>
+        </Message>
+        <Message>
+          <Channel>1</Channel>
+          <Message_ID>298</Message_ID>
+          <IsExtended>FALSE</IsExtended>
+          <IsRtr>FALSE</IsRtr>
+          <DLC>8</DLC>
+          <DataBytes>17,0,0,0,0,2,0,0</DataBytes>
+          <Repetion>10</Repetion>
+          <Repetition_Enabled>TRUE</Repetition_Enabled>
+          <Key_Value>a</Key_Value>
+          <Key_Enabled>TRUE</Key_Enabled>
+        </Message>
+        <Message>
+          <Channel>1</Channel>
+          <Message_ID>301</Message_ID>
+          <IsExtended>FALSE</IsExtended>
+          <IsRtr>FALSE</IsRtr>
+          <DLC>8</DLC>
+          <DataBytes>0,0,0,0,174,46,1,0</DataBytes>
+          <Repetion>10</Repetion>
+          <Repetition_Enabled>TRUE</Repetition_Enabled>
+          <Key_Value>a</Key_Value>
+          <Key_Enabled>TRUE</Key_Enabled>
+        </Message>
+        <Message>
+          <Channel>1</Channel>
+          <Message_ID>300</Message_ID>
+          <IsExtended>FALSE</IsExtended>
+          <IsRtr>FALSE</IsRtr>
+          <DLC>8</DLC>
+          <DataBytes>184,11,0,0,0,0,0,0</DataBytes>
+          <Repetion>10</Repetion>
+          <Repetition_Enabled>TRUE</Repetition_Enabled>
+          <Key_Value>a</Key_Value>
+          <Key_Enabled>TRUE</Key_Enabled>
+        </Message>
+      </Message_List>
     </CAN_Tx_Window>
     <CAN_Wave_Form_Genarator>
       <Default_Sampling_Period>125</Default_Sampling_Period>

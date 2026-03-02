@@ -15,7 +15,7 @@
   - Builds app icon/splash (`ui/resources.py`), shows splash, then fades/slides in `MainWindow`.
 - Profiles loaded from `config_loader.py` (default sim/dev/hw or `config_profiles/profiles.json`).
 - Managers created in `MainWindow.initialize_core_components`: `InstrumentManager`, `DBCParser`, `SignalManager`, `CANManager`, `Sequencer`.
-- UI tabs built in `MainWindow`: Configuration (Dashboard), Instrument (web views), Data (gauges, lazy-loaded), Error/Warn (placeholder), Tools (log viewer + health check).
+- UI tabs built in `MainWindow`: Configuration (Dashboard), CAN Tx Config (CAN transmit builder), TraceX, CAN Matrix, Standards, App Log (log viewer + health check).
 
 ## 3) Folder Structure (Purpose)
 - `main.py` – app bootstrap, theme, splash, main window creation.
@@ -32,8 +32,8 @@
 - `ui/`
   - `MainWindow.py` – main window, tab wiring, preflight checks, E-stop, health hook.
   - `Dashboard.py` – controls & sequence editor; CAN dialogs; save/load with metadata popup; E-stop button.
-  - `DataDashboard.py` – CAN gauge view (lazy-loaded).
-  - `InstrumentView.py` – embedded web panes for instrument UIs.
+  - `TraceXTab.py` – TraceX container tab.
+  - `TraceXView.py` – Trace analysis and plotting UI.
   - `Styles.py` – shared styles (incl. E-stop button).
   - `resources.py` – generated icon/splash (AtomX branding).
 - `docs/DEPLOYMENT_AND_CLI.md` – CLI usage, PyInstaller notes.
@@ -64,9 +64,7 @@
   - Monitor Signal Range
   - Compare Two Signals
   - Set Signal and Verify
-- Tools tab: log viewer (auto-refresh when active), Refresh button, Check Instrument Health.
-- Data tab: gauges (lazy load) fed by CAN signal cache.
-- Instrument tab: embedded web views for grid/PS/scope URLs.
+- App Log tab: log viewer (auto-refresh when active), Refresh button, Check Instrument Health.
 
 ## 6) Sequence Engine (core/Sequencer.py)
 - Steps: list of `{ "action": <str>, "params": <str|json> }`.
@@ -128,7 +126,11 @@
 - Splash shown; main window fades and slides in (`main.py`).
 
 ## 14) Deployment (from docs/DEPLOYMENT_AND_CLI.md)
-- PyInstaller example (PowerShell):
+- Canonical build path:
+```
+.\build_atomx.ps1
+```
+- PyInstaller fallback example (PowerShell):
 ```
 pyinstaller --name AtomX --noconsole `
   --add-data "DBC;DBC" `
@@ -150,8 +152,7 @@ pyinstaller --name AtomX --noconsole `
 
 ## 17) Known UI Elements (wiring)
 - Dashboard signals to MainWindow: init instrument, connect/disconnect CAN, start/stop cyclic, start trace, run sequence, stop sequence, E-stop.
-- Tools tab: Refresh log, Check Instrument Health (calls `InstrumentManager.health_report`).
-- Data tab: lazy load of `DataDashboard` gauges.
+- App Log tab: Refresh log, Check Instrument Health (calls `InstrumentManager.health_report`).
 
 ## 18) Error Handling Patterns
 - Sequencer: stops on first failed action; logs message.
@@ -312,10 +313,11 @@ This manual reflects the current repository state (files inspected: main.py, log
 
 ### Main Tabs (MainWindow)
 - Configuration: Dashboard (controls + sequence editor)
-- Instrument: web views (grid/PS/scope URLs)
-- Data: lazy-loaded gauges (CAN signal cache)
-- Error and Warnings: placeholder
-- Tools: log viewer (auto-refresh on focus), Refresh Logs, Check Instrument Health
+- CAN Tx Config: CAN transmit configuration UI
+- TraceX: trace visualization and analysis
+- CAN Matrix: matrix tools and mapping
+- Standards: standards workflows
+- App Log: log viewer (auto-refresh on focus), Refresh Logs, Check Instrument Health
 
 ### Dashboard Controls & Signals
 - Initialize Instruments → `MainWindow.on_init_instrument`
@@ -327,7 +329,7 @@ This manual reflects the current repository state (files inspected: main.py, log
 - Save/Load Sequence: “Test Details” popup (Name/Author/Description/Tags; save proceeds even if canceled, using defaults)
 - CAN dialogs: capture params for 7 CAN test actions
 
-### Tools Tab
+### App Log Tab
 - Log viewer with Refresh
 - Check Instrument Health → `InstrumentManager.health_report` (logs ✓/✗)
 
@@ -380,7 +382,7 @@ This manual reflects the current repository state (files inspected: main.py, log
 ## 27) Troubleshooting (Code-Based)
 
 - **PyInstaller not found**: use full path to `pyinstaller.exe` or add Scripts folder to PATH.
-- **Preflight failure**: ensure CAN is connected (`CAN Connected`) and instrument health is OK (Tools → Check Instrument Health).
+- **Preflight failure**: ensure CAN is connected (`CAN Connected`) and instrument health is OK (App Log → Check Instrument Health).
 - **CAN connect errors**: verify profile interface/channel/bitrate; check DBC load message.
 - **E-Stop**: use to halt a hung sequence; it stops Sequencer, cyclic CAN, and powers down PS/Grid.
 - **Simulation mode**: use `--profile sim` (CLI) or sim profile in GUI to avoid hardware.
@@ -395,7 +397,11 @@ This manual reflects the current repository state (files inspected: main.py, log
   # hardware
   python run_sequence.py --sequence "Test Sequence/sequence.json" --profile hw --init-instruments
   ```
-- PyInstaller (PowerShell):
+- Canonical build:
+  ```powershell
+  .\build_atomx.ps1
+  ```
+- PyInstaller fallback (PowerShell):
   ```powershell
   pyinstaller --name AtomX --noconsole `
     --add-data "DBC;DBC" `
@@ -416,7 +422,7 @@ This manual reflects the current repository state (files inspected: main.py, log
 
 ## 30) Current Limitations (Observed)
 
-- DataDashboard gauges use static layout (no configurable layout/thresholds after rollback).
+- Data dashboard feature has been removed from the active UI; legacy docs are retained for history.
 - Oscilloscope driver is minimal (run/stop/waveform/IDN); extend for deeper use.
 - Ramping/sweeps are synchronous loops (no async cancellation besides E-Stop).
 - Sequence branching beyond provided actions is limited; add custom logic in Sequencer if needed.
@@ -496,8 +502,8 @@ This manual reflects the current repository state (files inspected: main.py, log
 - `on_run_sequence` (preflight enforced)
 - `on_stop_sequence`
 - `on_estop` (E-Stop: stop sequence, stop cyclic, power down)
-- `on_check_health` (Tools tab)
-- Lazy-load helpers: `ensure_data_tab_built`, `ensure_instrument_tab_built`
+- `on_check_health` (App Log tab)
+- Lazy-load helpers: `ensure_error_tab_built`, `ensure_tracex_tab_built`, `ensure_canmatrix_tab_built`, `ensure_standards_tab_built`
 
 ### ui.Dashboard.py (selected)
 - Signals: `sig_init_instrument`, `sig_connect_can`, `sig_disconnect_can`, `sig_start_cyclic`, `sig_stop_cyclic`, `sig_start_trace`, `sig_run_sequence`, `sig_stop_sequence`, `sig_estop`.
@@ -505,11 +511,8 @@ This manual reflects the current repository state (files inspected: main.py, log
 - Save sequence prompts “Test Details” dialog; saves meta+steps JSON.
 - CAN dialogs: read value, tolerance check, conditional jump, wait change, monitor range, compare signals, set & verify.
 
-### ui.DataDashboard.py
-- Gauges built from static `SIGNALS` list; updates via CAN signal cache; lazy-loaded.
-
-### ui.InstrumentView.py
-- Three web views for Grid, PS, Scope URLs; user-editable addresses in UI fields.
+### ui.TraceXTab.py / ui.TraceXView.py
+- Trace analysis tab and plotting widgets integrated into MainWindow.
 
 ### ui.Styles.py
 - Shared styles; special styling for E-Stop button.
@@ -548,7 +551,7 @@ python run_sequence.py --sequence "Test Sequence/sequence.json" --profile sim
 ### Add a UI Control
 1. Modify `Dashboard` (for config/sequence) or `MainWindow` (for tabs/tools).
 2. Connect signals to handlers in `MainWindow`.
-3. If heavy, consider lazy-loading like the Data/Instrument tabs.
+3. If heavy, consider lazy-loading like TraceX/CAN Matrix/Standards tabs.
 
 ---
 
@@ -588,7 +591,7 @@ python run_sequence.py --sequence "Test Sequence/sequence.json" --profile sim
 
 ## 35) Safety & Preflight (Operational Guidance)
 
-- Always connect CAN (UI: “Connect CAN”) and run Tools → Check Instrument Health before starting sequences.
+- Always connect CAN (UI: “Connect CAN”) and run App Log → Check Instrument Health before starting sequences.
 - E-Stop is available in the Dashboard to halt sequence, stop cyclic CAN, and power down PS/Grid.
 - Use simulation profile (`sim`) when hardware is not connected.
 - Preflight enforced in `MainWindow.on_run_sequence`: blocks run if CAN disconnected or any instrument health is not OK.
@@ -598,11 +601,11 @@ python run_sequence.py --sequence "Test Sequence/sequence.json" --profile sim
 ## 36) Troubleshooting (Expanded)
 
 - **CAN not connected**: Connect via Dashboard; re-run preflight.
-- **Instrument health fail**: Check device connectivity, addresses in profile/config, and rerun Tools → Check Instrument Health.
+- **Instrument health fail**: Check device connectivity, addresses in profile/config, and rerun App Log → Check Instrument Health.
 - **PyInstaller missing**: Call full path (e.g., `$env:APPDATA\\Python\\Python314\\Scripts\\pyinstaller.exe`) or add to PATH.
 - **Sequence stops early**: Inspect Output log for failing step message; Sequencer stops on first failure.
 - **Trace not recording**: Ensure CAN connected; Start Trace creates files in `Test Results`.
-- **UI sluggish**: Data/Instrument tabs are lazy-loaded; avoid opening heavy tabs unless needed.
+- **UI sluggish**: TraceX/CAN Matrix/Standards are lazy-loaded; avoid opening heavy tabs unless needed.
 
 ---
 
@@ -619,7 +622,7 @@ python run_sequence.py --sequence "Test Sequence/sequence.json" --profile sim
 
 ## 38) Future Improvements (Recommended)
 
-- DataDashboard: configurable layouts/thresholds; trend charts with alerts.
+- TraceX: richer analysis presets, overlays, and export tooling.
 - Oscilloscope: richer SCPI control (channels, scaling, acquisition, screenshots).
 - Sequencer: branching/loop constructs; async/cancellable actions.
 - CAN: per-signal thresholds and alerting; GUI-driven cyclic definitions.
@@ -788,7 +791,7 @@ python run_sequence.py --sequence "Test Sequence/sequence.json" --profile sim
 
 - Profiles validated (sim/dev/hw) with correct CAN/instrument addresses.
 - DBC loads successfully (`Loaded DBC` message on startup).
-- Instrument health passes (Tools → Check Instrument Health).
+- Instrument health passes (App Log → Check Instrument Health).
 - Preflight enforced before sequences; failures block run.
 - E-Stop tested: stops sequence, stops cyclic CAN, powers down PS/Grid, logs warning.
 - CAN trace start/stop creates CSV/TRC in `Test Results/`.
@@ -801,7 +804,7 @@ python run_sequence.py --sequence "Test Sequence/sequence.json" --profile sim
 
 - Sequencer stops on first failed step; no built-in retries per step.
 - Ramps/sweeps are synchronous; E-Stop/stop sequence is the cancellation path.
-- DataDashboard is static (signals hardcoded in `SIGNALS` list).
+- Data dashboard was intentionally removed from active UI/runtime.
 - Metadata dialog on save: cancel still saves using existing defaults.
 
 ---
@@ -873,7 +876,7 @@ python run_sequence.py --sequence "Test Sequence/sequence.json" --profile sim
 6. If needed, click “E-Stop” to halt and power down.
 
 **Check Instrument Health**  
-1. Go to Tools tab.  
+1. Go to App Log tab.  
 2. Click “Check Instrument Health”.  
 3. View ✓/✗ messages in Output log.
 
@@ -922,7 +925,7 @@ Notes: CLI stops on step failure; no E-Stop hook in CLI; uses same Sequencer/Man
 ## 55) Data Flow (High-Level)
 
 - DBC load → `CANManager._initialize_message_definitions` → `signal_cache` seeded.
-- CAN Rx (bus or simulation) → `_on_message_received` → decode → `_cache_signals` → listeners notified → `SignalManager.process_can_message` (if used) → DataDashboard reads cache on timer.
+- CAN Rx (bus or simulation) → `_on_message_received` → decode → `_cache_signals` → listeners notified → `SignalManager.process_can_message` (if used).
 - Sequence run → Sequencer dispatch → CANManager/InstrumentManager actions → messages/status emitted to Dashboard (Output log + table) → logger writes JSON log.
 - Trace → CANManager `_log_message` → CSV/TRC written in `Test Results/`.
 
@@ -934,7 +937,7 @@ Notes: CLI stops on step failure; no E-Stop hook in CLI; uses same Sequencer/Man
 - CANManager:
   - `can.Notifier` callback for live RX.
   - Simulation thread (`_simulate_traffic`) when in simulation mode.
-- UI: main Qt thread; dashboards and dialogs operate on Qt events; periodic updates via QTimer (DataDashboard).
+- UI: main Qt thread; dashboards and dialogs operate on Qt events; periodic updates via QTimer as needed.
 
 ---
 
@@ -969,7 +972,7 @@ Notes: CLI stops on step failure; no E-Stop hook in CLI; uses same Sequencer/Man
 - Add configurable soft limits and confirmations for PS/Grid setpoints.
 - Add CLI E-Stop or step retry logic.
 - Expand oscilloscope SCPI coverage.
-- Add per-signal thresholds/alerts in DataDashboard with configurable layout.
+- Add richer TraceX threshold/alert overlays with configurable presets.
 - Add branching/looping in Sequencer with condition objects rather than string parsing.
 
 ---

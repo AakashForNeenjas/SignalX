@@ -1,4 +1,13 @@
-"""CAN Manager for CAN bus communication and message handling."""
+"""CAN Manager for CAN bus communication and message handling.
+
+This module provides the main CANManager class that orchestrates all CAN bus
+communication. It delegates to modular components for specific functionality:
+- CANConnection: Bus connection management
+- CANSimulator: Traffic simulation
+- CyclicMessageManager: Periodic message transmission
+- CANLogger: Message logging (CSV/TRC)
+- SignalManager: Signal caching and manipulation
+"""
 
 import logging
 import can
@@ -12,13 +21,21 @@ import time
 import csv
 import os
 from collections import deque
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import (
-    Any, Callable, Dict, List, Optional, Set, Tuple, Union,
+    Any, Callable, Dict, List, Optional, Tuple,
     TextIO, TYPE_CHECKING
 )
 
 from core.logging_utils import LoggerMixin
+# Import modular CAN components
+from core.can import (
+    CANConnection,
+    CANSimulator,
+    CyclicMessageManager,
+    CANLogger,
+    CANSignalManager,
+)
 
 if TYPE_CHECKING:
     from core.DBCParser import DBCParser
@@ -40,56 +57,179 @@ class CANManager(LoggerMixin):
             dbc_parser: DBC parser for message definitions
             logger: Optional logger instance
         """
-        self.bus: Optional[can.Bus] = None
         self.simulation_mode: bool = simulation_mode
         self.dbc_parser: Optional["DBCParser"] = dbc_parser
-        self.cyclic_tasks: Dict[int, Any] = {}
-        self.listeners: List[Callable[[can.Message], None]] = []
-        self.listeners_lock: threading.RLock = threading.RLock()
-        self.logging: bool = False
-        self.csv_file: Optional[TextIO] = None
-        self.csv_writer: Optional[csv.writer] = None
-        self.trc_file: Optional[TextIO] = None
-        self.start_time: Optional[datetime] = None
-        self.first_msg_time: Optional[float] = None
-        self.message_counter: int = 1
         self.running: bool = False
 
-        # ===== ROBUST CAN COMMUNICATION =====
-        # Signal cache: stores latest signal values for UI updates
-        self.signal_cache: Dict[str, Dict[str, Any]] = {}
-        # Thread lock for thread-safe signal_cache access
+        # ===== MODULAR COMPONENTS =====
+        # Connection management (delegates to CANConnection)
+        self._connection = CANConnection(simulation_mode=simulation_mode)
+
+        # Logger for CSV/TRC files (delegates to CANLogger)
+        self._can_logger = CANLogger()
+
+        # Signal cache lock (shared with components)
         self.signal_cache_lock: threading.RLock = threading.RLock()
-        # Message cache: stores last N messages for debugging (using deque for O(1) operations)
-        self.max_history_size: int = 100
-        self.message_history: deque[Dict[str, Any]] = deque(maxlen=self.max_history_size)
-        self.message_history_lock: threading.Lock = threading.Lock()
+
+        # Signal manager (delegates to CANSignalManager)
+        self._signal_manager = CANSignalManager(
+            dbc_parser=dbc_parser,
+            signal_cache_lock=self.signal_cache_lock
+        )
+
+        # Simulator (created on connect if simulation_mode)
+        self._simulator: Optional[CANSimulator] = None
+
+        # Cyclic message manager (created on connect when bus is available)
+        self._cyclic_manager: Optional[CyclicMessageManager] = None
+
+        # ===== BACKWARD COMPATIBILITY ATTRIBUTES =====
+        # These attributes are maintained for backward compatibility
+        # but delegate to modular components internally
+        self.listeners: List[Callable[[can.Message], None]] = []
+        self.listeners_lock: threading.RLock = threading.RLock()
+
         # Connection state tracking
         self.is_connected: bool = False
+
         # Statistics
         self.rx_count: int = 0
         self.tx_count: int = 0
         self.error_count: int = 0
+
         # Decode cache (message_id -> message_definition)
         self.message_definitions: Dict[int, Any] = {}
-        # Track last sent signals per message to preserve untouched fields
-        self.last_sent_signals: Dict[str, Dict[str, Any]] = {}
-        # Signal overrides: {(message_name, signal_name): value}
-        self.signal_overrides: Dict[Tuple[str, str], Any] = {}
-        self.signal_overrides_lock: threading.RLock = threading.RLock()
-        # Track cyclic periods (arbitration_id -> seconds) for updates
-        self.cyclic_periods: Dict[int, float] = {}
-        # Logging lock to serialize CSV/TRC writes and counters
-        self.log_lock: threading.RLock = threading.RLock()
-        # Internal metrics tick threads for TX periodic visibility
-        self.metrics_threads: Dict[int, threading.Thread] = {}
+
+        # Message history for debugging
+        self.max_history_size: int = 100
+        self.message_history: deque[Dict[str, Any]] = deque(maxlen=self.max_history_size)
+        self.message_history_lock: threading.Lock = threading.Lock()
+
         # Connection defaults (can be overridden via profiles)
         self.interface: Optional[str] = None
         self.channel: Optional[str] = None
         self.bitrate: Optional[int] = None
+
         # Store external logger for backward compatibility (LoggerMixin provides self.logger)
         self._external_logger: Optional[logging.Logger] = logger
         self.log_info("CANManager initialized", mode="simulation" if simulation_mode else "hardware")
+
+    # ===== PROPERTY DELEGATIONS FOR BACKWARD COMPATIBILITY =====
+
+    @property
+    def bus(self) -> Optional[can.Bus]:
+        """Get the CAN bus instance (delegates to CANConnection)."""
+        return self._connection.bus
+
+    @bus.setter
+    def bus(self, value: Optional[can.Bus]) -> None:
+        """Set the CAN bus instance (delegates to CANConnection)."""
+        self._connection.bus = value
+
+    @property
+    def logging(self) -> bool:
+        """Check if logging is enabled (delegates to CANLogger)."""
+        return self._can_logger.logging
+
+    @logging.setter
+    def logging(self, value: bool) -> None:
+        """Set logging state (delegates to CANLogger)."""
+        self._can_logger.logging = value
+
+    @property
+    def signal_cache(self) -> Dict[str, Dict[str, Any]]:
+        """Get the signal cache (delegates to SignalManager)."""
+        return self._signal_manager.signal_cache
+
+    @signal_cache.setter
+    def signal_cache(self, value: Dict[str, Dict[str, Any]]) -> None:
+        """Set the signal cache (delegates to SignalManager)."""
+        self._signal_manager.signal_cache = value
+
+    @property
+    def last_sent_signals(self) -> Dict[str, Dict[str, Any]]:
+        """Get last sent signals (delegates to SignalManager)."""
+        return self._signal_manager.last_sent_signals
+
+    @last_sent_signals.setter
+    def last_sent_signals(self, value: Dict[str, Dict[str, Any]]) -> None:
+        """Set last sent signals (delegates to SignalManager)."""
+        self._signal_manager.last_sent_signals = value
+
+    @property
+    def signal_overrides(self) -> Dict[Tuple[str, str], Any]:
+        """Get signal overrides.
+
+        Note: The SignalManager uses a different structure (nested dict).
+        This property converts for backward compatibility.
+        """
+        # Convert from SignalManager's {msg: {sig: val}} to {(msg, sig): val}
+        result = {}
+        for msg_name, signals in self._signal_manager.signal_overrides.items():
+            for sig_name, val in signals.items():
+                result[(msg_name, sig_name)] = val
+        return result
+
+    @property
+    def signal_overrides_lock(self) -> threading.RLock:
+        """Get signal overrides lock (uses signal_cache_lock)."""
+        return self.signal_cache_lock
+
+    @property
+    def cyclic_tasks(self) -> Dict[int, Any]:
+        """Get cyclic tasks (delegates to CyclicMessageManager if available)."""
+        if self._cyclic_manager:
+            return self._cyclic_manager.cyclic_tasks
+        return {}
+
+    @property
+    def cyclic_periods(self) -> Dict[int, float]:
+        """Get cyclic periods (delegates to CyclicMessageManager if available)."""
+        if self._cyclic_manager:
+            return self._cyclic_manager.cyclic_periods
+        return {}
+
+    @property
+    def metrics_threads(self) -> Dict[int, threading.Thread]:
+        """Get metrics threads (delegates to CyclicMessageManager if available)."""
+        if self._cyclic_manager:
+            return self._cyclic_manager.metrics_threads
+        return {}
+
+    @property
+    def csv_file(self) -> Optional[TextIO]:
+        """Get CSV file handle (delegates to CANLogger)."""
+        return self._can_logger.csv_file
+
+    @property
+    def csv_writer(self) -> Optional[csv.writer]:
+        """Get CSV writer (delegates to CANLogger)."""
+        return self._can_logger.csv_writer
+
+    @property
+    def trc_file(self) -> Optional[TextIO]:
+        """Get TRC file handle (delegates to CANLogger)."""
+        return self._can_logger.trc_file
+
+    @property
+    def start_time(self) -> Optional[datetime]:
+        """Get logging start time (delegates to CANLogger)."""
+        return self._can_logger.start_time
+
+    @property
+    def first_msg_time(self) -> Optional[float]:
+        """Get first message time (delegates to CANLogger)."""
+        return self._can_logger.first_msg_time
+
+    @property
+    def message_counter(self) -> int:
+        """Get message counter (delegates to CANLogger)."""
+        return self._can_logger.message_counter
+
+    @property
+    def log_lock(self) -> threading.Lock:
+        """Get log lock (delegates to CANLogger)."""
+        return self._can_logger.log_lock
 
     def get_diagnostics(self) -> Dict[str, Any]:
         """Get current CAN diagnostics and status.
@@ -129,41 +269,79 @@ class CANManager(LoggerMixin):
         channel: Optional[str] = None,
         bitrate: Optional[int] = None
     ) -> Tuple[bool, str]:
-        """
-        Connect to CAN bus and initialize message definitions from DBC.
-        ===== ROBUST CONNECTION HANDLING =====
+        """Connect to CAN bus and initialize message definitions from DBC.
+
+        Uses modular CANConnection for connection management and initializes
+        other components (simulator, cyclic manager) as needed.
+
+        Args:
+            interface: CAN interface (e.g., 'pcan', 'socketcan')
+            channel: CAN channel
+            bitrate: CAN bitrate
+
+        Returns:
+            Tuple of (success, message)
         """
         # Resolve defaults
         interface = interface or self.interface or 'pcan'
         channel = channel or self.channel or 'PCAN_USBBUS1'
         bitrate = bitrate or self.bitrate or 500000
 
+        # Store connection parameters
+        self._connection.interface = interface
+        self._connection.channel = channel
+        self._connection.bitrate = bitrate
+
         if self.simulation_mode:
             self._log(20, f"CAN connect (simulation) {interface}:{channel}")
             self.is_connected = True
             self.running = True
             self._initialize_message_definitions()  # Load DBC message defs
-            # Start a simulation thread to generate random messages
-            self.sim_thread = threading.Thread(
-                target=self._simulate_traffic,
-                daemon=True,
-                name="CAN_Simulation"
+
+            # Create and start simulator using modular component
+            self._simulator = CANSimulator(
+                message_definitions=self.message_definitions,
+                message_callback=self._on_message_received,
+                diagnostics_callback=self.get_full_diagnostics
             )
-            self.sim_thread.start()
+            self._simulator.start()
+
             return True, "Connected (Simulation Mode)"
 
         try:
             # Log connection attempt
             self._log(20, f"CAN connect attempt {interface}:{channel} bitrate={bitrate}")
-            self.bus = can.Bus(interface=interface, channel=channel, bitrate=bitrate)
+
+            # Use CANConnection component for actual connection
+            success, msg = self._connection.connect(interface, channel, bitrate)
+            if not success:
+                self.is_connected = False
+                self._log(40, msg)
+                return False, msg
+
             self.is_connected = True
             self.running = True
 
             # Load message definitions from DBC for proper decoding
             self._initialize_message_definitions()
 
+            # Create cyclic message manager with connected bus
+            self._cyclic_manager = CyclicMessageManager(
+                bus=self._connection.bus,
+                simulation_mode=self.simulation_mode,
+                dbc_parser=self.dbc_parser,
+                log_callback=self._log,
+                message_callback=self._on_message_received,
+                signal_cache_lock=self.signal_cache_lock,
+                signal_cache=self._signal_manager.signal_cache,
+                last_sent_signals=self._signal_manager.last_sent_signals,
+                build_full_values_func=self._build_full_values,
+                log_message_func=self._log_message,
+                logging_enabled=self._can_logger.logging
+            )
+
             # Setup listener for message reception
-            self.notifier = can.Notifier(self.bus, [self._on_message_received])
+            self.notifier = can.Notifier(self._connection.bus, [self._on_message_received])
 
             self._log(20, f"CAN connected {interface}:{channel}")
             return True, f"Connected to {interface}:{channel}"
@@ -228,27 +406,35 @@ class CANManager(LoggerMixin):
             raise RuntimeError(f"DBC initialization failed: {e}") from e
 
     def disconnect(self) -> None:
-        """Cleanly disconnect from CAN bus."""
+        """Cleanly disconnect from CAN bus.
+
+        Stops all modular components and cleans up resources.
+        """
         self.running = False
         self.is_connected = False
-        
+
         try:
+            # Stop notifier if active
             if hasattr(self, 'notifier') and self.notifier:
                 self.notifier.stop()
-            if self.bus:
-                self.bus.shutdown()
-                self.bus = None
 
-            # Stop simulation thread if active
-            if self.simulation_mode and hasattr(self, 'sim_thread'):
-                try:
-                    self.sim_thread.join(timeout=1)
-                except Exception as e:
-                    self._log(30, f"Warning: simulation thread join failed: {e}")
+            # Stop simulator if active (modular component)
+            if self._simulator:
+                self._simulator.stop()
+                self._simulator = None
 
-            self.cyclic_tasks.clear()
+            # Stop all cyclic messages (modular component)
+            if self._cyclic_manager:
+                self._cyclic_manager.stop_all()
+                self._cyclic_manager = None
+
+            # Disconnect from bus (modular component)
+            self._connection.disconnect()
+
+            # Clear listeners
             with self.listeners_lock:
                 self.listeners.clear()
+
             self._log(20, "CAN disconnected")
         except Exception as e:
             self._log(40, f"Error during CAN disconnect: {e}")
@@ -309,13 +495,14 @@ class CANManager(LoggerMixin):
     ) -> None:
         """Set or update an override for a specific signal within a message.
 
+        Delegates to SignalManager component.
+
         Args:
             message_name: Name of the CAN message
             signal_name: Name of the signal within the message
             value: Override value to set
         """
-        with self.signal_overrides_lock:
-            self.signal_overrides[(message_name, signal_name)] = value
+        self._signal_manager.set_signal_override(message_name, signal_name, value)
         self._log(20, f"Override set: {message_name}.{signal_name}={value}")
 
     def _get_cycle_time_ms(
@@ -388,19 +575,13 @@ class CANManager(LoggerMixin):
     ) -> None:
         """Clear overrides; if both provided, clear specific, else clear all.
 
+        Delegates to SignalManager component.
+
         Args:
             message_name: Optional message name to clear overrides for
             signal_name: Optional signal name to clear (requires message_name)
         """
-        with self.signal_overrides_lock:
-            if message_name and signal_name:
-                self.signal_overrides.pop((message_name, signal_name), None)
-            elif message_name:
-                keys = [k for k in self.signal_overrides if k[0] == message_name]
-                for k in keys:
-                    self.signal_overrides.pop(k, None)
-            else:
-                self.signal_overrides.clear()
+        self._signal_manager.clear_signal_override(message_name, signal_name)
 
     def _apply_overrides(
         self,
@@ -547,6 +728,9 @@ class CANManager(LoggerMixin):
     ) -> None:
         """Start cyclic transmission of a CAN message.
 
+        Delegates to CyclicMessageManager if available, otherwise falls back
+        to direct implementation for backward compatibility.
+
         Args:
             arbitration_id: CAN message ID
             data: Message data bytes
@@ -556,6 +740,15 @@ class CANManager(LoggerMixin):
         Raises:
             RuntimeError: If CAN bus is not connected (hardware mode)
         """
+        # Delegate to CyclicMessageManager if available
+        if self._cyclic_manager:
+            self._cyclic_manager.logging_enabled = self._can_logger.logging
+            self._cyclic_manager.start_cyclic_message(
+                arbitration_id, data, cycle_time, is_extended_id
+            )
+            return
+
+        # Fallback for simulation mode or when cyclic manager not initialized
         if self.simulation_mode:
             self._log(10, f"SIMULATION CAN CYCLIC START: ID={hex(arbitration_id)}")
             return
@@ -563,62 +756,22 @@ class CANManager(LoggerMixin):
         if not self.bus:
             raise RuntimeError("CAN bus not connected. Please connect first.")
 
-        if arbitration_id in self.cyclic_tasks:
-            self.stop_cyclic_message(arbitration_id)
-
-        msg = can.Message(arbitration_id=arbitration_id, data=data, is_extended_id=is_extended_id)
-        msg.timestamp = time.time()
-
-        if self.logging:
-            try:
-                # Log the first tick immediately so traces show the start of cyclic traffic
-                self._log_message(msg)
-            except Exception as e:
-                self._log(30, f"Failed to log initial cyclic message: {e}")
-
-        # Also feed metrics/listeners for TX visibility
-        try:
-            self._on_message_received(msg)
-        except Exception as e:
-            self._log(30, f"Failed to notify listeners for cyclic start: {e}")
-
-        task = self.bus.send_periodic(msg, cycle_time)
-        self.cyclic_tasks[arbitration_id] = task
-        self.cyclic_periods[arbitration_id] = cycle_time
-        # Start an internal metrics tick thread to mirror TX for interval computation
-        stop_event = threading.Event()
-        self.metrics_threads[arbitration_id] = stop_event
-
-        def _tick_metrics():
-            m = can.Message(arbitration_id=arbitration_id, data=data, is_extended_id=is_extended_id)
-            while not stop_event.wait(cycle_time):
-                m.timestamp = time.time()
-                try:
-                    self._on_message_received(m)
-                except Exception as e:
-                    self._log(30, f"Metrics tick failed for ID=0x{arbitration_id:X}: {e}")
-
-        t = threading.Thread(target=_tick_metrics, daemon=True, name=f"CAN_Metrics_{arbitration_id:X}")
-        t.start()
-
     def stop_cyclic_message(self, arbitration_id: int) -> None:
         """Stop cyclic transmission of a CAN message.
+
+        Delegates to CyclicMessageManager if available.
 
         Args:
             arbitration_id: CAN message ID to stop
         """
-        if self.simulation_mode:
-            self._log(10, f"SIMULATION CAN CYCLIC STOP: ID={hex(arbitration_id)}")
+        # Delegate to CyclicMessageManager if available
+        if self._cyclic_manager:
+            self._cyclic_manager.stop_cyclic_message(arbitration_id)
             return
 
-        if arbitration_id in self.cyclic_tasks:
-            self.cyclic_tasks[arbitration_id].stop()
-            del self.cyclic_tasks[arbitration_id]
-        if arbitration_id in self.cyclic_periods:
-            del self.cyclic_periods[arbitration_id]
-        if arbitration_id in self.metrics_threads:
-            self.metrics_threads[arbitration_id].set()
-            del self.metrics_threads[arbitration_id]
+        # Fallback for simulation mode
+        if self.simulation_mode:
+            self._log(10, f"SIMULATION CAN CYCLIC STOP: ID={hex(arbitration_id)}")
 
     def start_cyclic_message_by_name(
         self,
@@ -628,6 +781,8 @@ class CANManager(LoggerMixin):
     ) -> bool:
         """Start a cyclic CAN message using DBC encoding.
 
+        Delegates to CyclicMessageManager if available.
+
         Args:
             message_name: Name of the message in the DBC file
             signals_dict: Dictionary of signal names and values
@@ -636,6 +791,14 @@ class CANManager(LoggerMixin):
         Returns:
             True if successful, False otherwise
         """
+        # Delegate to CyclicMessageManager if available
+        if self._cyclic_manager:
+            self._cyclic_manager.logging_enabled = self._can_logger.logging
+            return self._cyclic_manager.start_cyclic_message_by_name(
+                message_name, signals_dict, cycle_time_ms
+            )
+
+        # Fallback implementation for when cyclic manager not available
         if not self.dbc_parser or not self.dbc_parser.database:
             self._log(30, f"No DBC loaded, cannot encode message '{message_name}'")
             return False
@@ -667,24 +830,32 @@ class CANManager(LoggerMixin):
         except Exception as e:
             self._log(40, f"Error encoding message '{message_name}': {e}")
             return False
-    
+
     def start_all_cyclic_messages(self) -> Tuple[List[str], List[str]]:
         """Start all cyclic messages defined in can_messages.py.
+
+        Delegates to CyclicMessageManager if available.
 
         Returns:
             Tuple of (started_messages, failed_messages) lists
         """
+        # Delegate to CyclicMessageManager if available
+        if self._cyclic_manager:
+            self._cyclic_manager.logging_enabled = self._can_logger.logging
+            return self._cyclic_manager.start_all_cyclic_messages()
+
+        # Fallback implementation
         import sys
         import os
-        
+
         # Add CAN Configuration to path
         script_dir = os.path.dirname(os.path.abspath(__file__))
         project_root = os.path.dirname(script_dir)
         config_path = os.path.join(project_root, "CAN Configuration")
-        
+
         if config_path not in sys.path:
             sys.path.insert(0, config_path)
-        
+
         try:
             import can_messages
             CYCLIC_CAN_MESSAGES = can_messages.CYCLIC_CAN_MESSAGES
@@ -708,13 +879,20 @@ class CANManager(LoggerMixin):
 
         self._log(20, f"Started {len(started_messages)} cyclic messages, {len(failed_messages)} failed")
         return started_messages, failed_messages
-    
+
     def stop_all_cyclic_messages(self) -> bool:
         """Stop all cyclic messages defined in can_messages.py.
+
+        Delegates to CyclicMessageManager if available.
 
         Returns:
             True if successful, False otherwise
         """
+        # Delegate to CyclicMessageManager if available
+        if self._cyclic_manager:
+            return self._cyclic_manager.stop_all_cyclic_messages()
+
+        # Fallback implementation
         import sys
         import os
 
@@ -756,6 +934,8 @@ class CANManager(LoggerMixin):
     def start_logging(self, filename_base: str) -> str:
         """Start logging CAN messages to CSV and TRC files.
 
+        Delegates to CANLogger component.
+
         Args:
             filename_base: Base filename (without extension) for log files.
                           Must be a valid filename without path separators.
@@ -767,87 +947,27 @@ class CANManager(LoggerMixin):
             ValueError: If filename_base contains invalid characters.
             OSError: If the results directory cannot be created or files cannot be opened.
         """
-        # Validate filename to prevent path traversal
-        if not filename_base or '..' in filename_base or os.path.sep in filename_base:
-            raise ValueError(f"Invalid filename_base: {filename_base}")
+        full_path = self._can_logger.start_logging(filename_base)
 
-        # Sanitize filename - only allow alphanumeric, underscore, hyphen, and dot
-        import re
-        if not re.match(r'^[\w\-\.]+$', filename_base):
-            raise ValueError(f"Filename contains invalid characters: {filename_base}")
-
-        # Create Test Results folder if it doesn't exist (race-condition safe)
-        results_dir = "Test Results"
-        os.makedirs(results_dir, exist_ok=True)
-
-        # Full path with Test Results folder
-        full_path = os.path.join(results_dir, filename_base)
-
-        self.logging = True
-        self.start_time = datetime.now()  # Record start time for TRC
-
-        # CSV file
-        self.csv_file = open(f"{full_path}.csv", 'w', newline='', encoding='utf-8')
-        self.csv_writer = csv.writer(self.csv_file)
-        self.csv_writer.writerow(["Time", "Type", "ID", "DLC", "Data"])
-
-        # TRC file (PCAN format)
-        self.trc_file = open(f"{full_path}.trc", 'w', encoding='utf-8')
-        self._write_trc_header()
+        # Update cyclic manager's logging state if available
+        if self._cyclic_manager:
+            self._cyclic_manager.logging_enabled = True
 
         self._log(20, f"Started logging to {full_path}")
         return full_path
 
     def stop_logging(self) -> None:
-        """Stop logging and safely close all log files."""
-        self.logging = False
-        errors = []
+        """Stop logging and safely close all log files.
 
-        if self.csv_file:
-            try:
-                self.csv_file.close()
-            except Exception as e:
-                errors.append(f"CSV close failed: {e}")
-            finally:
-                self.csv_file = None
-                self.csv_writer = None
+        Delegates to CANLogger component.
+        """
+        self._can_logger.stop_logging()
 
-        if self.trc_file:
-            try:
-                self.trc_file.close()
-            except Exception as e:
-                errors.append(f"TRC close failed: {e}")
-            finally:
-                self.trc_file = None
+        # Update cyclic manager's logging state if available
+        if self._cyclic_manager:
+            self._cyclic_manager.logging_enabled = False
 
-        if errors:
-            self._log(30, f"Errors stopping logging: {'; '.join(errors)}")
-        else:
-            self._log(20, "Logging stopped")
-
-    def _write_trc_header(self) -> None:
-        """Write TRC file header in PCAN format."""
-        start_time_str = self.start_time.strftime("%d-%m-%Y %H:%M:%S.%f")[:-3]
-        # PCAN-style STARTTIME uses Excel/PCAN serial days (days since 1899-12-30)
-        excel_epoch = datetime(1899, 12, 30)
-        start_serial = (self.start_time - excel_epoch).total_seconds() / 86400.0
-        with self.log_lock:
-            self.trc_file.write(";$FILEVERSION=1.1\n")
-            self.trc_file.write(f";$STARTTIME={start_serial:.10f}\n")
-            self.trc_file.write(";\n")
-            self.trc_file.write(f";   Start time: {start_time_str}\n")
-            self.trc_file.write(";   Generated by AtomX\n")
-            self.trc_file.write(";\n")
-            self.trc_file.write(";   Message Number\n")
-            self.trc_file.write(";   |         Time Offset (ms)\n")
-            self.trc_file.write(";   |         |        Type\n")
-            self.trc_file.write(";   |         |        |        ID (hex)\n")
-            self.trc_file.write(";   |         |        |        |     Data Length\n")
-            self.trc_file.write(";   |         |        |        |     |   Data Bytes (hex) ...\n")
-            self.trc_file.write(";   |         |        |        |     |   |\n")
-            self.trc_file.write(";---+--   ----+----  --+--  ----+---  +  -+ -- -- -- -- -- -- --\n")
-            self.message_counter = 1
-            self.first_msg_time = None
+        self._log(20, "Logging stopped")
 
     def add_listener(self, callback: Callable[[can.Message], None]) -> None:
         """Add a message listener callback.
@@ -947,7 +1067,8 @@ class CANManager(LoggerMixin):
     ) -> None:
         """Update signal_cache with latest signal values.
 
-        This is what the UI Dashboard reads for real-time updates.
+        Delegates to SignalManager component but also maintains backward
+        compatibility with the existing cache structure.
 
         Args:
             message_id: CAN message arbitration ID
@@ -955,15 +1076,18 @@ class CANManager(LoggerMixin):
             timestamp: Message timestamp
             raw_signals: Optional raw signal values before choice decoding
         """
+        # Delegate to SignalManager
+        self._signal_manager.cache_signals(message_id, decoded_signals, timestamp, raw_signals)
+
+        # Also update the cache with additional metadata for backward compatibility
         with self.signal_cache_lock:
             for signal_name, value in decoded_signals.items():
                 if signal_name in self.signal_cache:
-                    self.signal_cache[signal_name]['value'] = value
-                    self.signal_cache[signal_name]['timestamp'] = timestamp
+                    # Add raw_value if available
                     if raw_signals and signal_name in raw_signals:
                         self.signal_cache[signal_name]['raw_value'] = raw_signals[signal_name]
                 else:
-                    # Unknown signal (not in DBC) - add to cache anyway
+                    # Unknown signal (not in DBC) - add to cache with metadata
                     self.signal_cache[signal_name] = {
                         'value': value,
                         'timestamp': timestamp,
@@ -977,63 +1101,19 @@ class CANManager(LoggerMixin):
     def _log_message(self, msg: can.Message) -> None:
         """Log message to CSV and TRC files.
 
+        Delegates to CANLogger component.
+
         Args:
             msg: CAN message to log
         """
-        # Skip CAN error/status frames or remote frames
-        try:
-            if getattr(msg, "is_error_frame", False) or getattr(msg, "is_remote_frame", False):
-                return
-        except Exception:
-            pass
-        # Require a valid arbitration ID
-        if not hasattr(msg, "arbitration_id") or msg.arbitration_id is None:
-            return
-        if not isinstance(msg.arbitration_id, int):
-            return
+        # Delegate to CANLogger
+        self._can_logger.log_message(msg)
 
-        # Serialize logging to keep message numbers and timestamps monotonic
-        with self.log_lock:
-            # Use monotonic clock for stable offsets (system clock jumps won't break ordering)
-            now_mono = time.monotonic()
-            if self.first_msg_time is None:
-                self.first_msg_time = now_mono
-            relative_time = max(0.0, (now_mono - self.first_msg_time) * 1000)  # milliseconds
-            dlc = getattr(msg, "dlc", len(msg.data) if hasattr(msg, "data") else 0)
-            if dlc is None:
-                dlc = 0
-            dlc = max(0, min(int(dlc), 8))
-            data_bytes = ""
-            if hasattr(msg, "data") and msg.data is not None:
-                data_bytes = ' '.join([f'{b:02X}' for b in list(msg.data)[:dlc]])
-
-            # CSV format
-            if hasattr(self, 'csv_writer') and self.csv_writer:
-                msg_type = "Rx" if msg.is_rx else "Tx"
-                self.csv_writer.writerow([
-                    f"{relative_time:.3f}",
-                    msg_type,
-                    f"{msg.arbitration_id:03X}",
-                    dlc,
-                    data_bytes
-                ])
-                if self.csv_file:
-                    self.csv_file.flush()
-
-            # TRC format
-            if hasattr(self, 'trc_file') and self.trc_file:
-                msg_type = "Rx" if msg.is_rx else "Tx"
-                # Align to PCAN textual layout similar to provided templates
-                trc_line = f"{self.message_counter:6d}){relative_time:11.1f}  {msg_type:2s} {msg.arbitration_id:9X}  {dlc:1d}  {data_bytes} \n"
-                self.trc_file.write(trc_line)
-                self.trc_file.flush()
-                self.message_counter += 1
-
-        # Add to message history for debugging (thread-safe with deque)
+        # Also maintain local message history for backward compatibility
         with self.message_history_lock:
             self.message_history.append({
                 'timestamp': getattr(msg, "timestamp", None),
-                'msg_id': msg.arbitration_id,
+                'msg_id': getattr(msg, "arbitration_id", None),
                 'data': getattr(msg, "data", b''),
                 'direction': 'RX' if getattr(msg, "is_rx", False) else 'TX'
             })
@@ -1110,27 +1190,28 @@ class CANManager(LoggerMixin):
     ) -> Tuple[bool, Optional[Any], Optional[float]]:
         """Get current signal value from cache (non-blocking, returns immediately).
 
+        Delegates to SignalManager component.
+
         Args:
             signal_name: Name of the signal
 
         Returns:
             Tuple of (success, value, timestamp)
         """
-        with self.signal_cache_lock:
-            if signal_name in self.signal_cache:
-                cache_entry = self.signal_cache[signal_name]
-                return True, cache_entry['value'], cache_entry['timestamp']
-        
+        result = self._signal_manager.get_signal_from_cache(signal_name)
+        if result:
+            return True, result[0], result[1]
         return False, None, None
-    
+
     def get_all_signals_from_cache(self) -> Dict[str, Dict[str, Any]]:
         """Get all signals currently in cache.
+
+        Delegates to SignalManager component.
 
         Returns:
             Dictionary of all cached signals
         """
-        with self.signal_cache_lock:
-            return dict(self.signal_cache)
+        return self._signal_manager.get_all_signals_from_cache()
 
     def wait_for_signal_condition(
         self,

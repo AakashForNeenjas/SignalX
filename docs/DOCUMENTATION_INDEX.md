@@ -7,6 +7,7 @@
 2. Run `verify_implementation.py` - Confirm everything is working
 3. Try adding a simple "Read Signal Value" action in Dashboard
 4. Check `output_log` for diagnostic messages
+5. For packaged app builds, use `.\build_atomx.ps1` from repo root
 
 ---
 
