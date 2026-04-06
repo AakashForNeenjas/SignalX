@@ -10,6 +10,7 @@ def create_main_tabs():
         "tracex": QWidget(),
         "canmatrix": QWidget(),
         "standards": QWidget(),
+        "knowledge_base": QWidget(),
     }
 
     tabs.addTab(tab_map["config"], "Configuration")
@@ -17,6 +18,7 @@ def create_main_tabs():
     tabs.addTab(tab_map["tracex"], "TraceX")
     tabs.addTab(tab_map["canmatrix"], "CAN Matrix")
     tabs.addTab(tab_map["standards"], "Standards")
+    tabs.addTab(tab_map["knowledge_base"], "Knowledge Base")
     tabs.addTab(tab_map["tools"], "App Log")
 
     tab_indices = {name: tabs.indexOf(widget) for name, widget in tab_map.items()}

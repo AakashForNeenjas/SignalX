@@ -1,7 +1,6 @@
 from pathlib import Path
 
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QLabel, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QLabel, QLayout, QSizePolicy, QVBoxLayout, QWidget
 
 
 class TraceXTab(QWidget):
@@ -12,6 +11,7 @@ class TraceXTab(QWidget):
 
         layout = QVBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
 
         try:
             from ui.TraceXView import MainWindow as TraceXMainWindow
@@ -22,7 +22,11 @@ class TraceXTab(QWidget):
                 can_mgr=can_mgr,
                 dbc_parser=dbc_parser,
             )
-            self._tracex_window.setWindowFlags(Qt.WindowType.Widget)
+            self._tracex_window.setSizePolicy(
+                QSizePolicy.Policy.Expanding,
+                QSizePolicy.Policy.Expanding,
+            )
+            self._tracex_window.setMinimumSize(0, 0)
             layout.addWidget(self._tracex_window)
         except Exception as exc:
             self._log_warning(f"TraceX init failed: {exc}")

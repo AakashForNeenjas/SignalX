@@ -130,13 +130,18 @@
 ```
 .\build_atomx.ps1
 ```
+- Debug console build:
+```
+.\build_atomx.ps1 -Console
+```
 - PyInstaller fallback example (PowerShell):
 ```
-pyinstaller --name AtomX --noconsole `
+pyinstaller --name AtomX --noconsole --icon "ui/app_logo.ico" `
   --add-data "DBC;DBC" `
   --add-data "CAN Configuration;CAN Configuration" `
   --add-data "Test Sequence;Test Sequence" main.py
 ```
+- Branding source-of-truth is `ui/app logo.png`; `build_atomx.ps1` auto-generates `ui/app_logo.ico`.
 - Ensure PyInstaller is on PATH or call full path to `pyinstaller.exe`.
 
 ## 15) Testing
@@ -401,13 +406,18 @@ This manual reflects the current repository state (files inspected: main.py, log
   ```powershell
   .\build_atomx.ps1
   ```
+- Debug console build:
+  ```powershell
+  .\build_atomx.ps1 -Console
+  ```
 - PyInstaller fallback (PowerShell):
   ```powershell
-  pyinstaller --name AtomX --noconsole `
+  pyinstaller --name AtomX --noconsole --icon "ui/app_logo.ico" `
     --add-data "DBC;DBC" `
     --add-data "CAN Configuration;CAN Configuration" `
     --add-data "Test Sequence;Test Sequence" main.py
   ```
+- Branding source-of-truth is `ui/app logo.png`; `build_atomx.ps1` auto-generates `ui/app_logo.ico`.
 - Ensure PyInstaller is on PATH or call full path.
 
 ---

@@ -4,12 +4,13 @@ import time
 from pathlib import Path
 import numpy as np
 from PyQt6.QtWidgets import (
-    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
+    QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QFileDialog, QTreeWidget, QTreeWidgetItem, QSplitter,
     QLabel, QSlider, QMessageBox, QTreeWidgetItemIterator, QComboBox,
+    QLayout,
     QGroupBox
 )
-from PyQt6.QtCore import Qt, QThread, pyqtSignal, QTimer
+from PyQt6.QtCore import QSize, Qt, QThread, pyqtSignal, QTimer
 import pyqtgraph as pg
 import pyqtgraph.exporters
 import json
@@ -88,11 +89,10 @@ class TraceLoaderThread(QThread):
             self.error.emit(str(e))
 
 
-class MainWindow(QMainWindow):
+class MainWindow(QWidget):
     def __init__(self, project_root=None, can_mgr=None, dbc_parser=None):
         super().__init__()
         self.setWindowTitle("TraceX - CAN Signal Viewer")
-        self.resize(1500, 900)  # Increased starting size for better scale
 
         if project_root:
             self.project_root = Path(project_root).resolve()
@@ -145,6 +145,13 @@ class MainWindow(QMainWindow):
         self._adopt_can_defaults()
         if not self._import_existing_dbc_context():
             self.auto_load_dbc()
+
+    # Prevent embedded TraceX widget from forcing parent window expansion.
+    def minimumSizeHint(self):
+        return QSize(0, 0)
+
+    def sizeHint(self):
+        return QSize(1200, 800)
 
     def _adopt_can_defaults(self):
         if not self.can_mgr_ref:
@@ -212,9 +219,9 @@ class MainWindow(QMainWindow):
                     print(f"Error auto-loading {dbc_file.name}: {e}")
 
     def init_ui(self):
-        central_widget = QWidget()
-        self.setCentralWidget(central_widget)
-        main_layout = QVBoxLayout(central_widget)
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
 
         # Top Controls Layout
         control_layout = QVBoxLayout()

@@ -37,7 +37,7 @@ class DBCParser:
                 dbc_path = os.path.join(dbc_root, filename if filename.endswith('.dbc') else f"{filename}.dbc")
             else:
                 # Find first .dbc file in folder
-                dbc_files = [f for f in os.listdir(dbc_root) if f.endswith('.dbc')]
+                dbc_files = sorted(f for f in os.listdir(dbc_root) if f.endswith('.dbc'))
                 if not dbc_files:
                     return False, f"No DBC files found in {dbc_root}"
                 dbc_path = os.path.join(dbc_root, dbc_files[0])

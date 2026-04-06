@@ -11,8 +11,20 @@ from logging_setup import setup_logging
 from ui.MainWindow import MainWindow
 from ui.resources import create_app_icon, create_splash_pixmap
 from PyQt6.QtWidgets import QSplashScreen
-from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QPoint
+from PyQt6.QtCore import Qt, QPropertyAnimation, QEasingCurve, QPoint, QTimer
 from PyQt6.QtGui import QGuiApplication
+
+
+def _set_windows_app_user_model_id() -> None:
+    """Set explicit Windows AppUserModelID for stable taskbar icon grouping."""
+    if sys.platform != "win32":
+        return
+    try:
+        import ctypes
+
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("Neenjas.AtomX")
+    except Exception:
+        pass
 
 
 def _hide_console_if_frozen() -> None:
@@ -50,9 +62,37 @@ def _global_exception_handler(exc_type, exc_value, exc_tb):
     sys.__excepthook__(exc_type, exc_value, exc_tb)
 
 
+def _force_window_visible(window: MainWindow) -> None:
+    """Rescue path when Windows restores an off-screen/minimized window."""
+    try:
+        if window.windowState() & Qt.WindowState.WindowMinimized:
+            window.showNormal()
+        if not window.isVisible():
+            window.show()
+
+        screen = window.screen() or QGuiApplication.primaryScreen()
+        if screen:
+            avail = screen.availableGeometry()
+            frame = window.frameGeometry()
+            offscreen = not avail.intersects(frame)
+            too_small = frame.width() < 400 or frame.height() < 250
+            if offscreen or too_small:
+                width = min(max(int(avail.width() * 0.85), 1100), avail.width())
+                height = min(max(int(avail.height() * 0.85), 700), avail.height())
+                x = avail.left() + (avail.width() - width) // 2
+                y = avail.top() + (avail.height() - height) // 2
+                window.setGeometry(x, y, width, height)
+
+        window.raise_()
+        window.activateWindow()
+    except Exception:
+        pass
+
+
 def main():
     # Install global exception handler
     sys.excepthook = _global_exception_handler
+    _set_windows_app_user_model_id()
     _hide_console_if_frozen()
 
     logger, log_path = setup_logging()
@@ -91,8 +131,10 @@ def main():
 
     window = MainWindow(logger=logger, log_path=log_path)
     window.setWindowIcon(app_icon)
-    # Maximized display (keeps window controls visible)
-    window.showMaximized()
+    # MainWindow manages geometry restore/adaptive sizing on first show.
+    window.show()
+    QTimer.singleShot(250, lambda: _force_window_visible(window))
+    QTimer.singleShot(1200, lambda: _force_window_visible(window))
     window.raise_()
     window.activateWindow()
 

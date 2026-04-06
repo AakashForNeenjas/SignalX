@@ -7,13 +7,21 @@ from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QLabel, QHBoxLayout,
     QComboBox, QTextEdit, QMessageBox,
     QLineEdit, QListWidget, QListWidgetItem, QTableWidget,
-    QDialog, QDialogButtonBox, QProgressDialog, QCheckBox
+    QDialog, QDialogButtonBox, QProgressDialog, QCheckBox, QLayout
 )
 from config_loader import load_profiles, get_profile
 import config
 from core import updater
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import QRect, Qt
 from ui.resources import create_app_icon
+from ui.window_geometry import (
+    clamp_rect_to_screen,
+    compute_adaptive_rect,
+    find_target_screen,
+    is_suspicious_saved_rect,
+    load_window_settings,
+    save_window_settings,
+)
 from ui.widgets import (
     ConfigHeader,
     ErrorMessageList,
@@ -49,6 +57,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.central_widget)
         self.layout = QVBoxLayout(self.central_widget)
         self.layout.setContentsMargins(0, 0, 0, 0)
+        self.layout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         # Header branding
         self.header_bar = HeaderBar(on_check_updates=self.on_check_updates, version_text=f"Version: {self.current_version}")
         self.layout.addWidget(self.header_bar)
@@ -63,12 +72,14 @@ class MainWindow(QMainWindow):
         self.tracex_tab = tab_map["tracex"]
         self.canmatrix_tab = tab_map["canmatrix"]
         self.standards_tab = tab_map["standards"]
+        self.knowledge_base_tab = tab_map["knowledge_base"]
 
         self.tools_tab_index = tab_indices["tools"]
         self.tracex_tab_index = tab_indices["tracex"]
         self.canmatrix_tab_index = tab_indices["canmatrix"]
         self.error_tab_index = tab_indices["error"]
         self.standards_tab_index = tab_indices["standards"]
+        self.knowledge_base_tab_index = tab_indices["knowledge_base"]
         self.tabs.currentChanged.connect(self.on_tab_changed)
         # Lazy-load flags must be set before building tabs
         self.tools_built = False
@@ -76,8 +87,10 @@ class MainWindow(QMainWindow):
         self.tracex_built = False
         self.canmatrix_built = False
         self.standards_built = False
+        self.knowledge_base_built = False
         self.err_state_cache = None
         self.sequence_run_report = None
+        self._window_geometry_restored = False
         
         # Placeholder content
         self.setup_config_tab()
@@ -100,6 +113,11 @@ class MainWindow(QMainWindow):
         """Build Standards tab UI if not already built."""
         if not self.standards_built:
             self.setup_standards_tab()
+
+    def ensure_knowledge_base_tab_built(self):
+        """Build Knowledge Base tab UI if not already built."""
+        if not self.knowledge_base_built:
+            self.setup_knowledge_base_tab()
     
     def ensure_error_tab_built(self):
         """Build CAN Tx Config tab UI if not already built."""
@@ -248,6 +266,7 @@ class MainWindow(QMainWindow):
     def setup_tracex_tab(self):
         """Initialize the TraceX tab UI."""
         layout = QVBoxLayout(self.tracex_tab)
+        layout.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
         try:
             from ui.TraceXTab import TraceXTab
             self.tracex_widget = TraceXTab(
@@ -256,6 +275,7 @@ class MainWindow(QMainWindow):
                 logger=self.logger,
             )
             layout.addWidget(self.tracex_widget)
+            self.tracex_tab.setMinimumSize(0, 0)
             self.tracex_built = True
         except Exception as e:
             fallback = QLabel(f"TraceX unavailable: {e}")
@@ -406,6 +426,22 @@ class MainWindow(QMainWindow):
             self.standards_text.setVisible(True)
             self.standards_text.setText(json.dumps(data, indent=2))
 
+    def setup_knowledge_base_tab(self):
+        """Initialize the bundled DVP knowledge base tab."""
+        layout = QVBoxLayout(self.knowledge_base_tab)
+        try:
+            from ui.widgets.knowledge_base_tab import KnowledgeBaseTab
+
+            self.knowledge_base_widget = KnowledgeBaseTab(
+                logger=self.logger,
+            )
+            layout.addWidget(self.knowledge_base_widget)
+            self.knowledge_base_built = True
+        except Exception as e:
+            fallback = QLabel(f"Knowledge base unavailable: {e}")
+            layout.addWidget(fallback)
+            self.knowledge_base_built = True
+
     def setup_error_tab(self):
         """Setup CAN transmit builder in CAN Tx Config tab."""
         layout = QVBoxLayout(self.error_tab)
@@ -544,8 +580,8 @@ class MainWindow(QMainWindow):
         self.sequencer.sequence_finished.connect(self.on_sequence_finished)
         self.sequencer.action_info.connect(self.on_action_info)
 
-        # Load DBC and mappings
-        success, msg = self.dbc_parser.load_dbc_file("RE")
+        # Load DBC and mappings (auto-detect first .dbc file in DBC folder)
+        success, msg = self.dbc_parser.load_dbc_file()
         if success:
             self.dashboard.output_log.append(f"{msg}")
             success, msg = self.signal_manager.load_signal_mapping()
@@ -1212,6 +1248,8 @@ class MainWindow(QMainWindow):
             self.ensure_error_tab_built()
         if index == self.standards_tab_index:
             self.ensure_standards_tab_built()
+        if index == self.knowledge_base_tab_index:
+            self.ensure_knowledge_base_tab_built()
         if index == self.tools_tab_index:
             if hasattr(self, "system_log_tab"):
                 self.system_log_tab.start_auto_refresh()
@@ -1226,9 +1264,63 @@ class MainWindow(QMainWindow):
                 self.logger.log(level, message)
             except Exception:
                 pass
+
+    def _restore_window_geometry_once(self):
+        if self._window_geometry_restored:
+            return
+
+        screen = find_target_screen(self)
+        if screen:
+            available = screen.availableGeometry()
+        else:
+            own_screen = self.screen()
+            available = own_screen.availableGeometry() if own_screen else QRect(0, 0, 1366, 768)
+        settings = load_window_settings()
+
+        rect = settings.get("normal_rect")
+        if is_suspicious_saved_rect(rect):
+            rect = compute_adaptive_rect(available)
+        rect = clamp_rect_to_screen(rect, available)
+        self.setGeometry(rect)
+
+        # Ensure minimized state does not carry across startup.
+        self.setWindowState(self.windowState() & ~Qt.WindowState.WindowMinimized)
+        if settings.get("maximized", False):
+            self.setWindowState(self.windowState() | Qt.WindowState.WindowMaximized)
+
+        self._window_geometry_restored = True
+
+    def _save_window_geometry(self):
+        try:
+            save_window_settings(self)
+        except Exception as e:
+            self._log(logging.WARNING, f"Failed to save window geometry: {e}")
+
+    def showEvent(self, event):
+        if not self._window_geometry_restored:
+            self._restore_window_geometry_once()
+        super().showEvent(event)
+
+    def resizeEvent(self, event):
+        if self.logger and self.logger.isEnabledFor(logging.DEBUG):
+            try:
+                new_size = event.size()
+                old_size = event.oldSize()
+                self.logger.debug(
+                    "MainWindow resize: %sx%s (old=%sx%s, maximized=%s)",
+                    new_size.width(),
+                    new_size.height(),
+                    old_size.width(),
+                    old_size.height(),
+                    self.isMaximized(),
+                )
+            except Exception:
+                pass
+        super().resizeEvent(event)
     
     def closeEvent(self, event):
         """Ensure background threads and connections stop on window close."""
+        self._save_window_geometry()
         try:
             if hasattr(self, 'sequencer') and self.sequencer:
                 self.sequencer.stop_sequence()

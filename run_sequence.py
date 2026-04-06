@@ -44,7 +44,11 @@ def main():
     parser = argparse.ArgumentParser(description="Headless AtomX sequence runner")
     parser.add_argument("--sequence", "-s", required=True, help="Path to sequence JSON file")
     parser.add_argument("--profile", "-p", default="sim", help="Profile name (sim/dev/hw)")
-    parser.add_argument("--dbc", default="RE", help="DBC file name without extension (default: RE)")
+    parser.add_argument(
+        "--dbc",
+        default=None,
+        help="DBC file name without extension (optional; auto-detects first .dbc in DBC folder if omitted)",
+    )
     parser.add_argument("--init-instruments", action="store_true", help="Initialize instruments before running")
     parser.add_argument("--log-level", default="INFO", help="Logging level (INFO/DEBUG/WARNING/ERROR)")
     args = parser.parse_args()

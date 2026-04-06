@@ -34,17 +34,25 @@ Canonical build path (recommended, from repo root):
 ```powershell
 .\build_atomx.ps1
 ```
+- This is the default end-user release build (`--noconsole`).
+
+Debug build with terminal output:
+```powershell
+.\build_atomx.ps1 -Console
+```
+- This uses `--console` for troubleshooting.
+- Build branding source-of-truth is `ui/app logo.png`; the script auto-generates `ui/app_logo.ico` before packaging.
 
 Fallback direct PyInstaller command:
 Basic build command (from repo root):
 ```bash
-pyinstaller --name AtomX --noconsole --add-data "DBC;DBC" --add-data "CAN Configuration;CAN Configuration" --add-data "Test Sequence;Test Sequence" main.py
+pyinstaller --name AtomX --noconsole --icon "ui/app_logo.ico" --add-data "DBC;DBC" --add-data "CAN Configuration;CAN Configuration" --add-data "Test Sequence;Test Sequence" main.py
 ```
 
 Notes:
 - `--add-data` includes runtime assets (DBC, config, sample sequences). Adjust paths for your OS (use `:` on macOS/Linux).
 - Ensure Qt plugins are found; PyInstaller usually bundles them automatically for PyQt6.
-- If you prefer a console build (for debugging), drop `--noconsole`.
+- If icon looks stale on a previously pinned taskbar shortcut, unpin and re-pin once after upgrade (Windows icon cache behavior).
 - Output will be under `dist/AtomX/`.
 
 ## Tips & Troubleshooting

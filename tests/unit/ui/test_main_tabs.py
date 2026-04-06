@@ -16,6 +16,7 @@ def test_main_tabs_labels_and_order(qt_app):
         "TraceX",
         "CAN Matrix",
         "Standards",
+        "Knowledge Base",
         "App Log",
     ]
     actual_labels = [tabs.tabText(i) for i in range(tabs.count())]
@@ -31,3 +32,4 @@ def test_main_tabs_internal_keys_preserved(qt_app):
 
     assert "error" in tab_map
     assert "tools" in tab_map
+    assert "knowledge_base" in tab_map
