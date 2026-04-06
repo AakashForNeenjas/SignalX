@@ -54,7 +54,7 @@ pyqtdarktheme==0.1.7
 pyqtgraph==0.14.0
 pyserial==3.5
 pytest==9.0.2
-pytest-cov==7.1.1
+pytest-cov==7.1.0
 pytest-mock==3.14.0
 pytest-asyncio==0.25.3
 python-can[pcan]==4.6.1
